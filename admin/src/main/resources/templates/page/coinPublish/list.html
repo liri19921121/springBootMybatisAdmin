@@ -1,0 +1,726 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+<link rel="stylesheet" th:href="@{/daterangepicker/daterangepicker.css}">
+<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+<head>
+	<meta charset="utf-8">
+	<meta name="_ctx" th:content="@{/}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<style>
+		.search{
+			float: right;
+		}
+		.search>.selectbox{
+			width: 300px;float: right;
+			margin-right: 20px;
+		}
+		.search>.selectbox>label{
+			float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+		}
+		.search>.selectbox>select{
+			width:200px;float: right;
+		}
+		.searcher{
+			cursor: pointer;
+		}
+
+		@media (min-width: 768px){
+			.modal-dialog {
+				width: 800px;
+				margin: 30px auto;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 众筹管理</a></li>
+    <li class="active">发布管理</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">发布管理</h3>
+              <br><br>
+				<button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入项目名">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+
+					<div class="selectbox" style="width: 203px">
+						<select id="publishState" class="form-control" >
+							<option value="-1" th:text="请选择状态" ></option>
+							<option  value="0" th:selected="${'0' == publishState}">未开始</option>
+							<option  value="1" th:selected="${'1' == publishState}">预热中</option>
+							<option  value="2" th:selected="${'2' == publishState}">进行中</option>
+							<option  value="3" th:selected="${'3' == publishState}">已结束</option>
+						</select>
+					</div>
+
+				</div>
+
+			</div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+						<th>众筹项目</th>
+						<!--<th>项目描述</th>-->
+						<th>展示数量</th>
+						<th>众筹数量</th>
+						<th>认购人数</th>
+						<th>已认购数量</th>
+						<!--<th>消耗币种</th>-->
+						<th>消耗币种</th>
+						<th>消耗单价</th>
+						<!-- <th>获得币种</th>-->
+						<th>获得币种</th>
+						<th>获得单价</th>
+						<th>状态</th>
+						<th>预热开始时间</th>
+						<th>认购开始时间</th>
+						<th>认购结束时间</th>
+						<!--<th>标题图片</th>-->
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ coinPublish }" >
+                  <td th:text="${stat.count}">1</td>
+						<th th:text="${item.title }">title</th>
+						<!--<th th:text="${item.depict }">描述</th>-->
+						<th th:text="${item.show_number }">展示数量</th>
+						<th th:text="${item.number }">众筹数量</th>
+						<th th:text="${item.user_number }">认购用户数</th>
+						<th th:text="${item.buy_number }">已认购数量</th>
+						<!-- <th th:text="${item.consume_coin }">消耗币种</th>-->
+						<th th:text="${item.conChineseName }">消耗币种</th>
+						<th th:text="${item.consume_price }">消耗单价</th>
+						<!-- <th th:text="${item.get_coin }">获得币种</th>-->
+						<th th:text="${item.getChineseName }">获得币种</th>
+						<th th:text="${item.get_price }">获得单价</th>
+						<th th:text="${item.state }">状态</th>
+						<th th:text="${item.preheat_time }">预热开始时间</th>
+						<th th:text="${item.publish_begin_time }">认购开始时间</th>
+						<th th:text="${item.publish_end_time }">认购结束时间</th>
+						<!--<th><img  th:width="30px" th:high="30px" th:src="${item.head_path }" /></th>-->
+                  <td>
+					  <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+					  <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+					  <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+					  <span data-toggle="tooltip" data-placement="left" title="添加国际化版本" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'addLang(\''+${item.id}+'\');'"><i class="fa fa-at"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modelHead">确定</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<input type="hidden" name="id" id="id" value="0"/>
+					<input type="hidden" name="actionurl" value="/"/>
+
+					<input type="hidden" name="pics" value=""/>
+					<input type="hidden" id="isImgChange" name="isImgChange" value=""/>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">众筹项目</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="title" value="" id="title" placeholder="请输入标题">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">描述</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="depict" value="" id="depict" placeholder="请输入描述">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">展示数量</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="showNumber" value="" id="showNumber" placeholder="请输入展示数量">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">众筹数量</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="number" value="" id="number" placeholder="请输入众筹数量">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">消耗币种</label>
+								<div class="col-sm-7">
+									<select id="labels" class="form-control" name="consumeCoin"  id="consumeCoin">
+										<option th:each="allCoinName:${allCoinName}" th:value="${allCoinName.code}" th:text="${allCoinName.chinese_name}"  ></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">消耗单价</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="consumePrice" value="" id="consumePrice" placeholder="请输入消耗单价">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">获得币种</label>
+								<div class="col-sm-7">
+									<select class="form-control" name="getCoin"  id="getCoin" placeholder="请选择获得币种" >
+										<option th:each="allCoinName:${allCoinName}" th:value="${allCoinName.code}" th:text="${allCoinName.chinese_name}"  ></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">获得单价</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="getPrice" value="" id="getPrice" placeholder="请输入获得单价">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">预热开始时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="preheatTime" value="" id="preheatTime" placeholder="请输入预热开始时间">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">认购开始时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="publishBeginTime" value="" id="publishBeginTime" placeholder="请输入认购开始时间">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">上传展示图</label>
+								<div class="col-sm-7">
+									<a href="javascript:void(0)"><input type="file" class="form-control file" name="imgfile" value="" id="imgfile" placeholder="请选择文件"></a>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">认购结束时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" name="publishEndTime" value="" id="publishEndTime" placeholder="请输入认购结束时间">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="imgfile" class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<div><img src="" data-toggle="tooltip" title="当前展示图" id="showImg" style="width: 50px;"></div>
+							</div>
+						</div>
+
+					</div>
+
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="submitBtn" >确定</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="itemModalLang" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modelHead">添加/编辑国际化</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+					<input type="hidden" name="langRaiseId" id="langRaiseId" />
+
+					<div class="form-group">
+						<label for="getPrice" class="col-sm-2 control-label">已有版本：</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="getPrice" value="" id="ishaveLang" readonly="readonly" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="getPrice" class="col-sm-2 control-label">内容：</label>
+						<div class="col-sm-10">
+							<span id="langHtm"></span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="getCoin" class="col-sm-2 control-label">请选择语言</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="selectLang"  id="selectLang" placeholder="请选择语言" >
+								<option th:each="allLang:${allLang}" th:value="${allLang.lang}" th:text="${allLang.chinese_lang}"  ></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="getPrice" class="col-sm-2 control-label">标题</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="langTitle" value="" id="langTitle" placeholder="标题">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="getPrice" class="col-sm-2 control-label">描述</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="langDepict" value="" id="langDepict" placeholder="描述">
+						</div>
+					</div>
+
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="LangSubmitBtn" >确定</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+
+<script th:src="@{/daterangepicker/moment.min.js}"></script>
+<script th:src="@{/daterangepicker/daterangepicker.js}"></script>
+<script th:inline="javascript">
+    function timestampToTime(str){
+        if (str == null || str == ""){
+            return null;
+        }
+        var oDate = new Date(str),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth()+1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+        return oTime;
+    };
+    //补0操作
+    function getzf(num){
+        if(parseInt(num) < 10){
+            num = '0'+num;
+        }
+        return num;
+    }
+
+    var options = {};
+    options.singleDatePicker=true;
+    options.timePicker=true;
+    options.timePickerSeconds=true;
+    options.timePicker24Hour=true;
+    options.showDropdowns=true;
+    options.autoApply=true;//只有在不显示时间的时候起作用
+    options.showDropdowns=true;
+    options.locale= {
+        format: 'YYYY-MM-DD HH:mm:ss',
+        applyLabel: "应用",
+        cancelLabel: "取消",
+        resetLabel: "重置",
+        daysOfWeek: ['日', '一', '二', '三', '四', '五','六'],
+        monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+    }
+
+    $(function(){
+
+        //提交按钮
+        $("#LangSubmitBtn").click(function(){
+            var langRaiseId = $("#langRaiseId").val();
+            var selectLang = $("#selectLang").val();
+            var langTitle = $("#langTitle").val();
+            var langDepict = $("#langDepict").val();
+
+            if (selectLang == null ||langTitle == null ||langDepict == null || selectLang == "" || langTitle == "" || langDepict == "") {
+                alert( "参数不齐，请检查参数");
+                $("#itemModal").modal("hide");
+            }
+            if(langRaiseId == null){
+                alert ("异常，请刷新重试");
+                $("#itemModal").modal("hide");
+            }
+            $.ajax({
+                type:"POST",
+                url:_ctx+"/coinPublish/addLangVersion",
+                cache:false,
+                data:{raiseId:langRaiseId,lang:selectLang,title:langTitle,depict:langDepict},
+                dataType:"json",
+                success:function(data){
+                    if(data.status == "200"){
+                        alert("添加成功！")
+                        window.location.href=window.location.href;
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+            $("#itemModal").modal("hide");
+        });
+
+        //日期
+        $('#publishBeginTime').daterangepicker(options);
+        $('#publishEndTime').daterangepicker(options);
+        $('#preheatTime').daterangepicker(options);
+
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/coinPublish/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("确定");
+            setData("","","","","","","","","","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var title = $("#title").val();
+            var depict = $("#depict").val();
+            var showNumber = $("#showNumber").val();
+            var number = $("#number").val();
+            var consumeCoin = $("#consumeCoin").val();
+            var consumePrice = $("#consumePrice").val();
+            var getCoin = $("#getCoin").val();
+            var getPrice = $("#getPrice").val();
+            var preheatTime = $("#preheatTime").val();
+            var publishBeginTime = $("#publishBeginTime").val();
+            var publishEndTime = $("#publishEndTime").val();
+            var base64Img= $("input[name='pics']").val();
+            var isImgChange = $("#isImgChange").val();
+
+            if(checkData(base64Img,title ,depict ,showNumber ,number ,consumeCoin ,consumePrice ,getCoin ,getPrice ,preheatTime ,publishBeginTime ,publishEndTime)){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+
+                    data:{isImgChange:isImgChange,id:id,title:title,depict:depict,pics:base64Img,showNumber:showNumber,number:number,consumeCoin:consumeCoin,consumePrice:consumePrice,getCoin:getCoin,getPrice:getPrice,preheatTime:preheatTime,publishBeginTime:publishBeginTime,publishEndTime:publishEndTime},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+
+
+
+    })
+
+
+    function setData(  id , title , depict , headPath , showNumber , number , userNumber , buyNumber , consumeCoin , consumePrice , getCoin , getPrice , preheatTime , publishBeginTime , publishEndTime , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+        $("#id").val(id);
+        $("#title").val(title);
+        $("#depict").val(depict);
+        /*$("#headPath").attr("src", headPath);*/
+        $("#showImg").attr("src",headPath);
+        $("#showNumber").val(showNumber);
+        $("#number").val(number);
+        $("#consumeCoin").val(consumeCoin);
+        $("#consumePrice").val(consumePrice);
+        $("#getCoin").val(getCoin);
+        $("#getPrice").val(getPrice);
+        $("#preheatTime").val(timestampToTime(preheatTime));
+        $("#publishBeginTime").val(timestampToTime(publishBeginTime));
+        $("#publishEndTime").val(timestampToTime(publishEndTime));
+    }
+
+    function skipPage(page){
+        var keyword = $("#keyword").val();
+        var publishState = $("#publishState").val();
+        var url="/coinPublish/list";
+        if(page != ""){
+            url =url+ "/"+page+"?t=1";
+        }else {
+            url = url + "?t=1";
+        }
+        if(keyword != ""){
+            url =url+"&keyword="+keyword;
+        }
+        url = url +"&publishState="+publishState;
+        window.location.href=_ctx+url;
+    }
+    //编辑商户
+    function edit(id){
+        $("#modelHead").text("编辑");
+        $("#submitBtn").text("编辑");
+        $("input[name='id']").val(id);
+        $("input[name='actionurl']").val("/coinPublish/edit");
+        $.get(_ctx+"/coinPublish/detail",{t:new Date().getTime(),id:id},function(data){
+            console.log("data:",data);
+            if(data.status == "200"){
+                var item = data.data;
+                console.log("item:",item);
+                setData( item.id , item.title , item.depict , item.head_path , item.show_number , item.number , item.user_number , item.buy_number , item.consume_coin , item.consume_price , item.get_coin , item.get_price , item.preheat_time , item.publish_begin_time , item.publish_end_time , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by )
+            }else{
+                alert(data.message);
+            }
+        })
+        $("#itemModal").modal("show");
+    }
+
+    function addLang(id){
+        $("#langRaiseId").val(id);
+        $.get(_ctx+"/coinPublish/getHaveLang",{raiseId:id},function(data){
+            $("#ishaveLang").val(data.haveLang);
+            console.log("data:",data.list);
+            var htm = "";
+            var list = data.list;
+            $.each(list,function(index){
+                htm = htm + "<span><h3>"+list[index].chinese_name+"版本:</h3></span>"
+                    +"<span><h4>标题：</h4>"+list[index].title+"</span>;"
+                    +"<span><h4>描述：</h4>"+list[index].depict+"</span><br><br>"
+
+            });
+            $("#langHtm").html(htm);
+
+
+        })
+        $("#itemModalLang").modal("show");
+    }
+
+
+    //删除
+    function del(id){
+        if(confirm("您确定要删除这条记录吗？"))
+            $.post(_ctx+"/coinPublish/del",{t:new Date().getTime(),id:id},function(data){
+                if(data.status == "200"){
+                    window.location.href=window.location.href;
+                }else{
+                    alert(data.message);
+                }
+            });
+    }
+
+    //校验
+    function checkData(base64Img, title , depict , headPath , showNumber , number , consumeCoin , consumePrice , getCoin , getPrice , preheatTime , publishBeginTime , publishEndTime ){
+
+
+        if(title == ""){
+            alert("title不能为空");
+            $("input[name='title']").focus();
+            return false;
+        }
+        if(depict == ""){
+            alert("描述不能为空");
+            $("input[name='depict']").focus();
+            return false;
+        }
+        if(showNumber == ""){
+            alert("展示数量不能为空");
+            $("input[name='showNumber']").focus();
+            return false;
+        }
+        if(number == ""){
+            alert("众筹数量不能为空");
+            $("input[name='number']").focus();
+            return false;
+        }
+
+        if(consumeCoin == ""){
+            alert("消耗coin不能为空");
+            $("input[name='consumeCoin']").focus();
+            return false;
+        }
+        if(consumePrice == ""){
+            alert("消耗单价不能为空");
+            $("input[name='consumePrice']").focus();
+            return false;
+        }
+        if(getCoin == ""){
+            alert("获得coin不能为空");
+            $("input[name='getCoin']").focus();
+            return false;
+        }
+        if(getPrice == ""){
+            alert("获得单价不能为空");
+            $("input[name='getPrice']").focus();
+            return false;
+        }
+        if(preheatTime == ""){
+            alert("预热开始时间不能为空");
+            $("input[name='preheatTime']").focus();
+            return false;
+        }
+        if(publishBeginTime == ""){
+            alert("认购开始时间不能为空");
+            $("input[name='publishBeginTime']").focus();
+            return false;
+        }
+        if(publishEndTime == ""){
+            alert("认购结束时间不能为空");
+            $("input[name='publishEndTime']").focus();
+            return false;
+        }
+        /*if(base64Img == ""){
+            alert("图片不能为空");
+            $("input[name='pics']").focus();
+            return false;
+        }*/
+        return true;
+    }
+
+
+
+    var input = document.getElementById("imgfile");
+    if (typeof (FileReader) === 'undefined') {
+        result.innerHTML = "抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！";
+        input.setAttribute('disabled', 'disabled');
+    } else {
+        input.addEventListener('change', readFile, false);
+    }
+    function readFile() {
+        var file = this.files[0];
+        //判断是否是图片类型
+        if (!/image\/\w+/.test(file.type)) {
+            alert("只能选择图片");
+            return false;
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            base64Code=this.result;
+            $("input[name='pics']").val(this.result);
+            $("#showImg").attr("src",this.result);
+            $("#isImgChange").val("isImgChange");
+        }
+    }
+
+</script>
+</body>
+</html>

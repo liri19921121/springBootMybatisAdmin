@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 业务记录</a></li>
+    <li class="active">统计列表</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">统计列表</h3>
+              <br><br>
+				<!--
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+				-->
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<input type="hidden" name="unifyId" id="unifyId" th:value="${unifyId}"/>
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+						<th>会员账号</th>
+						<th>日期</th>
+					  <th>释放数量</th>
+					  <th>真实数量</th>
+					  <th>状态</th>
+					  <th>类型</th>
+						<th>结算时间</th>
+						<th>审核用户</th>
+						<th>审核时间</th>
+					  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ dailyTotalDetail }" >
+                  <td th:text="${stat.count}">1</td>
+					<th th:text="${item.user_name }">userid</th>
+					<th th:text="${item.date }">当天的日期</th>
+					<th th:text="${item.amount }">amount</th>
+					<th th:text="${item.real_amount }">real_amount</th>
+					<th th:switch="${item.status }">
+						<span th:case="0">待结算</span>
+						<span th:case="1">已结算</span>
+					</th>
+					<th th:switch="${item.type }">
+						<span th:case="0">动态</span>
+						<span th:case="1">静态</span>
+					</th>
+					<th th:text="${item.statistics_time }">结算时间</th>
+					<th th:text="${item.username }">username</th>
+					<th th:text="${item.modify_time }">modify_time</th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="查看详情" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'auditing(\''+${item.id}+'\');'"><i class="fa fa-eye"></i> 查看详情</span>
+					  <!--
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  	 -->
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="userId" class="col-sm-2 control-label">用户ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userId" value="" id="userId" placeholder="请输入用户ID">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="coinCode" class="col-sm-2 control-label">free -- 自由子链，lock -- 锁定子链，</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="coinCode" value="" id="coinCode" placeholder="请输入free -- 自由子链，lock -- 锁定子链，">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="amount" class="col-sm-2 control-label">释放总数量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="amount" value="" id="amount" placeholder="请输入释放总数量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="realAmount" class="col-sm-2 control-label">获得真实的数量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="realAmount" value="" id="realAmount" placeholder="请输入获得真实的数量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="userAmount" class="col-sm-2 control-label">用户数量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userAmount" value="" id="userAmount" placeholder="请输入用户数量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="status" class="col-sm-2 control-label">是否审核，1 -- 已审核，0 -- 未审核</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="status" value="" id="status" placeholder="请输入是否审核，1 -- 已审核，0 -- 未审核">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="type" class="col-sm-2 control-label">1 -- 静态，0 -- 动态</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="type" value="" id="type" placeholder="请输入1 -- 静态，0 -- 动态">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="date" class="col-sm-2 control-label">当天的日期</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="date" value="" id="date" placeholder="请输入当天的日期">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="unifyId" class="col-sm-2 control-label">unifyId</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="unifyId" value="" id="unifyId" placeholder="请输入unifyId">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/dailyTotalDetail/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var userId = $("#userId").val();
+            var coinCode = $("#coinCode").val();
+            var amount = $("#amount").val();
+            var realAmount = $("#realAmount").val();
+            var userAmount = $("#userAmount").val();
+            var status = $("#status").val();
+            var type = $("#type").val();
+            var date = $("#date").val();
+            var unifyId = $("#unifyId").val();
+            var createBy = $("#createBy").val();
+            var createTime = $("#createTime").val();
+            
+
+            if(checkData(id ,userId ,coinCode ,amount ,realAmount ,userAmount ,status ,type ,date ,unifyId ,createBy ,createTime )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,userId:userId,coinCode:coinCode,amount:amount,realAmount:realAmount,userAmount:userAmount,status:status,type:type,date:date,unifyId:unifyId,createBy:createBy,createTime:createTime, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , userId , coinCode , amount , realAmount , userAmount , status , type , date , unifyId , createBy , createTime ){
+   	 $("#id").val(id);
+   	 $("#userId").val(userId);
+   	 $("#coinCode").val(coinCode);
+   	 $("#amount").val(amount);
+   	 $("#realAmount").val(realAmount);
+   	 $("#userAmount").val(userAmount);
+   	 $("#status").val(status);
+   	 $("#type").val(type);
+   	 $("#date").val(date);
+   	 $("#unifyId").val(unifyId);
+   	 $("#createBy").val(createBy);
+   	 $("#createTime").val(createTime);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var unifyId = $("#unifyId").val();
+    var url="/dailyTotalDetail/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    if(unifyId != ""){
+        url =url+"&unifyId="+unifyId;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/dailyTotalDetail/edit");
+    $.get(_ctx+"/dailyTotalDetail/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.user_id , item.coin_code , item.amount , item.real_amount , item.user_amount , item.status , item.type , item.date , item.unify_id , item.create_by , item.create_time )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+
+    function auditing(id){
+        window.location.href=_ctx+"/dailyDetail/list?unifyId="+id;
+    }
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/dailyTotalDetail/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , userId , coinCode , amount , realAmount , userAmount , status , type , date , unifyId , createBy , createTime ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("用户ID不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(coinCode == ""){
+        alert("free -- 自由子链，lock -- 锁定子链，不能为空");
+        $("input[name='coinCode']").focus();
+        return false;
+    }
+    if(amount == ""){
+        alert("释放总数量不能为空");
+        $("input[name='amount']").focus();
+        return false;
+    }
+    if(realAmount == ""){
+        alert("获得真实的数量不能为空");
+        $("input[name='realAmount']").focus();
+        return false;
+    }
+    if(userAmount == ""){
+        alert("用户数量不能为空");
+        $("input[name='userAmount']").focus();
+        return false;
+    }
+    if(status == ""){
+        alert("是否审核，1 -- 已审核，0 -- 未审核不能为空");
+        $("input[name='status']").focus();
+        return false;
+    }
+    if(type == ""){
+        alert("1 -- 静态，0 -- 动态不能为空");
+        $("input[name='type']").focus();
+        return false;
+    }
+    if(date == ""){
+        alert("当天的日期不能为空");
+        $("input[name='date']").focus();
+        return false;
+    }
+    if(unifyId == ""){
+        alert("unifyId不能为空");
+        $("input[name='unifyId']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

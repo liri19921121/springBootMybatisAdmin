@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.goodsDirectory.GoodsDirectoryDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			title ,
+			content ,
+			head_img_id ,
+			price ,
+			sales_volume ,
+			sort_num ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from goods_directory 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update goods_directory set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into goods_directory (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ title } ,
+	        	#{ content } ,
+	        	#{ headImgId } ,
+	        	#{ price } ,
+	        	#{ salesVolume } ,
+	        	#{ sortNum } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into goods_directory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="title != null">
+			        title ,
+			      </if>
+	              <if test="content != null">
+			        content ,
+			      </if>
+	              <if test="headImgId != null">
+			        head_img_id ,
+			      </if>
+	              <if test="price != null">
+			        price ,
+			      </if>
+	              <if test="salesVolume != null">
+			        sales_volume ,
+			      </if>
+	              <if test="sortNum != null">
+			        sort_num ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="title != null">
+	        #{ title } ,
+	      </if>
+	      <if test="content != null">
+	        #{ content } ,
+	      </if>
+	      <if test="headImgId != null">
+	        #{ headImgId } ,
+	      </if>
+	      <if test="price != null">
+	        #{ price } ,
+	      </if>
+	      <if test="salesVolume != null">
+	        #{ salesVolume } ,
+	      </if>
+	      <if test="sortNum != null">
+	        #{ sortNum } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update goods_directory
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="title != null">
+	         title = #{ title } ,
+	      </if>
+	      <if test="content != null">
+	         content = #{ content } ,
+	      </if>
+	      <if test="headImgId != null">
+	         head_img_id = #{ headImgId } ,
+	      </if>
+	      <if test="price != null">
+	         price = #{ price } ,
+	      </if>
+	      <if test="salesVolume != null">
+	         sales_volume = #{ salesVolume } ,
+	      </if>
+	      <if test="sortNum != null">
+	         sort_num = #{ sortNum } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update goods_directory
+    set  
+	        id = #{ id }  ,
+	        title = #{ title }  ,
+	        content = #{ content }  ,
+	        head_img_id = #{ headImgId }  ,
+	        price = #{ price }  ,
+	        sales_volume = #{ salesVolume }  ,
+	        sort_num = #{ sortNum }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update goods_directory set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from goods_directory
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="headImgId != null">
+		        and head_img_id = #{ headImgId }
+	        </if>
+	        <if test="price != null">
+		        and price = #{ price }
+	        </if>
+	        <if test="salesVolume != null">
+		        and sales_volume = #{ salesVolume }
+	        </if>
+	        <if test="sortNum != null">
+		        and sort_num = #{ sortNum }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+        SELECT g.id,g.title,g.content,g.sales_volume,g.price,g.sort_num,CONCAT(#{homeUrl},p.pic_path) as pic_path,g.create_time
+        FROM goods_directory g LEFT JOIN picture p ON g.head_img_id = p.pic_id
+        <where>
+			g.is_deleted = 'N'
+			<if test="keyword != null">
+				and g.title like concat("%",#{keyword},"%")
+			</if>
+		</where>
+
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from goods_directory
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="headImgId != null">
+		        and head_img_id = #{ headImgId }
+	        </if>
+	        <if test="price != null">
+		        and price = #{ price }
+	        </if>
+	        <if test="salesVolume != null">
+		        and sales_volume = #{ salesVolume }
+	        </if>
+	        <if test="sortNum != null">
+		        and sort_num = #{ sortNum }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 实名认证列表</a></li>
+    <li class="active">实名认证</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">实名认证列表</h3>
+              <br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>用户id</th>
+						  <th>姓</th>
+						  <th>真实名</th>
+						  <th>国籍</th>
+						  <th>申请时间</th>
+		                  <th>证件号码</th>
+		                  <th>审核状态</th>
+						  <th>审核时间</th>
+						  <th>审核人</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ userExtendInfo }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.user_id }">用户id</th>
+					      <th th:text="${item.surname }">姓</th>
+					      <th th:text="${item.real_name }">真实姓名</th>
+					      <th th:if="${item.nationality == '1'}" th:text="中国籍">国籍</th>
+					      <th th:if="${item.nationality == '2'}" th:text="海外籍">国籍</th>
+					      <th th:text="${item.create_time }">申请时间</th>
+		                  <th th:text="${item.id_card }">身份证号码</th>
+		                  <th th:each="reviewStatus:${reviewStatusList}" th:if="${item.real_audit_status} == ${reviewStatus.key}" th:text="${reviewStatus.value}">审核状态：0-审核中，1-审核通过，2-审核不通过</th>
+					      <th th:text="${item.modify_time }">审核时间</th>
+					      <th th:text="${item.modify_name }">审核人</th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="审核" th:if="${QX.edit == '1'and item.real_audit_status ==1 }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\',1,\''+${page.pageNum}+'\');'">审核<i class="fa fa-edit"></i></span>
+					 <span data-toggle="tooltip" data-placement="left" title="审核" th:if="${QX.edit == '1'and item.real_audit_status !=1 }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\',2,\''+${page.pageNum}+'\');'">查看<i class="fa fa-edit"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+
+        $("#addItem").click(function(){
+            window.location.href=_ctx+"/userExtendInfo/toAdd";
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var userId = $("#userId").val();
+            var idCard = $("#idCard").val();
+            var idPersonCardImg = $("#idPersonCardImg").val();
+            var passport = $("#passport").val();
+            var passportImg = $("#passportImg").val();
+            var idCardHandlerStatus = $("#idCardHandlerStatus").val();
+            var idCardStatus = $("#idCardStatus").val();
+            var passportStatus = $("#passportStatus").val();
+            var orderPartner = $("#orderPartner").val();
+            var idCardReverseImg = $("#idCardReverseImg").val();
+            var idCardPersonImg = $("#idCardPersonImg").val();
+            var realName = $("#realName").val();
+            var realAuditRemark = $("#realAuditRemark").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var banReason = $("#banReason").val();
+            var nationality = $("#nationality").val();
+            var realAuditStatus = $("#realAuditStatus").val();
+            
+
+            if(checkData(id ,userId ,idCard ,idPersonCardImg ,passport ,passportImg ,idCardHandlerStatus ,idCardStatus ,passportStatus ,orderPartner ,idCardReverseImg ,idCardPersonImg ,realName ,realAuditRemark ,modifyTime ,modifyBy ,createTime ,createBy ,banReason ,nationality ,realAuditStatus )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,userId:userId,idCard:idCard,idPersonCardImg:idPersonCardImg,passport:passport,passportImg:passportImg,idCardHandlerStatus:idCardHandlerStatus,idCardStatus:idCardStatus,passportStatus:passportStatus,orderPartner:orderPartner,idCardReverseImg:idCardReverseImg,idCardPersonImg:idCardPersonImg,realName:realName,realAuditRemark:realAuditRemark,modifyTime:modifyTime,modifyBy:modifyBy,createTime:createTime,createBy:createBy,banReason:banReason,nationality:nationality,realAuditStatus:realAuditStatus, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , userId , idCard , idPersonCardImg , passport , passportImg , idCardHandlerStatus , idCardStatus , passportStatus , orderPartner , idCardReverseImg , idCardPersonImg , realName , realAuditRemark , modifyTime , modifyBy , createTime , createBy , banReason , nationality , realAuditStatus ){
+   	 $("#id").val(id);
+   	 $("#userId").val(userId);
+   	 $("#idCard").val(idCard);
+   	 $("#idPersonCardImg").val(idPersonCardImg);
+   	 $("#passport").val(passport);
+   	 $("#passportImg").val(passportImg);
+   	 $("#idCardHandlerStatus").val(idCardHandlerStatus);
+   	 $("#idCardStatus").val(idCardStatus);
+   	 $("#passportStatus").val(passportStatus);
+   	 $("#orderPartner").val(orderPartner);
+   	 $("#idCardReverseImg").val(idCardReverseImg);
+   	 $("#idCardPersonImg").val(idCardPersonImg);
+   	 $("#realName").val(realName);
+   	 $("#realAuditRemark").val(realAuditRemark);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#banReason").val(banReason);
+   	 $("#nationality").val(nationality);
+   	 $("#realAuditStatus").val(realAuditStatus);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/userExtendInfo/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+    //编辑商户
+    function edit(id,type,page){
+	    if(type ==1 ){
+	        url = "/userExtendInfo/toEdit?id="+id;
+	        url = url+"&page="+page;
+            window.location.href=_ctx+url;
+		}
+		if(type ==2){
+            url = "/userExtendInfo/toView?id="+id;
+            url = url+"&page="+page;
+            window.location.href=_ctx+url;
+		}
+    }
+
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/userExtendInfo/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , userId , idCard , idPersonCardImg , passport , passportImg , idCardHandlerStatus , idCardStatus , passportStatus , orderPartner , idCardReverseImg , idCardPersonImg , realName , realAuditRemark , modifyTime , modifyBy , createTime , createBy , banReason , nationality , realAuditStatus ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("用户id不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(idCard == ""){
+        alert("身份证号码不能为空");
+        $("input[name='idCard']").focus();
+        return false;
+    }
+    if(idPersonCardImg == ""){
+        alert("手持身份证照不能为空");
+        $("input[name='idPersonCardImg']").focus();
+        return false;
+    }
+    if(passport == ""){
+        alert("护照不能为空");
+        $("input[name='passport']").focus();
+        return false;
+    }
+    if(passportImg == ""){
+        alert("passportImg不能为空");
+        $("input[name='passportImg']").focus();
+        return false;
+    }
+    if(idCardHandlerStatus == ""){
+        alert("手持身份证校验 0  没输入 1 验证通过 2 上传 没验证 3 其它 4 未通过不能为空");
+        $("input[name='idCardHandlerStatus']").focus();
+        return false;
+    }
+    if(idCardStatus == ""){
+        alert("0  没输入 1 验证通过 2 上传 没验证 3 其它 4 未通过不能为空");
+        $("input[name='idCardStatus']").focus();
+        return false;
+    }
+    if(passportStatus == ""){
+        alert("0  没输入 1 验证通过 2 上传 没验证 3 其它 4 未通过不能为空");
+        $("input[name='passportStatus']").focus();
+        return false;
+    }
+    if(orderPartner == ""){
+        alert("合作者的总数量不能为空");
+        $("input[name='orderPartner']").focus();
+        return false;
+    }
+    if(idCardReverseImg == ""){
+        alert("身份证反面照片不能为空");
+        $("input[name='idCardReverseImg']").focus();
+        return false;
+    }
+    if(idCardPersonImg == ""){
+        alert("身份证人像照片不能为空");
+        $("input[name='idCardPersonImg']").focus();
+        return false;
+    }
+    if(realName == ""){
+        alert("真实姓名不能为空");
+        $("input[name='realName']").focus();
+        return false;
+    }
+    if(realAuditRemark == ""){
+        alert("审批备注不能为空");
+        $("input[name='realAuditRemark']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(banReason == ""){
+        alert("不通过原因不能为空");
+        $("input[name='banReason']").focus();
+        return false;
+    }
+    if(nationality == ""){
+        alert("国籍不能为空");
+        $("input[name='nationality']").focus();
+        return false;
+    }
+    if(realAuditStatus == ""){
+        alert("审核状态：0-审核中，1-审核通过，2-审核不通过不能为空");
+        $("input[name='realAuditStatus']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

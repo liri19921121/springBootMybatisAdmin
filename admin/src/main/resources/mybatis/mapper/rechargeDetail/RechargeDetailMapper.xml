@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.rechargeDetail.RechargeDetailDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			amount ,
+			type ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tran_recharge_detail 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update tran_recharge_detail set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into tran_recharge_detail (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ amount } ,
+	        	#{ type } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into tran_recharge_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="amount != null">
+			        amount ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="amount != null">
+	        #{ amount } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update tran_recharge_detail
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="amount != null">
+	         amount = #{ amount } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update tran_recharge_detail
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        amount = #{ amount }  ,
+	        type = #{ type }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update tran_recharge_detail set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from tran_recharge_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from tran_recharge_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getRechargeList" resultType="pm" parameterType="pm" >
+		SELECT
+			a.id,
+			a.user_id,
+			a.amount,
+			a.type,
+			a.create_time,
+			b.user_name,
+			c.username as adminName,
+			c.nick_name
+		from tran_recharge_detail a
+		LEFT JOIN usr_user b on a.user_id=b.id
+		LEFT JOIN admin_user c on a.create_by=c.user_id
+		<where>
+			<if test="isDeleted != null">
+				and a.is_deleted = #{ isDeleted }
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and (
+				b.user_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				or
+				c.nick_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				or
+				c.username LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				)
+			</if>
+		</where>
+		order by a.create_time desc
+	</select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from tran_recharge_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

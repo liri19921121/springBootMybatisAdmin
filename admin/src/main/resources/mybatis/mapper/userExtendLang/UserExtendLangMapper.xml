@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.userExtendLang.UserExtendLangDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			key ,
+			name ,
+			lang ,
+			type ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_user_extend_lang 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_user_extend_lang set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_user_extend_lang (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ key } ,
+	        	#{ name } ,
+	        	#{ lang } ,
+	        	#{ type } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_user_extend_lang
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="key != null">
+			        key ,
+			      </if>
+	              <if test="name != null">
+			        name ,
+			      </if>
+	              <if test="lang != null">
+			        lang ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="key != null">
+	        #{ key } ,
+	      </if>
+	      <if test="name != null">
+	        #{ name } ,
+	      </if>
+	      <if test="lang != null">
+	        #{ lang } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_user_extend_lang
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="key != null">
+	         key = #{ key } ,
+	      </if>
+	      <if test="name != null">
+	         name = #{ name } ,
+	      </if>
+	      <if test="lang != null">
+	         lang = #{ lang } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_user_extend_lang
+    set  
+	        id = #{ id }  ,
+	        key = #{ key }  ,
+	        name = #{ name }  ,
+	        lang = #{ lang }  ,
+	        type = #{ type }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_user_extend_lang set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_extend_lang
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="key != null">
+		        and key = #{ key }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="lang != null">
+		        and lang = #{ lang }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select *
+	   		from usr_user_extend_lang
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="key != null">
+		        and key = #{ key }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="lang != null">
+		        and lang = #{ lang }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_user_extend_lang
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="key != null">
+		        and key = #{ key }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="lang != null">
+		        and lang = #{ lang }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

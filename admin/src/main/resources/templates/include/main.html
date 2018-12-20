@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>static</title>
+</head>
+<style>
+  .wrap{
+    width:100%;
+    min-width: 1026px;
+    background:rgba(241,247,255,1);
+    padding: 23px 20px 28px;
+    box-sizing: border-box;
+  }
+  .top{
+    width:100%;
+    height:215px;
+    /*background: #0d34a4;*/
+  }
+  .topTitle{
+    width:100%;
+    height:20px;
+  }
+  .topTitle>img{
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+  .topTitle>span{
+    font-size:19px;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+  }
+  .topLists{
+    width:100%;
+    height:160px;
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .topLists>.list{
+    width:23%;
+    height:160px;
+    border-radius:6px;
+    padding-left: 18px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .topLists>.list1{
+    background:linear-gradient(180deg,rgba(255,105,116,1) 0%,rgba(254,139,110,1) 100%);
+    box-shadow:-1px -3px 10px 0px rgba(255,106,116,0.8);
+  }
+  .topLists>.list2{
+    background:linear-gradient(180deg,rgba(111,104,210,1) 0%,rgba(111,205,232,1) 100%);
+    box-shadow:-1px -3px 10px 0px rgba(116,103,206,0.8);
+  }
+  .topLists>.list3{
+    background:linear-gradient(180deg,rgba(14,131,185,1) 0%,rgba(97,197,212,1) 100%);
+    box-shadow:-1px -3px 10px 0px rgba(18,135,187,0.8);
+  }
+  .topLists>.list4{
+    background:linear-gradient(180deg,rgba(87,79,250,1) 0%,rgba(151,147,232,1) 100%);
+    box-shadow:-1px -3px 10px 0px rgba(90,83,249,0.8);
+  }
+  .topLists>.list>img{
+    width:80px;
+    height:80px;
+    position: absolute;
+    right: 16px;
+    top: 36px;
+  }
+  .topLists>.list>span{
+    display: block;
+  }
+  .topLists>.list>.text1{
+    font-size:16px;
+    font-weight:400;
+    line-height: 20px;
+    color:rgba(255,255,255,1);
+    opacity:0.8;
+    margin-top: 19px;
+  }
+  .topLists>.list>.text2{
+    font-size:40px;
+    font-weight:normal;
+    line-height: 20px;
+    color:rgba(255,255,255,1);
+    margin-top: 25px;
+  }
+  .topLists>.list>.text3{
+    font-size:12px;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    margin-top: 37px;
+    cursor: pointer;
+  }
+
+  .middle{
+    width:100%;
+    height:370px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .middleList{
+    width:48.5%;
+    height:100%;
+  }
+  .middleListTitle{
+    width:100%;
+    height:20px;
+  }
+  .middleListTitle>img{
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+  .middleListTitle>span{
+    font-size:19px;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+  }
+  .middleListContent{
+    width:100%;
+    height:330px;
+    background:rgba(255,255,255,1);
+    box-shadow:-1px -3px 1px 0px rgba(255,255,255,1), -1px -3px 10px 0px rgba(153,153,153,0.15);
+    border-radius:6px;
+    margin-top: 20px;
+  }
+  .middleListContent>img{
+    width:100%;
+    height:100%
+  }
+
+  .bottom{
+    width:100%;
+    height:220px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bottomList{
+    width:48.5%;
+    height:100%;
+  }
+  .bottomListTitle{
+    width:100%;
+    height:20px;
+  }
+  .bottomListTitle>img{
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-top: 3px;
+    margin-right: 10px;
+  }
+  .bottomListTitle>span{
+    font-size:19px;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+  }
+  .bottomListContent{
+    width:100%;
+    height:180px;
+    background:rgba(255,255,255,1);
+    box-shadow:-1px -3px 1px 0px rgba(255,255,255,1), -1px -3px 10px 0px rgba(153,153,153,0.15);
+    border-radius:6px;
+    margin-top: 20px;
+    padding: 8px 22px 38px;
+    box-sizing: border-box;
+  }
+  .bottomListContent>.textList{
+    width:100%;
+    height:53px;
+    position: relative;
+    border-bottom:1px solid rgba(234,234,234,1)
+  }
+  .bottomListContent>.textList:last-child{
+    border-bottom:1px solid transparent;
+  }
+  .textLeft{
+    width: 70%;
+    height:100%;
+    line-height: 53px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .textLeft>span{
+    font-size:14px;
+    font-weight:400;
+    color:rgba(117,119,130,1);
+  }
+  .bottomListContent>.textList>span{
+    font-size:14px;
+    font-weight:400;
+    color:rgba(191,191,191,1);
+    position: absolute;
+    right: 0;
+    top: 15px;
+  }
+
+
+</style>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="topTitle">
+      <img src="/images/index/5.png" alt="">
+      <span>统计指标</span>
+    </div>
+    <div class="topLists">
+      <div class="list list1">
+        <img src="/images/index/1.png" alt="">
+        <span class="text1">最新商机量</span>
+        <span class="text2">39</span>
+        <span class="text3">查看更多</span>
+      </div>
+      <div class="list list2">
+        <img src="/images/index/2.png" alt="">
+        <span class="text1">最新商机量</span>
+        <span class="text2">10</span>
+        <span class="text3">查看更多</span>
+      </div>
+      <div class="list list3">
+        <img src="/images/index/3.png" alt="">
+        <span class="text1">最新商机量</span>
+        <span class="text2">17</span>
+        <span class="text3">查看更多</span>
+      </div>
+      <div class="list list4">
+        <img src="/images/index/4.png" alt="">
+        <span class="text1">最新商机量</span>
+        <span class="text2">124294</span>
+        <span class="text3">查看更多</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="middle">
+    <div class="middleList">
+
+      <div class="middleListTitle">
+        <img src="/images/index/6.png" alt="">
+        <span>统计报告</span>
+      </div>
+      <div class="middleListContent">
+        <img src="/images/index/a1.png" alt="" style="width: 49%">
+        <img src="/images/index/a2.png" alt="" style="width: 50%">
+      </div>
+    </div>
+    <div class="middleList">
+      <div class="middleListTitle">
+        <img src="/images/index/7.png" alt="">
+        <span>统计报表</span>
+      </div>
+      <div class="middleListContent">
+        <img src="/images/index/a1.png" alt="" style="width: 49%">
+        <img src="/images/index/a2.png" alt="" style="width: 50%">
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+
+    <div class="bottomList">
+      <div class="bottomListTitle">
+        <img src="/images/index/8.png" alt="">
+        <span>内部公告</span>
+      </div>
+      <div class="bottomListContent">
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+        </div>
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+        </div>
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="bottomList">
+      <div class="bottomListTitle">
+        <img src="/images/index/9.png" alt="">
+        <span>行业新闻</span>
+      </div>
+      <div class="bottomListContent">
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+        </div>
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+        </div>
+        <div class="textList">
+          <div class="textLeft">
+            <span>其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅其巍峨企鹅</span>
+          </div>
+          <span>2018-09-11</span>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.userAccountDetail.UserAccountDetailDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			trans_user_id ,
+			code ,
+			amount ,
+			detail_id ,
+			state ,
+			detail_type ,
+			befor_money ,
+			after_money ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_user_account_detail 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_user_account_detail set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_user_account_detail (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ transUserId } ,
+	        	#{ code } ,
+	        	#{ amount } ,
+	        	#{ detailId } ,
+	        	#{ state } ,
+	        	#{ detailType } ,
+	        	#{ beforMoney } ,
+	        	#{ afterMoney } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_user_account_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="transUserId != null">
+			        trans_user_id ,
+			      </if>
+	              <if test="code != null">
+			        code ,
+			      </if>
+	              <if test="amount != null">
+			        amount ,
+			      </if>
+	              <if test="detailId != null">
+			        detail_id ,
+			      </if>
+	              <if test="state != null">
+			        state ,
+			      </if>
+	              <if test="detailType != null">
+			        detail_type ,
+			      </if>
+	              <if test="beforMoney != null">
+			        befor_money ,
+			      </if>
+	              <if test="afterMoney != null">
+			        after_money ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="transUserId != null">
+	        #{ transUserId } ,
+	      </if>
+	      <if test="code != null">
+	        #{ code } ,
+	      </if>
+	      <if test="amount != null">
+	        #{ amount } ,
+	      </if>
+	      <if test="detailId != null">
+	        #{ detailId } ,
+	      </if>
+	      <if test="state != null">
+	        #{ state } ,
+	      </if>
+	      <if test="detailType != null">
+	        #{ detailType } ,
+	      </if>
+	      <if test="beforMoney != null">
+	        #{ beforMoney } ,
+	      </if>
+	      <if test="afterMoney != null">
+	        #{ afterMoney } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_user_account_detail
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="transUserId != null">
+	         trans_user_id = #{ transUserId } ,
+	      </if>
+	      <if test="code != null">
+	         code = #{ code } ,
+	      </if>
+	      <if test="amount != null">
+	         amount = #{ amount } ,
+	      </if>
+	      <if test="detailId != null">
+	         detail_id = #{ detailId } ,
+	      </if>
+	      <if test="state != null">
+	         state = #{ state } ,
+	      </if>
+	      <if test="detailType != null">
+	         detail_type = #{ detailType } ,
+	      </if>
+	      <if test="beforMoney != null">
+	         befor_money = #{ beforMoney } ,
+	      </if>
+	      <if test="afterMoney != null">
+	         after_money = #{ afterMoney } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_user_account_detail
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        trans_user_id = #{ transUserId }  ,
+	        code = #{ code }  ,
+	        amount = #{ amount }  ,
+	        detail_id = #{ detailId }  ,
+	        state = #{ state }  ,
+	        detail_type = #{ detailType }  ,
+	        befor_money = #{ beforMoney }  ,
+	        after_money = #{ afterMoney }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_user_account_detail set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_account_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="transUserId != null">
+		        and trans_user_id = #{ transUserId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="detailId != null">
+		        and detail_id = #{ detailId }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="detailType != null">
+		        and detail_type = #{ detailType }
+	        </if>
+	        <if test="beforMoney != null">
+		        and befor_money = #{ beforMoney }
+	        </if>
+	        <if test="afterMoney != null">
+		        and after_money = #{ afterMoney }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_account_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="transUserId != null">
+		        and trans_user_id = #{ transUserId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="detailId != null">
+		        and detail_id = #{ detailId }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="detailType != null">
+		        and detail_type = #{ detailType }
+	        </if>
+	        <if test="beforMoney != null">
+		        and befor_money = #{ beforMoney }
+	        </if>
+	        <if test="afterMoney != null">
+		        and after_money = #{ afterMoney }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_user_account_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="transUserId != null">
+		        and trans_user_id = #{ transUserId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="detailId != null">
+		        and detail_id = #{ detailId }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="detailType != null">
+		        and detail_type = #{ detailType }
+	        </if>
+	        <if test="beforMoney != null">
+		        and befor_money = #{ beforMoney }
+	        </if>
+	        <if test="afterMoney != null">
+		        and after_money = #{ afterMoney }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

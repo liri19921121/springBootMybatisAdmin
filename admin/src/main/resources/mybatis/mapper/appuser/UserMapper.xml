@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.appuser.AppUserDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			mail ,
+			name ,
+			user_name ,
+			auth_mail ,
+			auth_google ,
+			auth_verified ,
+			auth_mobile ,
+			mobile ,
+			area_code,
+			source ,
+			password ,
+			deal_password ,
+			status ,
+			gmt_lastlogin ,
+			last_login_ip ,
+			google_secret ,
+			picture ,
+			postal_code ,
+			address ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by ,
+			social_channel ,
+			social_account 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_user 
+	    where id = #{ id } and is_deleted = 'N'
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_user set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_user (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ mail } ,
+	        	#{ name } ,
+	        	#{ userName } ,
+	        	#{ authMail } ,
+	        	#{ authGoogle } ,
+		  		#{ authVerified } ,
+	        	#{ authMobile } ,
+	        	#{ mobile } ,
+		        #{ areaCode } ,
+	        	#{ source } ,
+	        	#{ password } ,
+	        	#{ dealPassword } ,
+	        	#{ status } ,
+	        	#{ gmtLastlogin } ,
+	        	#{ lastLoginIp } ,
+	        	#{ googleSecret } ,
+	        	#{ picture } ,
+			    #{ postalCode } ,
+			    #{ address } ,
+				#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ socialChannel } ,
+	        	#{ socialAccount } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="mail != null">
+			        mail ,
+			      </if>
+	              <if test="name != null">
+			        name ,
+			      </if>
+	              <if test="userName != null">
+			        user_name ,
+			      </if>
+	              <if test="authMail != null">
+			        auth_mail ,
+			      </if>
+	              <if test="authGoogle != null">
+			        auth_google ,
+			      </if>
+				  <if test="authVerified != null">
+					auth_verified ,
+				  </if>
+	              <if test="authMobile != null">
+			        auth_mobile ,
+			      </if>
+	              <if test="mobile != null">
+			        mobile ,
+			      </if>
+				  <if test="areaCode != null">
+					area_code ,
+				  </if>
+	              <if test="source != null">
+			        source ,
+			      </if>
+	              <if test="password != null">
+			        password ,
+			      </if>
+	              <if test="dealPassword != null">
+			        deal_password ,
+			      </if>
+	              <if test="status != null">
+			        status ,
+			      </if>
+	              <if test="gmtLastlogin != null">
+			        gmt_lastlogin ,
+			      </if>
+	              <if test="lastLoginIp != null">
+			        last_login_ip ,
+			      </if>
+	              <if test="googleSecret != null">
+			        google_secret ,
+			      </if>
+	              <if test="picture != null">
+			        picture ,
+			      </if>
+				  <if test="postalCode != null">
+					postal_code ,
+				  </if>
+				  <if test="address != null">
+					address ,
+				  </if>
+				  <if test="isDeleted != null">
+					is_deleted ,
+				  </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="socialChannel != null">
+			        social_channel ,
+			      </if>
+	              <if test="socialAccount != null">
+			        social_account ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="mail != null">
+	        #{ mail } ,
+	      </if>
+	      <if test="name != null">
+	        #{ name } ,
+	      </if>
+	      <if test="userName != null">
+	        #{ userName } ,
+	      </if>
+	      <if test="authMail != null">
+	        #{ authMail } ,
+	      </if>
+	      <if test="authGoogle != null">
+	        #{ authGoogle } ,
+	      </if>
+		<if test="authVerified != null">
+			#{ authVerified } ,
+		</if>
+	      <if test="authMobile != null">
+	        #{ authMobile } ,
+	      </if>
+	      <if test="mobile != null">
+	        #{ mobile } ,
+	      </if>
+		<if test="areaCode != null">
+			#{ areaCode } ,
+		</if>
+	      <if test="source != null">
+	        #{ source } ,
+	      </if>
+	      <if test="password != null">
+	        #{ password } ,
+	      </if>
+	      <if test="dealPassword != null">
+	        #{ dealPassword } ,
+	      </if>
+	      <if test="status != null">
+	        #{ status } ,
+	      </if>
+	      <if test="gmtLastlogin != null">
+	        #{ gmtLastlogin } ,
+	      </if>
+	      <if test="lastLoginIp != null">
+	        #{ lastLoginIp } ,
+	      </if>
+	      <if test="googleSecret != null">
+	        #{ googleSecret } ,
+	      </if>
+	      <if test="picture != null">
+	        #{ picture } ,
+	      </if>
+		<if test="postalCode != null">
+			#{ postalCode } ,
+		</if>
+		<if test="address != null">
+			#{ address } ,
+		</if>
+		<if test="isDeleted != null">
+			#{ isDeleted } ,
+		</if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="socialChannel != null">
+	        #{ socialChannel } ,
+	      </if>
+	      <if test="socialAccount != null">
+	        #{ socialAccount } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_user
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="mail != null">
+	         mail = #{ mail } ,
+	      </if>
+	      <if test="name != null">
+	         name = #{ name } ,
+	      </if>
+	      <if test="userName != null">
+	         user_name = #{ userName } ,
+	      </if>
+	      <if test="authMail != null">
+	         auth_mail = #{ authMail } ,
+	      </if>
+	      <if test="authGoogle != null">
+	         auth_google = #{ authGoogle } ,
+	      </if>
+		<if test="authVerified != null">
+			auth_verified = #{ authVerified } ,
+		</if>
+	      <if test="authMobile != null">
+	         auth_mobile = #{ authMobile } ,
+	      </if>
+	      <if test="mobile != null">
+	         mobile = #{ mobile } ,
+	      </if>
+		<if test="areaCode != null">
+			area_code = #{ areaCode } ,
+		</if>
+	      <if test="source != null">
+	         source = #{ source } ,
+	      </if>
+	      <if test="password != null">
+	         password = #{ password } ,
+	      </if>
+	      <if test="dealPassword != null">
+	         deal_password = #{ dealPassword } ,
+	      </if>
+	      <if test="status != null">
+	         status = #{ status } ,
+	      </if>
+	      <if test="gmtLastlogin != null">
+	         gmt_lastlogin = #{ gmtLastlogin } ,
+	      </if>
+	      <if test="lastLoginIp != null">
+	         last_login_ip = #{ lastLoginIp } ,
+	      </if>
+	      <if test="googleSecret != null">
+	         google_secret = #{ googleSecret } ,
+	      </if>
+	      <if test="picture != null">
+	         picture = #{ picture } ,
+	      </if>
+		<if test="postalCode != null">
+			postal_code = #{ postalCode } ,
+		</if>
+		<if test="address != null">
+			address = #{ address } ,
+		</if>
+		<if test="isDeleted != null">
+			is_deleted = #{ isDeleted } ,
+		</if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="socialChannel != null">
+	         social_channel = #{ socialChannel } ,
+	      </if>
+	      <if test="socialAccount != null">
+	         social_account = #{ socialAccount } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_user
+    set  
+	        id = #{ id }  ,
+	        mail = #{ mail }  ,
+	        name = #{ name }  ,
+	        user_name = #{ userName }  ,
+	        auth_mail = #{ authMail }  ,
+	        auth_google = #{ authGoogle }  ,
+	        auth_verified = #{ authVerified }  ,
+	        auth_mobile = #{ authMobile }  ,
+	        mobile = #{ mobile }  ,
+	        area_code = #{ areaCode }  ,
+	        source = #{ source }  ,
+	        password = #{ password }  ,
+	        deal_password = #{ dealPassword }  ,
+	        status = #{ status }  ,
+	        gmt_lastlogin = #{ gmtLastlogin }  ,
+	        last_login_ip = #{ lastLoginIp }  ,
+	        google_secret = #{ googleSecret }  ,
+	        picture = #{ picture }  ,
+	        postal_code = #{ postalCode }  ,
+	        address = #{ address }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        social_channel = #{ socialChannel }  ,
+	        social_account = #{ socialAccount }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_user set status = 0
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select
+		  u.id ,
+		  u.mail ,
+		  u.name ,
+		  u.user_name ,
+		  u.auth_mail ,
+		  u.auth_google ,
+		  u.auth_verified ,
+		  u.auth_mobile ,
+		  u.mobile ,
+		  u.area_code,
+		  u.source ,
+		  u.password ,
+		  u.deal_password ,
+		  u.gmt_lastlogin ,
+		  u.last_login_ip ,
+		  u.google_secret ,
+		  u.picture ,
+		  u.postal_code ,
+		  u.address ,
+		  u.is_deleted ,
+		  u.create_time ,
+		  u.create_by ,
+		  u.modify_time ,
+		  u.modify_by ,
+		  u.social_channel ,
+		  u.social_account,
+		  u.status as unStatus,
+		  ua.amount,
+		  ai.status
+		  from usr_user u
+		  left join usr_user_account ua
+		  on u.id = ua.user_id
+		  left JOIN
+		  usr_activation_info ai
+		  on u.id = ai.user_id
+	   	  <where>
+			  1=1
+			  and u.is_deleted = 'N'
+			  and ua.code = 'lock'
+			  and ai.is_deleted = 'N'
+	        <if test="id != null">
+		        and u.id = #{ id }
+	        </if>
+	        <if test="mail != null">
+		        and u.mail = #{ mail }
+	        </if>
+	        <if test="name != null">
+		        and u.name = #{ name }
+	        </if>
+	        <if test="userName != null">
+		        and u.user_name = #{ userName }
+	        </if>
+	        <if test="authMail != null">
+		        and u.auth_mail = #{ authMail }
+	        </if>
+	        <if test="authGoogle != null">
+		        and u.auth_google = #{ authGoogle }
+	        </if>
+			  <if test="authVerified != null">
+				  and u.auth_verified = #{ authVerified }
+			  </if>
+	        <if test="authMobile != null">
+		        and u.auth_mobile = #{ authMobile }
+	        </if>
+	        <if test="mobile != null">
+		        and u.mobile = #{ mobile }
+	        </if>
+			  <if test="areaCode != null">
+				  and u.area_code = #{ areaCode }
+			  </if>
+	        <if test="source != null">
+		        and u.source = #{ source }
+	        </if>
+	        <if test="password != null">
+		        and u.password = #{ password }
+	        </if>
+	        <if test="dealPassword != null">
+		        and u.deal_password = #{ dealPassword }
+	        </if>
+	        <if test="status != null">
+		        and u.status = #{ status }
+	        </if>
+	        <if test="gmtLastlogin != null">
+		        and u.gmt_lastlogin = #{ gmtLastlogin }
+	        </if>
+	        <if test="lastLoginIp != null">
+		        and u.last_login_ip = #{ lastLoginIp }
+	        </if>
+	        <if test="googleSecret != null">
+		        and u.google_secret = #{ googleSecret }
+	        </if>
+	        <if test="picture != null">
+		        and u.picture = #{ picture }
+	        </if>
+			  <if test="postalCode != null">
+				  and u.postal_code = #{ postalCode }
+			  </if>
+			  <if test="address != null">
+				  and u.address = #{ address }
+			  </if>
+			  <if test="isDeleted != null">
+				  and u.is_deleted = #{ isDeleted }
+			  </if>
+	        <if test="createTime != null">
+		        and u.create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and u.create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and u.modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and u.modify_by = #{ modifyBy }
+	        </if>
+	        <if test="socialChannel != null">
+		        and u.social_channel = #{ socialChannel }
+	        </if>
+	        <if test="socialAccount != null">
+		        and u.social_account = #{ socialAccount }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="mail != null">
+		        and mail = #{ mail }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="userName != null">
+		        and user_name = #{ userName }
+	        </if>
+	        <if test="authMail != null">
+		        and auth_mail = #{ authMail }
+	        </if>
+	        <if test="authGoogle != null">
+		        and auth_google = #{ authGoogle }
+	        </if>
+			  <if test="authVerified != null">
+				  and auth_verified = #{ authVerified }
+			  </if>
+	        <if test="authMobile != null">
+		        and auth_mobile = #{ authMobile }
+	        </if>
+	        <if test="mobile != null">
+		        and mobile = #{ mobile }
+	        </if>
+			  <if test="areaCode != null">
+				  and area_code = #{ areaCode }
+			  </if>
+	        <if test="source != null">
+		        and source = #{ source }
+	        </if>
+	        <if test="password != null">
+		        and password = #{ password }
+	        </if>
+	        <if test="dealPassword != null">
+		        and deal_password = #{ dealPassword }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="gmtLastlogin != null">
+		        and gmt_lastlogin = #{ gmtLastlogin }
+	        </if>
+	        <if test="lastLoginIp != null">
+		        and last_login_ip = #{ lastLoginIp }
+	        </if>
+	        <if test="googleSecret != null">
+		        and google_secret = #{ googleSecret }
+	        </if>
+	        <if test="picture != null">
+		        and picture = #{ picture }
+	        </if>
+			  <if test="postalCode != null">
+				  and postal_code = #{ postalCode }
+			  </if>
+			  <if test="address != null">
+				  and address = #{ address }
+			  </if>
+			  <if test="isDeleted != null">
+				  and is_deleted = #{ isDeleted }
+			  </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="socialChannel != null">
+		        and social_channel = #{ socialChannel }
+	        </if>
+	        <if test="socialAccount != null">
+		        and social_account = #{ socialAccount }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getAppUserByConditionList" resultType="pm" parameterType="pm" >
+		select
+		u.id,
+		u.user_name as userName,
+		u.mail as mail,
+		u.mobile as mobile,
+		u.source,
+		u.auth_verified as authVerified,
+		u.create_time as createTime,
+		u.status as uStatus,
+		ue.real_name as realName,
+		ue.id_card as idCard,
+		ue.nationality,
+		ua.amount,
+		ai.status
+		from usr_user u
+		LEFT JOIN (SELECT id,user_id,real_name,id_card,nationality FROM `usr_user_extend_info` GROUP BY user_id ORDER BY create_time desc) ue
+		on u.id = ue.user_id
+		LEFT JOIN
+		usr_user_account ua
+		on ua.user_id = u.id and u.is_deleted = ua.is_deleted
+		left JOIN
+		usr_activation_info ai
+		on u.id = ai.user_id
+		<where>
+			  1=1
+			and u.is_deleted = 'N'
+			and ua.code = 'lock'
+			and ai.is_deleted = 'N'
+			<if test="mail != null">
+				and u.mail = #{ mail }
+			</if>
+			<if test="userName != null">
+				and u.user_name = #{ userName }
+			</if>
+			<if test="mobile != null">
+				and u.mobile = #{ mobile }
+			</if>
+			<if test="status != null">
+				and u.status = #{ status }
+			</if>
+			<if test="keyword != null">
+				and u.user_name like concat("%",#{keyword},"%")
+			</if>
+		</where>
+		 order by u.id desc
+	</select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_user
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="mail != null">
+		        and mail = #{ mail }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="userName != null">
+		        and user_name = #{ userName }
+	        </if>
+	        <if test="authMail != null">
+		        and auth_mail = #{ authMail }
+	        </if>
+	        <if test="authGoogle != null">
+		        and auth_google = #{ authGoogle }
+	        </if>
+			  <if test="authVerified != null">
+				  and auth_verified = #{ authVerified }
+			  </if>
+	        <if test="authMobile != null">
+		        and auth_mobile = #{ authMobile }
+	        </if>
+	        <if test="mobile != null">
+		        and mobile = #{ mobile }
+	        </if>
+			  <if test="areaCode != null">
+				  and area_code = #{ areaCode }
+			  </if>
+	        <if test="source != null">
+		        and source = #{ source }
+	        </if>
+	        <if test="password != null">
+		        and password = #{ password }
+	        </if>
+	        <if test="dealPassword != null">
+		        and deal_password = #{ dealPassword }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="gmtLastlogin != null">
+		        and gmt_lastlogin = #{ gmtLastlogin }
+	        </if>
+	        <if test="lastLoginIp != null">
+		        and last_login_ip = #{ lastLoginIp }
+	        </if>
+	        <if test="googleSecret != null">
+		        and google_secret = #{ googleSecret }
+	        </if>
+	        <if test="picture != null">
+		        and picture = #{ picture }
+	        </if>
+			  <if test="postalCode != null">
+				  and postal_code = #{ postalCode }
+			  </if>
+			  <if test="address != null">
+				  and address = #{ address }
+			  </if>
+			  <if test="isDeleted != null">
+				  and is_deleted = #{ isDeleted }
+			  </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="socialChannel != null">
+		        and social_channel = #{ socialChannel }
+	        </if>
+	        <if test="socialAccount != null">
+		        and social_account = #{ socialAccount }
+	        </if>
+	    </where> 
+	  </select>
+
+
+	<select id="getDeteilByUserId" resultType="pm" parameterType="pm" >
+		SELECT u.id,u.user_name as userName,u.`name`,u.mail,u.mobile,u.source, CASE WHEN ISNULL(u.`name`) THEN '未实名' ELSE '已实名' END as shimin,
+		CASE WHEN (SELECT a.amount FROM usr_user_account a WHERE a.`code`='free' AND a.user_id = u.id) >= #{vipBound}
+		THEN 'VIP会员' ELSE '普通会员' END AS dengji,u.auth_google,u.gmt_lastlogin,u.create_time AS registrationTime ,
+		u.`password`,u.deal_password,CASE WHEN u.`status`=1 THEN '可用' ELSE '禁用' END AS status
+		FROM usr_user u WHERE u.id = #{userId}
+	</select>
+
+</mapper>
+

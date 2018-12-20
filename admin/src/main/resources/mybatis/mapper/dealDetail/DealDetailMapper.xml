@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.dealDetail.DealDetailDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			publish_id ,
+			type ,
+			buyer_user_id ,
+			seller_user_id ,
+			order_id ,
+			coin ,
+			amount ,
+			price ,
+			total_number ,
+			state ,
+			pay_way ,
+			picture_id ,
+			is_appeal ,
+			buy_time ,
+			play_time ,
+			collection_time ,
+			late_play_time ,
+			late_collection_time ,
+			remarks ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by ,
+			is_deleted 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tran_deal_detail 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update tran_deal_detail set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into tran_deal_detail (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ publishId } ,
+	        	#{ type } ,
+	        	#{ buyerUserId } ,
+	        	#{ sellerUserId } ,
+	        	#{ orderId } ,
+	        	#{ coin } ,
+	        	#{ amount } ,
+	        	#{ price } ,
+	        	#{ totalNumber } ,
+	        	#{ state } ,
+	        	#{ payWay } ,
+	        	#{ pictureId } ,
+	        	#{ isAppeal } ,
+	        	#{ buyTime } ,
+	        	#{ playTime } ,
+	        	#{ collectionTime } ,
+	        	#{ latePlayTime } ,
+	        	#{ lateCollectionTime } ,
+	        	#{ remarks } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ isDeleted } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into tran_deal_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="publishId != null">
+			        publish_id ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="buyerUserId != null">
+			        buyer_user_id ,
+			      </if>
+	              <if test="sellerUserId != null">
+			        seller_user_id ,
+			      </if>
+	              <if test="orderId != null">
+			        order_id ,
+			      </if>
+	              <if test="coin != null">
+			        coin ,
+			      </if>
+	              <if test="amount != null">
+			        amount ,
+			      </if>
+	              <if test="price != null">
+			        price ,
+			      </if>
+	              <if test="totalNumber != null">
+			        total_number ,
+			      </if>
+	              <if test="state != null">
+			        state ,
+			      </if>
+	              <if test="payWay != null">
+			        pay_way ,
+			      </if>
+	              <if test="pictureId != null">
+			        picture_id ,
+			      </if>
+	              <if test="isAppeal != null">
+			        is_appeal ,
+			      </if>
+	              <if test="buyTime != null">
+			        buy_time ,
+			      </if>
+	              <if test="playTime != null">
+			        play_time ,
+			      </if>
+	              <if test="collectionTime != null">
+			        collection_time ,
+			      </if>
+	              <if test="latePlayTime != null">
+			        late_play_time ,
+			      </if>
+	              <if test="lateCollectionTime != null">
+			        late_collection_time ,
+			      </if>
+	              <if test="remarks != null">
+			        remarks ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="publishId != null">
+	        #{ publishId } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="buyerUserId != null">
+	        #{ buyerUserId } ,
+	      </if>
+	      <if test="sellerUserId != null">
+	        #{ sellerUserId } ,
+	      </if>
+	      <if test="orderId != null">
+	        #{ orderId } ,
+	      </if>
+	      <if test="coin != null">
+	        #{ coin } ,
+	      </if>
+	      <if test="amount != null">
+	        #{ amount } ,
+	      </if>
+	      <if test="price != null">
+	        #{ price } ,
+	      </if>
+	      <if test="totalNumber != null">
+	        #{ totalNumber } ,
+	      </if>
+	      <if test="state != null">
+	        #{ state } ,
+	      </if>
+	      <if test="payWay != null">
+	        #{ payWay } ,
+	      </if>
+	      <if test="pictureId != null">
+	        #{ pictureId } ,
+	      </if>
+	      <if test="isAppeal != null">
+	        #{ isAppeal } ,
+	      </if>
+	      <if test="buyTime != null">
+	        #{ buyTime } ,
+	      </if>
+	      <if test="playTime != null">
+	        #{ playTime } ,
+	      </if>
+	      <if test="collectionTime != null">
+	        #{ collectionTime } ,
+	      </if>
+	      <if test="latePlayTime != null">
+	        #{ latePlayTime } ,
+	      </if>
+	      <if test="lateCollectionTime != null">
+	        #{ lateCollectionTime } ,
+	      </if>
+	      <if test="remarks != null">
+	        #{ remarks } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update tran_deal_detail
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="publishId != null">
+	         publish_id = #{ publishId } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="buyerUserId != null">
+	         buyer_user_id = #{ buyerUserId } ,
+	      </if>
+	      <if test="sellerUserId != null">
+	         seller_user_id = #{ sellerUserId } ,
+	      </if>
+	      <if test="orderId != null">
+	         order_id = #{ orderId } ,
+	      </if>
+	      <if test="coin != null">
+	         coin = #{ coin } ,
+	      </if>
+	      <if test="amount != null">
+	         amount = #{ amount } ,
+	      </if>
+	      <if test="price != null">
+	         price = #{ price } ,
+	      </if>
+	      <if test="totalNumber != null">
+	         total_number = #{ totalNumber } ,
+	      </if>
+	      <if test="state != null">
+	         state = #{ state } ,
+	      </if>
+	      <if test="payWay != null">
+	         pay_way = #{ payWay } ,
+	      </if>
+	      <if test="pictureId != null">
+	         picture_id = #{ pictureId } ,
+	      </if>
+	      <if test="isAppeal != null">
+	         is_appeal = #{ isAppeal } ,
+	      </if>
+	      <if test="buyTime != null">
+	         buy_time = #{ buyTime } ,
+	      </if>
+	      <if test="playTime != null">
+	         play_time = #{ playTime } ,
+	      </if>
+	      <if test="collectionTime != null">
+	         collection_time = #{ collectionTime } ,
+	      </if>
+	      <if test="latePlayTime != null">
+	         late_play_time = #{ latePlayTime } ,
+	      </if>
+	      <if test="lateCollectionTime != null">
+	         late_collection_time = #{ lateCollectionTime } ,
+	      </if>
+	      <if test="remarks != null">
+	         remarks = #{ remarks } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update tran_deal_detail
+    set  
+	        id = #{ id }  ,
+	        publish_id = #{ publishId }  ,
+	        type = #{ type }  ,
+	        buyer_user_id = #{ buyerUserId }  ,
+	        seller_user_id = #{ sellerUserId }  ,
+	        order_id = #{ orderId }  ,
+	        coin = #{ coin }  ,
+	        amount = #{ amount }  ,
+	        price = #{ price }  ,
+	        total_number = #{ totalNumber }  ,
+	        state = #{ state }  ,
+	        pay_way = #{ payWay }  ,
+	        picture_id = #{ pictureId }  ,
+	        is_appeal = #{ isAppeal }  ,
+	        buy_time = #{ buyTime }  ,
+	        play_time = #{ playTime }  ,
+	        collection_time = #{ collectionTime }  ,
+	        late_play_time = #{ latePlayTime }  ,
+	        late_collection_time = #{ lateCollectionTime }  ,
+	        remarks = #{ remarks }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        is_deleted = #{ isDeleted }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update tran_deal_detail set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from tran_deal_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="publishId != null">
+		        and publish_id = #{ publishId }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="buyerUserId != null">
+		        and buyer_user_id = #{ buyerUserId }
+	        </if>
+	        <if test="sellerUserId != null">
+		        and seller_user_id = #{ sellerUserId }
+	        </if>
+	        <if test="orderId != null">
+		        and order_id = #{ orderId }
+	        </if>
+	        <if test="coin != null">
+		        and coin = #{ coin }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="price != null">
+		        and price = #{ price }
+	        </if>
+	        <if test="totalNumber != null">
+		        and total_number = #{ totalNumber }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="payWay != null">
+		        and pay_way = #{ payWay }
+	        </if>
+	        <if test="pictureId != null">
+		        and picture_id = #{ pictureId }
+	        </if>
+	        <if test="isAppeal != null">
+		        and is_appeal = #{ isAppeal }
+	        </if>
+	        <if test="buyTime != null">
+		        and buy_time = #{ buyTime }
+	        </if>
+	        <if test="playTime != null">
+		        and play_time = #{ playTime }
+	        </if>
+	        <if test="collectionTime != null">
+		        and collection_time = #{ collectionTime }
+	        </if>
+	        <if test="latePlayTime != null">
+		        and late_play_time = #{ latePlayTime }
+	        </if>
+	        <if test="lateCollectionTime != null">
+		        and late_collection_time = #{ lateCollectionTime }
+	        </if>
+	        <if test="remarks != null">
+		        and remarks = #{ remarks }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	   SELECT d.id,d.order_id,CASE WHEN d.type = 0 THEN '出售' WHEN d.type = 1 THEN '购买' else '异常订单' END AS type,
+		bu.user_name AS buyUserName,d.amount,d.price,d.total_number,su.user_name AS selUserName,
+		CASE WHEN d.state = 0 THEN '待付款' WHEN d.state = 1 THEN '已付款' WHEN d.state = 2 THEN '已完成' WHEN d.state = 3 THEN '已取消' else '异常订单' END AS state
+		,CASE WHEN d.is_appeal = 0 THEN '未申诉' WHEN d.is_appeal = 1 THEN '申诉中' WHEN d.is_appeal = 2 THEN '已结束' else '异常订单' END AS is_appeal,d.buy_time,d.play_time,d.collection_time
+		FROM tran_deal_detail d LEFT JOIN usr_user bu ON d.buyer_user_id = bu.id LEFT JOIN usr_user su ON d.seller_user_id = su.id
+		<where>
+			d.is_deleted = 'N'
+			<if test="keyword != null">
+				and bu.user_name like concat("%",#{keyword},"%") or  su.user_name  like concat("%",#{keyword},"%") or d.order_id like concat("%",#{keyword},"%")
+			</if>
+            <if test="publishId != null">
+                and d.publish_id = #{publishId}
+            </if>
+
+			<if test="mold == 1"> and d.type = 0 </if><if test="mold == 2"> and d.type = 1 </if>
+			<if test="appealState == 1"> and d.is_appeal = 0 </if><if test="appealState == 2"> and d.is_appeal = 1 </if><if test="appealState == 3"> and d.is_appeal = 2 </if>
+			<if test="orderState == 1"> and d.state = 0 </if><if test="orderState == 2"> and d.state = 1 </if><if test="orderState == 3"> and d.state = 2 </if><if test="orderState == 4"> and d.state = 3 </if>
+
+		</where>
+
+	  </select>
+
+	<select id="getByDetails" resultType="pm" parameterType="pm" >
+		SELECT bu.user_name AS buserName,su.user_name AS suserName,IFNULL(bu.mobile,'无') as bmobile,IFNULL(su.mobile,'无') AS smobile,
+		IFNULL(bu.mail,'无') as bmail,IFNULL(su.mail,'无') as smail,
+		d.order_id,d.price,d.amount,d.total_number,d.buy_time,d.play_time,d.collection_time,
+		l.`name`,CONCAT(#{homeUrl},p.pic_path) as pic_path,IFNULL(d.remarks,'无') AS remarks,
+		CASE WHEN d.is_appeal = 0 THEN '未申诉' WHEN d.is_appeal = 1 THEN '申诉中' WHEN d.is_appeal = 2 THEN '已结束' else '异常订单' END AS is_appeal
+		,CASE WHEN a.is_win = 0 THEN '失败' WHEN a.is_win = 1 THEN '成功' WHEN ISNULL(a.is_win) THEN '未申诉' else '异常' END AS is_win
+		FROM tran_deal_detail d LEFT JOIN usr_user bu ON d.buyer_user_id = bu.id LEFT JOIN usr_user su ON su.id = d.seller_user_id
+		LEFT JOIN usr_payment_lang l ON d.pay_way = l.way LEFT JOIN picture p ON d.picture_id = p.pic_id LEFT JOIN tran_deal_appeal a ON a.deal_id = d.id
+		WHERE l.lang = 'zh_CN' and d.id = #{id}
+	</select>
+
+
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from tran_deal_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="publishId != null">
+		        and publish_id = #{ publishId }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="buyerUserId != null">
+		        and buyer_user_id = #{ buyerUserId }
+	        </if>
+	        <if test="sellerUserId != null">
+		        and seller_user_id = #{ sellerUserId }
+	        </if>
+	        <if test="orderId != null">
+		        and order_id = #{ orderId }
+	        </if>
+	        <if test="coin != null">
+		        and coin = #{ coin }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="price != null">
+		        and price = #{ price }
+	        </if>
+	        <if test="totalNumber != null">
+		        and total_number = #{ totalNumber }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="payWay != null">
+		        and pay_way = #{ payWay }
+	        </if>
+	        <if test="pictureId != null">
+		        and picture_id = #{ pictureId }
+	        </if>
+	        <if test="isAppeal != null">
+		        and is_appeal = #{ isAppeal }
+	        </if>
+	        <if test="buyTime != null">
+		        and buy_time = #{ buyTime }
+	        </if>
+	        <if test="playTime != null">
+		        and play_time = #{ playTime }
+	        </if>
+	        <if test="collectionTime != null">
+		        and collection_time = #{ collectionTime }
+	        </if>
+	        <if test="latePlayTime != null">
+		        and late_play_time = #{ latePlayTime }
+	        </if>
+	        <if test="lateCollectionTime != null">
+		        and late_collection_time = #{ lateCollectionTime }
+	        </if>
+	        <if test="remarks != null">
+		        and remarks = #{ remarks }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

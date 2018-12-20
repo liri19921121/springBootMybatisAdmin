@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统配置</a></li>
+    <li class="active">邀请好友</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">邀请好友列表</h3>
+              <br><br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入用户手机或邮箱或UID">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>用户ID</th>
+		                  <!--<th>用户姓名</th>-->
+						  <th>用户手机</th>
+						  <th>用户邮箱</th>
+		                  <th>被推荐用户ID</th>
+		                 <!-- <th>被推荐用户姓名</th>-->
+						  <th>被推荐用户手机</th>
+					   	  <th>被推荐用户邮箱</th>
+						  <th>被推荐用户注册时间</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ relationUmbrella }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.userName }">用户名</th>
+		                 <!-- <th th:text="${item.name }">用户姓名</th>-->
+						  <th th:text="${item.zmobile }">用户手机</th>
+						  <th th:text="${item.zmail }">用户邮箱</th>
+		                  <th th:text="${item.BuserName }">被推荐用户名</th>
+		                  <!--<th th:text="${item.Bname }">被推荐用户姓名</th>-->
+						  <th th:text="${item.bmobile }">被推荐用户手机</th>
+						  <th th:text="${item.bmail }">被推荐用户邮箱</th>
+					      <th th:text="${item.createTime }">被推荐用户注册时间</th>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="userId" class="col-sm-2 control-label">用户id</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userId" value="" id="userId" placeholder="请输入用户id">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="level" class="col-sm-2 control-label">用户代数</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="level" value="" id="level" placeholder="请输入用户代数">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="recommendId" class="col-sm-2 control-label">直推用户，user_id的上级,他的推荐人ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="recommendId" value="" id="recommendId" placeholder="请输入直推用户，user_id的上级,他的推荐人ID">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="childNumber" class="col-sm-2 control-label">user_id直推用户的数量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="childNumber" value="" id="childNumber" placeholder="请输入user_id直推用户的数量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="umbrellaChain" class="col-sm-2 control-label">伞链接</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="umbrellaChain" value="" id="umbrellaChain" placeholder="请输入伞链接">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/relationUmbrella/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var userId = $("#userId").val();
+            var level = $("#level").val();
+            var recommendId = $("#recommendId").val();
+            var childNumber = $("#childNumber").val();
+            var umbrellaChain = $("#umbrellaChain").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var isDeleted = $("#isDeleted").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            
+
+            if(checkData(id ,userId ,level ,recommendId ,childNumber ,umbrellaChain ,createTime ,createBy ,isDeleted ,modifyTime ,modifyBy )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,userId:userId,level:level,recommendId:recommendId,childNumber:childNumber,umbrellaChain:umbrellaChain,createTime:createTime,createBy:createBy,isDeleted:isDeleted,modifyTime:modifyTime,modifyBy:modifyBy, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , userId , level , recommendId , childNumber , umbrellaChain , createTime , createBy , isDeleted , modifyTime , modifyBy ){
+   	 $("#id").val(id);
+   	 $("#userId").val(userId);
+   	 $("#level").val(level);
+   	 $("#recommendId").val(recommendId);
+   	 $("#childNumber").val(childNumber);
+   	 $("#umbrellaChain").val(umbrellaChain);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/relationUmbrella/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/relationUmbrella/edit");
+    $.get(_ctx+"/relationUmbrella/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.user_id , item.level , item.recommend_id , item.child_number , item.umbrella_chain , item.create_time , item.create_by , item.is_deleted , item.modify_time , item.modify_by )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/relationUmbrella/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , userId , level , recommendId , childNumber , umbrellaChain , createTime , createBy , isDeleted , modifyTime , modifyBy ){
+    if(id == ""){
+        alert("直推用户不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("用户id不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(level == ""){
+        alert("用户代数不能为空");
+        $("input[name='level']").focus();
+        return false;
+    }
+    if(recommendId == ""){
+        alert("直推用户，user_id的上级,他的推荐人ID不能为空");
+        $("input[name='recommendId']").focus();
+        return false;
+    }
+    if(childNumber == ""){
+        alert("user_id直推用户的数量不能为空");
+        $("input[name='childNumber']").focus();
+        return false;
+    }
+    if(umbrellaChain == ""){
+        alert("伞链接不能为空");
+        $("input[name='umbrellaChain']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("记录生成时间不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

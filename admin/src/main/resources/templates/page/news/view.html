@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="_ctx" th:content="@{/}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <title>查看</title>
+<style>
+    .imgwrap img{
+        width: 100% !important;
+    }
+	h1{
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+	<h1 th:text="${news.title}">标题</h1>
+	<div th:utext="${news.content}" th:class="imgwrap"></div>
+</body>
+</html>

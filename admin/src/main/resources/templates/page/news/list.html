@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+  <meta charset="utf-8">
+  <meta name="_ctx" th:content="@{/}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>商户列表</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+  <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+ <style>
+ 	.search{
+ 		float: right;
+ 	}
+ 	.search>.selectbox{
+ 		width: 300px;float: right;
+ 		margin-right: 20px;
+ 	}
+ 	.search>.selectbox>label{
+ 		float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+ 	}
+ 	.search>.selectbox>select{
+ 		width:200px;float: right;
+ 	}
+ 	.searcher{
+ 		cursor: pointer;
+ 	}
+ </style>
+ </head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 资讯管理</a></li>
+    <li class="active">资讯列表</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">资讯列表</h3>
+              <br><br>
+              <!-- 
+              <div th:each="item,stat :${news}">
+              	<span th:text="${item}"></span>
+              </div>
+	               -->
+		      <button th:if="${QX.add == '1' && QX.query == '1'}" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;新增</button>
+		     
+		      <div class="search">
+		        <div class="input-group" style="float: right;width: 300px;">
+		            <input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+		            <span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+		        </div>
+				<div class="selectbox">
+				    <label>资讯分类：</label>
+				    <select id="category_labels" class="form-control">
+                        <option value="">全部</option>
+                        <option th:each="category:${categorys}" th:value="${category.code}" th:text="${category.name}" th:if="${#lists.isEmpty(news)}" ></option>
+                        <option th:each="category:${categorys}" th:value="${category.code}" th:text="${category.name}" th:unless="${#lists.isEmpty(news)}" th:selected="${categoryCode == category.code}"></option>
+                    </select>
+				 </div>
+		      </div>
+            </div>
+            <div class="box-body table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+	                  <th>标题</th>
+	                  <th>标签</th>
+	                  <th>作者</th>
+	                  <th>关键词</th>
+	                  <th>阅读</th>
+	                  <th>点赞</th>
+	                  <th>原创</th>
+                      <th>语言</th>
+                      <th>类型</th>
+	                  <th>状态</th>
+	                  <th>发布时间</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1'}" th:each="item:${news}">
+                  <td th:text="${item.id}">id</td>
+                  <td th:text="${item.title}">title</td>
+                  <td >
+                      <span th:each="category:${categorys}" th:if="${item.labels == category.code}" th:text="${category.name}">label</span>
+                  </td>
+                  <td th:text="${item.author}">author</td>
+                  <td th:text="${item.keywords}" >keywords</td>
+                  <td th:text="${item.read_count}" >read_count</td>
+                  <td th:text="${item.like_count}" >like_count</td>
+                  <td>
+	                  <span th:switch="${item.original}">
+	                  	<span  th:case="Y" class="label label-success">原创</span>
+	                  	<span  th:case="N" class="label label-success">非原创</span>
+	                  </span>
+                  </td>
+                  <td ><span th:each="lang:${languageList}" th:if="${item.lang == lang.key}" th:text="${lang.value}">label</span></td>
+                  <td>
+	                  <span th:switch="${item.category_code}">
+	                  	<span class="label label-info" th:case="0">咨讯</span>
+	                  	<span class="label label-success" th:case="1">公告</span>
+	                  </span>
+                  </td>
+                  <td>
+	                  <span th:switch="${item.status}">
+	                  	<span class="label label-info" th:case="10">新建</span>
+	                  	<span class="label label-success" th:case="20">已发布</span>
+	                  	<span class="label label-default" th:case="30">已下架</span>
+	                  </span>
+                  </td>
+                  <td th:text="${item.publish_time}">time</td>
+                  <td >
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1'}"><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="查看" th:if="${QX.query == '1'}" class="btn btn-xs btn-success" th:onclick="'view(\''+${item.id}+'\');'"><i class="fa fa-eye"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1'}" >
+                	<td colspan="9" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+		</div>
+               
+</section>
+
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script type="text/javascript"  th:inline="javascript">
+	$(function(){
+		$("[data-toggle='tooltip']").tooltip();
+		var element = $('#mypage');
+		  options = {
+		      bootstrapMajorVersion:3, //对应的bootstrap版本
+		      currentPage: [[${page.pageNum }]], //当前页数
+		      numberOfPages:[[${page.pageSize }]], //每页的数量
+		      totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+		      itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+		          switch (type) {
+		              case "first":
+		                  return "首页";
+		              case "prev":
+		                  return "上一页";
+		              case "next":
+		                  return "下一页";
+		              case "last":
+		                  return "末页";
+		              case "page":
+		                  return page;
+		          }
+		      },
+		    //点击事件
+		      onPageClicked: function (event, originalEvent, type, page) {
+		          skipPage(page);
+		      }
+		  };
+		  element.bootstrapPaginator(options);
+		  
+			$("#addItem").click(function(){
+				window.location.href=_ctx+"/news/toAdd";
+			});		  
+		  //搜索
+		  $(".searcher").click(function(){
+			  skipPage("");
+		  });
+		  
+	})
+	
+	function skipPage(page){
+		var categoryLabels=$("#category_labels").val();
+		var keyword = $("#keyword").val();
+		var url="/news/list";
+		if(page != ""){
+			url =url+ "/"+page+"?t=1";
+		}else{
+			url =url+ "?t=1";
+		}
+		/*
+		if(isDeleted != ""){
+			url =url+"&isDeleted="+isDeleted;
+		}*/
+		
+		if(categoryLabels != ""){
+			url =url+"&categoryLabels="+categoryLabels;
+		}
+		if(keyword != ""){
+			url =url+"&keyword="+keyword;
+		}
+		window.location.href=_ctx+url;
+	}
+	//编辑商户
+	function edit(id){
+		window.location.href=_ctx+"/news/toEdit?id="+id;
+	}
+	
+	//编辑商户
+	function view(id){
+		window.location.href=_ctx+"/news/view?id="+id;
+	}
+	
+	//编辑商户
+	function del(id){
+		if(confirm("你确定要删除这条信息吗？")){
+			$.ajax({
+				type:"POST",
+				url:_ctx+"/news/del",
+				dataType:"json",
+				data:{id:id,t_:new Date().getTime()},
+				cache:false,
+				success: function(data){
+					console.log("data:",data);
+					if(data.status == "200"){
+						window.location.href=_ctx+"/news/list";
+					}
+				}
+			});
+		}
+	}
+	
+
+</script>
+</body>
+</html>

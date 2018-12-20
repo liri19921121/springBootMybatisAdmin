@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.coinInfo.CoinInfoDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			name ,
+			code ,
+			chinese_name ,
+			chain_coin ,
+			token ,
+			wei ,
+			status ,
+			is_recharge ,
+			is_withd ,
+			is_deleted ,
+			is_really_coin ,
+			create_by ,
+			create_time 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from coin_info 
+	    where id = #{ id }
+	  </select>
+
+	<select id="selectList" parameterType="pm" resultType="pm">
+		SELECT c.id,c.`name`,c.`code`,case WHEN c.`status` = 'Y' THEN '可用' ELSE '禁用'  END AS status FROM coin_info c
+		WHERE c.is_deleted = 'N'
+		<if test="keyword != null">
+			and c.`name` like concat(concat("%",#{keyword}),"%") or c.`code` like concat(concat("%",#{keyword}),"%")
+		</if>
+	</select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update coin_info set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into coin_info (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ name } ,
+	        	#{ code } ,
+	        	#{ chineseName } ,
+	        	#{ chainCoin } ,
+	        	#{ token } ,
+	        	#{ wei } ,
+	        	#{ status } ,
+	        	#{ isRecharge } ,
+	        	#{ isWithd } ,
+	        	#{ isDeleted } ,
+	        	#{ isReallyCoin } ,
+	        	#{ createBy } ,
+	        	#{ createTime } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into coin_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="name != null">
+			        name ,
+			      </if>
+	              <if test="code != null">
+			        code ,
+			      </if>
+	              <if test="chineseName != null">
+			        chinese_name ,
+			      </if>
+	              <if test="chainCoin != null">
+			        chain_coin ,
+			      </if>
+	              <if test="token != null">
+			        token ,
+			      </if>
+	              <if test="wei != null">
+			        wei ,
+			      </if>
+	              <if test="status != null">
+			        status ,
+			      </if>
+	              <if test="isRecharge != null">
+			        is_recharge ,
+			      </if>
+	              <if test="isWithd != null">
+			        is_withd ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="isReallyCoin != null">
+			        is_really_coin ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="name != null">
+	        #{ name } ,
+	      </if>
+	      <if test="code != null">
+	        #{ code } ,
+	      </if>
+	      <if test="chineseName != null">
+	        #{ chineseName } ,
+	      </if>
+	      <if test="chainCoin != null">
+	        #{ chainCoin } ,
+	      </if>
+	      <if test="token != null">
+	        #{ token } ,
+	      </if>
+	      <if test="wei != null">
+	        #{ wei } ,
+	      </if>
+	      <if test="status != null">
+	        #{ status } ,
+	      </if>
+	      <if test="isRecharge != null">
+	        #{ isRecharge } ,
+	      </if>
+	      <if test="isWithd != null">
+	        #{ isWithd } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="isReallyCoin != null">
+	        #{ isReallyCoin } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update coin_info
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="name != null">
+	         name = #{ name } ,
+	      </if>
+	      <if test="code != null">
+	         code = #{ code } ,
+	      </if>
+	      <if test="chineseName != null">
+	         chinese_name = #{ chineseName } ,
+	      </if>
+	      <if test="chainCoin != null">
+	         chain_coin = #{ chainCoin } ,
+	      </if>
+	      <if test="token != null">
+	         token = #{ token } ,
+	      </if>
+	      <if test="wei != null">
+		     <if test="wei != ''">
+	            wei = #{ wei } ,
+			 </if>
+	      </if>
+	      <if test="status != null">
+	         status = #{ status } ,
+	      </if>
+	      <if test="isRecharge != null">
+	         is_recharge = #{ isRecharge } ,
+	      </if>
+	      <if test="isWithd != null">
+	         is_withd = #{ isWithd } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="isReallyCoin != null">
+	         is_really_coin = #{ isReallyCoin } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update coin_info
+    set  
+	        id = #{ id }  ,
+	        name = #{ name }  ,
+	        code = #{ code }  ,
+	        chinese_name = #{ chineseName }  ,
+	        chain_coin = #{ chainCoin }  ,
+	        token = #{ token }  ,
+	        wei = #{ wei }  ,
+	        status = #{ status }  ,
+	        is_recharge = #{ isRecharge }  ,
+	        is_withd = #{ isWithd }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        is_really_coin = #{ isReallyCoin }  ,
+	        create_by = #{ createBy }  ,
+	        create_time = #{ createTime }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update coin_info set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from coin_info
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="chineseName != null">
+		        and chinese_name = #{ chineseName }
+	        </if>
+	        <if test="chainCoin != null">
+		        and chain_coin = #{ chainCoin }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="wei != null">
+		        and wei = #{ wei }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="isRecharge != null">
+		        and is_recharge = #{ isRecharge }
+	        </if>
+	        <if test="isWithd != null">
+		        and is_withd = #{ isWithd }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="isReallyCoin != null">
+		        and is_really_coin = #{ isReallyCoin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from coin_info
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="chineseName != null">
+		        and chinese_name = #{ chineseName }
+	        </if>
+	        <if test="chainCoin != null">
+		        and chain_coin = #{ chainCoin }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="wei != null">
+		        and wei = #{ wei }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="isRecharge != null">
+		        and is_recharge = #{ isRecharge }
+	        </if>
+	        <if test="isWithd != null">
+		        and is_withd = #{ isWithd }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="isReallyCoin != null">
+		        and is_really_coin = #{ isReallyCoin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	    </where> 
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from coin_info
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="name != null">
+		        and name = #{ name }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="chineseName != null">
+		        and chinese_name = #{ chineseName }
+	        </if>
+	        <if test="chainCoin != null">
+		        and chain_coin = #{ chainCoin }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="wei != null">
+		        and wei = #{ wei }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="isRecharge != null">
+		        and is_recharge = #{ isRecharge }
+	        </if>
+	        <if test="isWithd != null">
+		        and is_withd = #{ isWithd }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="isReallyCoin != null">
+		        and is_really_coin = #{ isReallyCoin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getAllCoinName" parameterType="pm" resultType="pm">
+		SELECT code,chinese_name from coin_info WHERE is_deleted = 'N' AND `status` = 'Y'
+	</select>
+
+	<select id="getNameList" resultType="pm" parameterType="pm" >
+			SELECT CONCAT(c.chinese_lang,'版本名称：',c.name) AS internaContent,CONCAT('是否启用：',CASE WHEN c.state = 1 THEN '启用' ELSE '不启用' END) AS internaState  FROM coin_info_name c WHERE c.coin = #{coin} AND c.is_deleted = 'N'
+	</select>
+</mapper>
+

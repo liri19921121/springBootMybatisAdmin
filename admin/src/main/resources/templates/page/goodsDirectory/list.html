@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 商城管理</a></li>
+    <li class="active">商品管理</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">配置列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入标题">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>标题</th>
+		                  <th>描述</th>
+		                  <th>价格</th>
+		                  <th>销量</th>
+		                  <th>排序</th>
+						  <!--<th>首页图片</th>-->
+		                  <th>创建时间</th>
+						  <th>国际化版本控制</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ goodsDirectory }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.title }">标题</th>
+		                  <th th:text="${item.content }">描述</th>
+		                  <th th:text="${item.price }">价格</th>
+		                  <th th:text="${item.sales_volume }">销量</th>
+		                  <th th:text="${item.sort_num }">排序</th>
+					      <!--<th><img  th:width="20px" th:high="20px" th:src="${item.pic_path }" /></th>-->
+		                  <th th:text="${item.create_time }">创建时间</th>
+					      <th><a>国际化版本控制</a></th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="title" class="col-sm-2 control-label">标题</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="title" value="" id="title" placeholder="请输入标题">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="content" class="col-sm-2 control-label">描述</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="content" value="" id="content" placeholder="请输入描述">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="headImgId" class="col-sm-2 control-label">头像图片</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="headImgId" value="" id="headImgId" placeholder="请输入头像图片">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="price" class="col-sm-2 control-label">price</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="price" value="" id="price" placeholder="请输入price">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="salesVolume" class="col-sm-2 control-label">销量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="salesVolume" value="" id="salesVolume" placeholder="请输入销量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="sortNum" class="col-sm-2 control-label">排序</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="sortNum" value="" id="sortNum" placeholder="请输入排序">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/goodsDirectory/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var title = $("#title").val();
+            var content = $("#content").val();
+            var headImgId = $("#headImgId").val();
+            var price = $("#price").val();
+            var salesVolume = $("#salesVolume").val();
+            var sortNum = $("#sortNum").val();
+            var isDeleted = $("#isDeleted").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            
+
+            if(checkData(id ,title ,content ,headImgId ,price ,salesVolume ,sortNum ,isDeleted ,createTime ,createBy ,modifyTime ,modifyBy )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,title:title,content:content,headImgId:headImgId,price:price,salesVolume:salesVolume,sortNum:sortNum,isDeleted:isDeleted,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , title , content , headImgId , price , salesVolume , sortNum , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+   	 $("#id").val(id);
+   	 $("#title").val(title);
+   	 $("#content").val(content);
+   	 $("#headImgId").val(headImgId);
+   	 $("#price").val(price);
+   	 $("#salesVolume").val(salesVolume);
+   	 $("#sortNum").val(sortNum);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/goodsDirectory/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/goodsDirectory/edit");
+    $.get(_ctx+"/goodsDirectory/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.title , item.content , item.head_img_id , item.price , item.sales_volume , item.sort_num , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/goodsDirectory/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , title , content , headImgId , price , salesVolume , sortNum , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(title == ""){
+        alert("标题不能为空");
+        $("input[name='title']").focus();
+        return false;
+    }
+    if(content == ""){
+        alert("描述不能为空");
+        $("input[name='content']").focus();
+        return false;
+    }
+    if(headImgId == ""){
+        alert("头像图片不能为空");
+        $("input[name='headImgId']").focus();
+        return false;
+    }
+    if(price == ""){
+        alert("price不能为空");
+        $("input[name='price']").focus();
+        return false;
+    }
+    if(salesVolume == ""){
+        alert("销量不能为空");
+        $("input[name='salesVolume']").focus();
+        return false;
+    }
+    if(sortNum == ""){
+        alert("排序不能为空");
+        $("input[name='sortNum']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

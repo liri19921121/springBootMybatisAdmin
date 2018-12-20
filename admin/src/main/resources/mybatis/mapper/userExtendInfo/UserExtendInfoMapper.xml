@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.userExtendInfo.UserExtendInfoDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			id_card ,
+			id_person_card_img ,
+			passport ,
+			passport_img ,
+			id_card_handler_status ,
+			id_card_status ,
+			passport_status ,
+			order_partner ,
+			id_card_reverse_img ,
+			id_card_person_img ,
+			surname ,
+			real_name ,
+			real_audit_remark ,
+			modify_time ,
+			modify_by ,
+			create_time ,
+			create_by ,
+			ban_reason ,
+			nationality ,
+			real_audit_status 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_user_extend_info 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_user_extend_info set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_user_extend_info (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ idCard } ,
+	        	#{ idPersonCardImg } ,
+	        	#{ passport } ,
+	        	#{ passportImg } ,
+	        	#{ idCardHandlerStatus } ,
+	        	#{ idCardStatus } ,
+	        	#{ passportStatus } ,
+	        	#{ orderPartner } ,
+	        	#{ idCardReverseImg } ,
+	        	#{ idCardPersonImg } ,
+		  		#{ surname } ,
+	        	#{ realName } ,
+	        	#{ realAuditRemark } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ banReason } ,
+	        	#{ nationality } ,
+	        	#{ realAuditStatus } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_user_extend_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="idCard != null">
+			        id_card ,
+			      </if>
+	              <if test="idPersonCardImg != null">
+			        id_person_card_img ,
+			      </if>
+	              <if test="passport != null">
+			        passport ,
+			      </if>
+	              <if test="passportImg != null">
+			        passport_img ,
+			      </if>
+	              <if test="idCardHandlerStatus != null">
+			        id_card_handler_status ,
+			      </if>
+	              <if test="idCardStatus != null">
+			        id_card_status ,
+			      </if>
+	              <if test="passportStatus != null">
+			        passport_status ,
+			      </if>
+	              <if test="orderPartner != null">
+			        order_partner ,
+			      </if>
+	              <if test="idCardReverseImg != null">
+			        id_card_reverse_img ,
+			      </if>
+	              <if test="idCardPersonImg != null">
+			        id_card_person_img ,
+			      </if>
+				  <if test="surname != null">
+					  surname ,
+				  </if>
+	              <if test="realName != null">
+			        real_name ,
+			      </if>
+	              <if test="realAuditRemark != null">
+			        real_audit_remark ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="banReason != null">
+			        ban_reason ,
+			      </if>
+	              <if test="nationality != null">
+			        nationality ,
+			      </if>
+	              <if test="realAuditStatus != null">
+			        real_audit_status ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="idCard != null">
+	        #{ idCard } ,
+	      </if>
+	      <if test="idPersonCardImg != null">
+	        #{ idPersonCardImg } ,
+	      </if>
+	      <if test="passport != null">
+	        #{ passport } ,
+	      </if>
+	      <if test="passportImg != null">
+	        #{ passportImg } ,
+	      </if>
+	      <if test="idCardHandlerStatus != null">
+	        #{ idCardHandlerStatus } ,
+	      </if>
+	      <if test="idCardStatus != null">
+	        #{ idCardStatus } ,
+	      </if>
+	      <if test="passportStatus != null">
+	        #{ passportStatus } ,
+	      </if>
+	      <if test="orderPartner != null">
+	        #{ orderPartner } ,
+	      </if>
+	      <if test="idCardReverseImg != null">
+	        #{ idCardReverseImg } ,
+	      </if>
+	      <if test="idCardPersonImg != null">
+	        #{ idCardPersonImg } ,
+	      </if>
+		  <if test="surname != null">
+			#{ surname } ,
+		  </if>
+	      <if test="realName != null">
+	        #{ realName } ,
+	      </if>
+	      <if test="realAuditRemark != null">
+	        #{ realAuditRemark } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="banReason != null">
+	        #{ banReason } ,
+	      </if>
+	      <if test="nationality != null">
+	        #{ nationality } ,
+	      </if>
+	      <if test="realAuditStatus != null">
+	        #{ realAuditStatus } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_user_extend_info
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="idCard != null">
+	         id_card = #{ idCard } ,
+	      </if>
+	      <if test="idPersonCardImg != null">
+	         id_person_card_img = #{ idPersonCardImg } ,
+	      </if>
+	      <if test="passport != null">
+	         passport = #{ passport } ,
+	      </if>
+	      <if test="passportImg != null">
+	         passport_img = #{ passportImg } ,
+	      </if>
+	      <if test="idCardHandlerStatus != null">
+	         id_card_handler_status = #{ idCardHandlerStatus } ,
+	      </if>
+	      <if test="idCardStatus != null">
+	         id_card_status = #{ idCardStatus } ,
+	      </if>
+	      <if test="passportStatus != null">
+	         passport_status = #{ passportStatus } ,
+	      </if>
+	      <if test="orderPartner != null">
+	         order_partner = #{ orderPartner } ,
+	      </if>
+	      <if test="idCardReverseImg != null">
+	         id_card_reverse_img = #{ idCardReverseImg } ,
+	      </if>
+	      <if test="idCardPersonImg != null">
+	         id_card_person_img = #{ idCardPersonImg } ,
+	      </if>
+		  <if test="surname != null">
+			  surname = #{ surname } ,
+		  </if>
+	      <if test="realName != null">
+	         real_name = #{ realName } ,
+	      </if>
+	      <if test="realAuditRemark != null">
+	         real_audit_remark = #{ realAuditRemark } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="banReason != null">
+	         ban_reason = #{ banReason } ,
+	      </if>
+	      <if test="nationality != null">
+	         nationality = #{ nationality } ,
+	      </if>
+	      <if test="realAuditStatus != null">
+	         real_audit_status = #{ realAuditStatus } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_user_extend_info
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        id_card = #{ idCard }  ,
+	        id_person_card_img = #{ idPersonCardImg }  ,
+	        passport = #{ passport }  ,
+	        passport_img = #{ passportImg }  ,
+	        id_card_handler_status = #{ idCardHandlerStatus }  ,
+	        id_card_status = #{ idCardStatus }  ,
+	        passport_status = #{ passportStatus }  ,
+	        order_partner = #{ orderPartner }  ,
+	        id_card_reverse_img = #{ idCardReverseImg }  ,
+	        id_card_person_img = #{ idCardPersonImg }  ,
+	        surname = #{ surname }  ,
+	        real_name = #{ realName }  ,
+	        real_audit_remark = #{ realAuditRemark }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        ban_reason = #{ banReason }  ,
+	        nationality = #{ nationality }  ,
+	        real_audit_status = #{ realAuditStatus }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_user_extend_info set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_extend_info
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="idCard != null">
+		        and id_card = #{ idCard }
+	        </if>
+	        <if test="idPersonCardImg != null">
+		        and id_person_card_img = #{ idPersonCardImg }
+	        </if>
+	        <if test="passport != null">
+		        and passport = #{ passport }
+	        </if>
+	        <if test="passportImg != null">
+		        and passport_img = #{ passportImg }
+	        </if>
+	        <if test="idCardHandlerStatus != null">
+		        and id_card_handler_status = #{ idCardHandlerStatus }
+	        </if>
+	        <if test="idCardStatus != null">
+		        and id_card_status = #{ idCardStatus }
+	        </if>
+	        <if test="passportStatus != null">
+		        and passport_status = #{ passportStatus }
+	        </if>
+	        <if test="orderPartner != null">
+		        and order_partner = #{ orderPartner }
+	        </if>
+	        <if test="idCardReverseImg != null">
+		        and id_card_reverse_img = #{ idCardReverseImg }
+	        </if>
+	        <if test="idCardPersonImg != null">
+		        and id_card_person_img = #{ idCardPersonImg }
+	        </if>
+			<if test="surname != null">
+				and surname = #{ surname }
+			</if>
+	        <if test="realName != null">
+		        and real_name = #{ realName }
+	        </if>
+	        <if test="realAuditRemark != null">
+		        and real_audit_remark = #{ realAuditRemark }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="banReason != null">
+		        and ban_reason = #{ banReason }
+	        </if>
+	        <if test="nationality != null">
+		        and nationality = #{ nationality }
+	        </if>
+	        <if test="realAuditStatus != null">
+		        and real_audit_status = #{ realAuditStatus }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select
+		  ue.id,
+		  ue.user_id,
+		  ue.surname,
+		  ue.real_name,
+		  ue.nationality,
+		  ue.create_time,
+		  ue.id_card,
+		  ue.real_audit_status,
+		  ue.modify_time,
+		  ue.id_card_reverse_img,
+		  ue.id_card_person_img,
+		  au.username as modify_name
+	   	from usr_user_extend_info ue
+		  left join admin_user au
+		  on ue.modify_by = au.user_id
+	   	  <where>
+		  <if test="userId != null">
+			  and ue.user_id = #{ userId }
+		  </if>
+		  <if test="keyword != null and keyword != ''">
+			  and (
+			  ue.id_card LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+			  or
+			  ue.surname LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+			  or
+			  ue.real_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+			  or
+			  ue.nationality LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+			  )
+		  </if>
+	    </where>
+		  order by ue.create_time desc
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_user_extend_info
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="idCard != null">
+		        and id_card = #{ idCard }
+	        </if>
+	        <if test="idPersonCardImg != null">
+		        and id_person_card_img = #{ idPersonCardImg }
+	        </if>
+	        <if test="passport != null">
+		        and passport = #{ passport }
+	        </if>
+	        <if test="passportImg != null">
+		        and passport_img = #{ passportImg }
+	        </if>
+	        <if test="idCardHandlerStatus != null">
+		        and id_card_handler_status = #{ idCardHandlerStatus }
+	        </if>
+	        <if test="idCardStatus != null">
+		        and id_card_status = #{ idCardStatus }
+	        </if>
+	        <if test="passportStatus != null">
+		        and passport_status = #{ passportStatus }
+	        </if>
+	        <if test="orderPartner != null">
+		        and order_partner = #{ orderPartner }
+	        </if>
+	        <if test="idCardReverseImg != null">
+		        and id_card_reverse_img = #{ idCardReverseImg }
+	        </if>
+	        <if test="idCardPersonImg != null">
+		        and id_card_person_img = #{ idCardPersonImg }
+	        </if>
+			<if test="surname != null">
+				and surname = #{ surname }
+			</if>
+	        <if test="realName != null">
+		        and real_name = #{ realName }
+	        </if>
+	        <if test="realAuditRemark != null">
+		        and real_audit_remark = #{ realAuditRemark }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="banReason != null">
+		        and ban_reason = #{ banReason }
+	        </if>
+	        <if test="nationality != null">
+		        and nationality = #{ nationality }
+	        </if>
+	        <if test="realAuditStatus != null">
+		        and real_audit_status = #{ realAuditStatus }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

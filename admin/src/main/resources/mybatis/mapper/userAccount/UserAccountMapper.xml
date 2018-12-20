@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.userAccount.UserAccountDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			code ,
+			token ,
+			address ,
+			amount ,
+			lock_amount ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_user_account 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_user_account set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_user_account (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ code } ,
+	        	#{ token } ,
+	        	#{ address } ,
+	        	#{ amount } ,
+	        	#{ lockAmount } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_user_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="code != null">
+			        code ,
+			      </if>
+	              <if test="token != null">
+			        token ,
+			      </if>
+	              <if test="address != null">
+			        address ,
+			      </if>
+	              <if test="amount != null">
+			        amount ,
+			      </if>
+	              <if test="lockAmount != null">
+			        lock_amount ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="code != null">
+	        #{ code } ,
+	      </if>
+	      <if test="token != null">
+	        #{ token } ,
+	      </if>
+	      <if test="address != null">
+	        #{ address } ,
+	      </if>
+	      <if test="amount != null">
+	        #{ amount } ,
+	      </if>
+	      <if test="lockAmount != null">
+	        #{ lockAmount } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_user_account
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="code != null">
+	         code = #{ code } ,
+	      </if>
+	      <if test="token != null">
+	         token = #{ token } ,
+	      </if>
+	      <if test="address != null">
+	         address = #{ address } ,
+	      </if>
+	      <if test="amount != null">
+	         amount = #{ amount } ,
+	      </if>
+	      <if test="lockAmount != null">
+	         lock_amount = #{ lockAmount } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_user_account
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        code = #{ code }  ,
+	        token = #{ token }  ,
+	        address = #{ address }  ,
+	        amount = #{ amount }  ,
+	        lock_amount = #{ lockAmount }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_user_account set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_account
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="address != null">
+		        and address = #{ address }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="lockAmount != null">
+		        and lock_amount = #{ lockAmount }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_user_account
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="address != null">
+		        and address = #{ address }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="lockAmount != null">
+		        and lock_amount = #{ lockAmount }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_user_account
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="code != null">
+		        and code = #{ code }
+	        </if>
+	        <if test="token != null">
+		        and token = #{ token }
+	        </if>
+	        <if test="address != null">
+		        and address = #{ address }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="lockAmount != null">
+		        and lock_amount = #{ lockAmount }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+
+
+	<select id="getListByCode" parameterType="pm" resultType="pm">
+		SELECT a.id,a.code,c.chinese_name,u.user_name,u.mobile as mobile,u.mail as mail,a.amount,
+		a.lock_amount,a.amount+a.lock_amount AS num FROM usr_user_account a LEFT JOIN usr_user u ON a.user_id = u.id LEFT JOIN coin_info c ON a.`code` = c.`code`
+		<where>
+			<if test="keyword != null">
+				u.user_name like concat("%",#{keyword},"%")
+				<if test="coin != null">
+					<if test="coin != 'all'">
+					   and a.`code` = #{coin}
+					</if>
+				</if>
+			</if>
+			<if test="keyword == null">
+				<if test="coin != null">
+					<if test="coin != 'all'">
+					    a.`code` = #{coin}
+					</if>
+				</if>
+			</if>
+		</where>
+
+		order by u.create_time desc
+	</select>
+</mapper>
+

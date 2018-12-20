@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="utf-8">
+	<meta name="_ctx" th:content="@{/}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<style>
+		.search{
+			float: right;
+		}
+		.search>.selectbox{
+			width: 300px;float: right;
+			margin-right: 20px;
+		}
+		.search>.selectbox>label{
+			float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+		}
+		.search>.selectbox>select{
+			width:200px;float: right;
+		}
+		.searcher{
+			cursor: pointer;
+		}
+
+		@media (min-width: 768px){
+			.modal-dialog {
+				width: 800px;
+				margin: 30px auto;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 买卖大厅</a></li>
+    <li class="active">订单管理</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">订单管理</h3>
+              <br><br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输买家或卖家ID或单号">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+
+				<div class="selectbox"  style="width: 203px">
+					<select id="appealState" class="form-control"  >
+						<option value="-1" th:text="申诉" ></option>
+						<option value="1" th:selected="${'1' == appealState}" >未申诉</option>
+						<option value="2" th:selected="${'2' == appealState}">申诉中</option>
+						<option value="3" th:selected="${'3' == appealState}">已结束</option>
+					</select>
+				</div>
+
+					<div class="selectbox" style="width: 203px">
+						<select id="orderState" class="form-control" >
+							<option value="-1" th:text="状态" ></option>
+							<option  value="1" th:selected="${'1' == orderState}">待付款</option>
+							<option  value="2" th:selected="${'2' == orderState}">已付款</option>
+							<option  value="3" th:selected="${'3' == orderState}">已完成</option>
+							<option  value="4" th:selected="${'4' == orderState}">已取消</option>
+						</select>
+					</div>
+
+					<div class="selectbox"  style="width: 203px">
+						<select id="mold" class="form-control"  >
+							<option value="-1" th:text="类型" ></option>
+							<option value="1" th:selected="${'1' == mold}" >出售</option>
+							<option value="2" th:selected="${'2' == mold}">购买</option>
+						</select>
+					</div>
+
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>编号</th>
+		                  <th>类型</th>
+		                  <!--<th>买家ID</th>
+		                  <th>卖家ID</th>-->
+						  <th>单价</th>
+						  <th>数量</th>
+		                  <th>总价</th>
+		                  <th>订单状态</th>
+		                  <th>申诉状态</th>
+		                  <th>下单时间</th>
+		                  <th>付款时间</th>
+		                  <th>完成时间</th>
+						  <th>操作</th>
+
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ dealDetail }" >
+                  <td th:text="${stat.count}">1</td>
+						<th th:text="${item.order_id }">单号</th>
+						<th th:text="${item.type }">类型</th>
+						<!--<th th:text="${item.buyUserName }">买家ID</th>
+						<th th:text="${item.selUserName }">卖家ID</th>-->
+						<th th:text="${item.price }">单价</th>
+					    <th th:text="${item.amount }">数量</th>
+					    <th th:text="${item.total_number }">总价</th>
+						<th th:text="${item.state }">订单状态</th>
+						<th th:text="${item.is_appeal }">申诉状态</th>
+						<th th:text="${item.buy_time }">下单时间</th>
+						<th th:text="${item.play_time }">付款时间</th>
+					    <th th:text="${item.collection_time }">完成时间</th>
+					<th >
+						<span data-toggle="tooltip" data-placement="left"   class="btn btn-xs btn-info" th:onclick="'showDetails(\''+${item.id}+'\');'" ><i class="fa fa-edit" ></i> 查看详情</span>
+					</th>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modelHead">详情</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" role="form">
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">订单编号</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="order_id" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">购买数量</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="amount" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">单价</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="price" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">总价</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="total_number" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">买家ID</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="buserName" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">卖家ID</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="suserName" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">买家手机</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="bmobile" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">卖家手机</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="smobile" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">买家邮箱</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="bmail" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">卖家邮箱</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="smail" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">支付方式</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="remarks" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">付款时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="play_time" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">下单时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="buy_time" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">完成时间</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="collection_time" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">支付图片</label>
+								<div class="col-sm-7">
+									<img id ="pic_path" src="">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">是否申诉</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control"  value="" id="is_appeal" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label  class="col-sm-5 control-label">申诉结果</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" value="" id="is_win" readonly="readonly" >
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+
+
+    function getLocalTime(nS) {
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+    }
+    //时间戳转化成时间
+    function timestampToTime(str){
+        if (str == null || str == ""){
+            return null;
+        }
+        var oDate = new Date(str),
+            oYear = oDate.getFullYear(),
+            oMonth = oDate.getMonth()+1,
+            oDay = oDate.getDate(),
+            oHour = oDate.getHours(),
+            oMin = oDate.getMinutes(),
+            oSen = oDate.getSeconds(),
+            oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+        return oTime;
+    };
+    //补0操作
+    function getzf(num){
+        if(parseInt(num) < 10){
+            num = '0'+num;
+        }
+        return num;
+    }
+
+    $(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/dealDetail/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","","","","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var publishId = $("#publishId").val();
+            var type = $("#type").val();
+            var buyerUserId = $("#buyerUserId").val();
+            var sellerUserId = $("#sellerUserId").val();
+            var orderId = $("#orderId").val();
+            var coin = $("#coin").val();
+            var amount = $("#amount").val();
+            var price = $("#price").val();
+            var totalNumber = $("#totalNumber").val();
+            var state = $("#state").val();
+            var payWay = $("#payWay").val();
+            var pictureId = $("#pictureId").val();
+            var isAppeal = $("#isAppeal").val();
+            var buyTime = $("#buyTime").val();
+            var playTime = $("#playTime").val();
+            var collectionTime = $("#collectionTime").val();
+            var latePlayTime = $("#latePlayTime").val();
+            var lateCollectionTime = $("#lateCollectionTime").val();
+            var remarks = $("#remarks").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            var isDeleted = $("#isDeleted").val();
+            
+
+            if(checkData(id ,publishId ,type ,buyerUserId ,sellerUserId ,orderId ,coin ,amount ,price ,totalNumber ,state ,payWay ,pictureId ,isAppeal ,buyTime ,playTime ,collectionTime ,latePlayTime ,lateCollectionTime ,remarks ,createTime ,createBy ,modifyTime ,modifyBy ,isDeleted )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,publishId:publishId,type:type,buyerUserId:buyerUserId,sellerUserId:sellerUserId,orderId:orderId,coin:coin,amount:amount,price:price,totalNumber:totalNumber,state:state,payWay:payWay,pictureId:pictureId,isAppeal:isAppeal,buyTime:buyTime,playTime:playTime,collectionTime:collectionTime,latePlayTime:latePlayTime,lateCollectionTime:lateCollectionTime,remarks:remarks,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy,isDeleted:isDeleted, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , publishId , type , buyerUserId , sellerUserId , orderId , coin , amount , price , totalNumber , state , payWay , pictureId , isAppeal , buyTime , playTime , collectionTime , latePlayTime , lateCollectionTime , remarks , createTime , createBy , modifyTime , modifyBy , isDeleted ){
+   	 $("#id").val(id);
+   	 $("#publishId").val(publishId);
+   	 $("#type").val(type);
+   	 $("#buyerUserId").val(buyerUserId);
+   	 $("#sellerUserId").val(sellerUserId);
+   	 $("#orderId").val(orderId);
+   	 $("#coin").val(coin);
+   	 $("#amount").val(amount);
+   	 $("#price").val(price);
+   	 $("#totalNumber").val(totalNumber);
+   	 $("#state").val(state);
+   	 $("#payWay").val(payWay);
+   	 $("#pictureId").val(pictureId);
+   	 $("#isAppeal").val(isAppeal);
+   	 $("#buyTime").val(buyTime);
+   	 $("#playTime").val(playTime);
+   	 $("#collectionTime").val(collectionTime);
+   	 $("#latePlayTime").val(latePlayTime);
+   	 $("#lateCollectionTime").val(lateCollectionTime);
+   	 $("#remarks").val(remarks);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+   	 $("#isDeleted").val(isDeleted);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+
+    var orderState = $("#orderState").val();
+    var appealState = $("#appealState").val();
+    var mold = $("#mold").val();
+
+    var url="/dealDetail/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    url =url+"&orderState="+orderState+"&appealState="+appealState+"&mold="+mold;
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function showDetails(id){
+    $.get(_ctx+"/dealDetail/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            $("#buserName").val(item.buserName);
+            $("#suserName").val(item.suserName);
+            $("#bmobile").val(item.bmobile);
+            $("#smobile").val(item.smobile);
+            $("#bmail").val(item.bmail);
+            $("#smail").val(item.smail);
+            $("#order_id").val(item.order_id);
+            $("#price").val(item.price);
+            $("#amount").val(item.amount);
+            $("#total_number").val(item.total_number);
+            $("#name").val(item.name);
+            $("#remarks").val(item.remarks);
+            $("#pic_path").attr("src",item.pic_path);
+            $("#is_appeal").val(item.is_appeal);
+            $("#buy_time").val(timestampToTime(item.buy_time));
+            $("#play_time").val(timestampToTime(item.play_time));
+            $("#collection_time").val(timestampToTime(item.collection_time));
+            $("#is_win").val(item.is_win);
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/dealDetail/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , publishId , type , buyerUserId , sellerUserId , orderId , coin , amount , price , totalNumber , state , payWay , pictureId , isAppeal , buyTime , playTime , collectionTime , latePlayTime , lateCollectionTime , remarks , createTime , createBy , modifyTime , modifyBy , isDeleted ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(publishId == ""){
+        alert("标的id不能为空");
+        $("input[name='publishId']").focus();
+        return false;
+    }
+    if(type == ""){
+        alert("0属于出售广告，1属于购买广告不能为空");
+        $("input[name='type']").focus();
+        return false;
+    }
+    if(buyerUserId == ""){
+        alert("买家id不能为空");
+        $("input[name='buyerUserId']").focus();
+        return false;
+    }
+    if(sellerUserId == ""){
+        alert("卖家id不能为空");
+        $("input[name='sellerUserId']").focus();
+        return false;
+    }
+    if(orderId == ""){
+        alert("订单号不能为空");
+        $("input[name='orderId']").focus();
+        return false;
+    }
+    if(coin == ""){
+        alert("币种不能为空");
+        $("input[name='coin']").focus();
+        return false;
+    }
+    if(amount == ""){
+        alert("交易数量不能为空");
+        $("input[name='amount']").focus();
+        return false;
+    }
+    if(price == ""){
+        alert("交易单价不能为空");
+        $("input[name='price']").focus();
+        return false;
+    }
+    if(totalNumber == ""){
+        alert("总价不能为空");
+        $("input[name='totalNumber']").focus();
+        return false;
+    }
+    if(state == ""){
+        alert("0-待付款、1-已付款（待确认）、2-已完成、3-已取消不能为空");
+        $("input[name='state']").focus();
+        return false;
+    }
+    if(payWay == ""){
+        alert("付款方式不能为空");
+        $("input[name='payWay']").focus();
+        return false;
+    }
+    if(pictureId == ""){
+        alert("付款图片id不能为空");
+        $("input[name='pictureId']").focus();
+        return false;
+    }
+    if(isAppeal == ""){
+        alert("是否申诉，0-未申诉、1-申诉中、2-已结束不能为空");
+        $("input[name='isAppeal']").focus();
+        return false;
+    }
+    if(buyTime == ""){
+        alert("下单时间不能为空");
+        $("input[name='buyTime']").focus();
+        return false;
+    }
+    if(playTime == ""){
+        alert("付款时间不能为空");
+        $("input[name='playTime']").focus();
+        return false;
+    }
+    if(collectionTime == ""){
+        alert("收款时间不能为空");
+        $("input[name='collectionTime']").focus();
+        return false;
+    }
+    if(latePlayTime == ""){
+        alert("最迟付款时间不能为空");
+        $("input[name='latePlayTime']").focus();
+        return false;
+    }
+    if(lateCollectionTime == ""){
+        alert("最迟收款时间不能为空");
+        $("input[name='lateCollectionTime']").focus();
+        return false;
+    }
+    if(remarks == ""){
+        alert("备注不能为空");
+        $("input[name='remarks']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("N不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

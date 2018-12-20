@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.relationUmbrella.RelationUmbrellaDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			level ,
+			recommend_id ,
+			child_number ,
+			umbrella_chain ,
+			group_user_id ,
+			has_area ,
+			area_id ,
+			create_time ,
+			create_by ,
+			is_deleted ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_relation_umbrella 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_relation_umbrella set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm">
+	    insert into usr_relation_umbrella (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ level } ,
+	        	#{ recommendId } ,
+	        	#{ childNumber } ,
+	        	#{ umbrellaChain } ,
+	        	#{ groupUserId } ,
+	        	#{ hasArea } ,
+	        	#{ areaId } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ isDeleted } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm">
+    insert into usr_relation_umbrella
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="level != null">
+			        level ,
+			      </if>
+	              <if test="recommendId != null">
+			        recommend_id ,
+			      </if>
+	              <if test="childNumber != null">
+			        child_number ,
+			      </if>
+	              <if test="umbrellaChain != null">
+			        umbrella_chain ,
+			      </if>
+	              <if test="groupUserId != null">
+			        group_user_id ,
+			      </if>
+	              <if test="hasArea != null">
+			        has_area ,
+			      </if>
+	              <if test="areaId != null">
+			        area_id ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="level != null">
+	        #{ level } ,
+	      </if>
+	      <if test="recommendId != null">
+	        #{ recommendId } ,
+	      </if>
+	      <if test="childNumber != null">
+	        #{ childNumber } ,
+	      </if>
+	      <if test="umbrellaChain != null">
+	        #{ umbrellaChain } ,
+	      </if>
+	      <if test="groupUserId != null">
+	        #{ groupUserId } ,
+	      </if>
+	      <if test="hasArea != null">
+	        #{ hasArea } ,
+	      </if>
+	      <if test="areaId != null">
+	        #{ areaId } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_relation_umbrella
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="level != null">
+	         level = #{ level } ,
+	      </if>
+	      <if test="recommendId != null">
+	         recommend_id = #{ recommendId } ,
+	      </if>
+	      <if test="childNumber != null">
+	         child_number = #{ childNumber } ,
+	      </if>
+	      <if test="umbrellaChain != null">
+	         umbrella_chain = #{ umbrellaChain } ,
+	      </if>
+	      <if test="groupUserId != null">
+	         group_user_id = #{ groupUserId } ,
+	      </if>
+	      <if test="hasArea != null">
+	         has_area = #{ hasArea } ,
+	      </if>
+
+	      <if test="areaId != null">
+			  <if test="areaId == 0">
+				  area_id = null ,
+			  </if>
+			  <if test="areaId != 0">
+				  area_id = #{ areaId } ,
+			  </if>
+	      </if>
+
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+
+	<update id="updateByIds" parameterType="pm">
+		update usr_relation_umbrella
+		<set>
+			<if test="groupUserId == 0">
+				group_user_id = null ,
+			</if>
+			<if test="groupUserId != 0">
+				group_user_id = #{groupUserId},
+			</if>
+			<if test="areaId == 0">
+				area_id =  null,
+			</if>
+			<if test="areaId != 0">
+				area_id =  #{areaId},
+			</if>
+			has_area =  #{hasArea},
+			modify_time = #{modifyTime},
+			modify_by = #{modifyBy}
+		</set>
+		where id in
+		<foreach collection="ids" item="ids" open="(" separator="," close=")">
+			#{ids}
+		</foreach>
+	</update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_relation_umbrella
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        level = #{ level }  ,
+	        recommend_id = #{ recommendId }  ,
+	        child_number = #{ childNumber }  ,
+	        umbrella_chain = #{ umbrellaChain }  ,
+	        group_user_id = #{ groupUserId }  ,
+	        has_area = #{ hasArea }  ,
+	        area_id = #{ areaId }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_relation_umbrella set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_relation_umbrella
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="level != null">
+		        and level = #{ level }
+	        </if>
+	        <if test="recommendId != null">
+		        and recommend_id = #{ recommendId }
+	        </if>
+	        <if test="childNumber != null">
+		        and child_number = #{ childNumber }
+	        </if>
+	        <if test="umbrellaChain != null">
+		        and umbrella_chain = #{ umbrellaChain }
+	        </if>
+	        <if test="groupUserId != null">
+		        and group_user_id = #{ groupUserId }
+	        </if>
+	        <if test="hasArea != null">
+		        and has_area = #{ hasArea }
+	        </if>
+	        <if test="areaId != null">
+		        and area_id = #{ areaId }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+		  SELECT r.id,zu.user_name AS userName,ifnull(zu.`name`,'未实名') AS `name`,zu.mobile AS zmobile,zu.mail AS zmail,
+		  bu.user_name AS BuserName,ifnull(bu.`name`,'未实名') AS Bname,bu.mobile AS bmobile,bu.mail AS bmail,r.create_time AS createTime
+		  FROM usr_relation_umbrella r LEFT JOIN usr_user zu ON r.recommend_id = zu.id LEFT JOIN usr_user bu ON r.user_id = bu.id
+		  <where>
+			  !ISNULL(zu.user_name)
+			  <if test="keyword != null">
+				and (zu.mobile like concat(concat("%",#{keyword}),"%")
+				  or  zu.mail like concat(concat("%",#{keyword}),"%")
+				  or zu.user_name like concat(concat("%",#{keyword}),"%")
+				  )
+			  </if>
+		  </where>
+        ORDER BY r.create_time DESC
+	  </select>
+
+	<select id="getUserIdByRecommendId" resultType="String" parameterType="String" >
+		SELECT user_id from usr_relation_umbrella WHERE recommend_id = #{userId}
+	</select>
+
+	<select id="getIds" resultType="Long" parameterType="pm" >
+		select u.id from usr_relation_umbrella u where (
+		u.umbrella_chain like     CONCAT('%',",",#{userId},",",'%')
+		or u.umbrella_chain like CONCAT(#{userId},",",'%')
+		OR u.umbrella_chain like CONCAT('%',",",#{userId})
+		OR u.umbrella_chain = #{userId} )
+		and (u.area_id is null or u.area_id = '' OR u.area_id = #{areaId})
+		OR u.user_id = #{userId}
+	</select>
+
+	<select id="getIdsByAreaId" resultType="Long" parameterType="pm" >
+		SELECT id from usr_relation_umbrella u WHERE area_id = #{areaId} AND is_deleted = 'N'
+	</select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_relation_umbrella
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="level != null">
+		        and level = #{ level }
+	        </if>
+	        <if test="recommendId != null">
+		        and recommend_id = #{ recommendId }
+	        </if>
+	        <if test="childNumber != null">
+		        and child_number = #{ childNumber }
+	        </if>
+	        <if test="umbrellaChain != null">
+		        and umbrella_chain = #{ umbrellaChain }
+	        </if>
+	        <if test="groupUserId != null">
+		        and group_user_id = #{ groupUserId }
+	        </if>
+	        <if test="hasArea != null">
+		        and has_area = #{ hasArea }
+	        </if>
+	        <if test="areaId != null">
+		        and area_id = #{ areaId }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.goodsType.GoodsTypeDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			parent_id ,
+			menu_type ,
+			title ,
+			sort_num ,
+			concat(#{homeUrl},menu_url) as menu_url,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by ,
+			lang 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from goods_type 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update goods_type set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into goods_type (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ parentId } ,
+	        	#{ menuType } ,
+	        	#{ title } ,
+	        	#{ sortNum } ,
+	        	#{ menuUrl } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ lang } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into goods_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="parentId != null">
+			        parent_id ,
+			      </if>
+	              <if test="menuType != null">
+			        menu_type ,
+			      </if>
+	              <if test="title != null">
+			        title ,
+			      </if>
+	              <if test="sortNum != null">
+			        sort_num ,
+			      </if>
+	              <if test="menuUrl != null">
+			        menu_url ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="lang != null">
+			        lang ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="parentId != null">
+	        #{ parentId } ,
+	      </if>
+	      <if test="menuType != null">
+	        #{ menuType } ,
+	      </if>
+	      <if test="title != null">
+	        #{ title } ,
+	      </if>
+	      <if test="sortNum != null">
+	        #{ sortNum } ,
+	      </if>
+	      <if test="menuUrl != null">
+	        #{ menuUrl } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="lang != null">
+	        #{ lang } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update goods_type
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="parentId != null">
+	         parent_id = #{ parentId } ,
+	      </if>
+	      <if test="menuType != null">
+	         menu_type = #{ menuType } ,
+	      </if>
+	      <if test="title != null">
+	         title = #{ title } ,
+	      </if>
+	      <if test="sortNum != null">
+	         sort_num = #{ sortNum } ,
+	      </if>
+	      <if test="menuUrl != null">
+	         menu_url = #{ menuUrl } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="lang != null">
+	         lang = #{ lang } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update goods_type
+    set  
+	        id = #{ id }  ,
+	        parent_id = #{ parentId }  ,
+	        menu_type = #{ menuType }  ,
+	        title = #{ title }  ,
+	        sort_num = #{ sortNum }  ,
+	        menu_url = #{ menuUrl }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        lang = #{ lang }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update goods_type set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from goods_type
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="parentId != null">
+		        and parent_id = #{ parentId }
+	        </if>
+	        <if test="menuType != null">
+		        and menu_type = #{ menuType }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="sortNum != null">
+		        and sort_num = #{ sortNum }
+	        </if>
+	        <if test="menuUrl != null">
+		        and menu_url = #{ menuUrl }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="lang != null">
+		        and lang = #{ lang }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    SELECT g.id,g.title,g.sort_num,l.chinese_name FROM goods_type g LEFT JOIN sys_lang l ON g.lang = l.lang_name
+	    <where>
+			g.is_deleted = 'N' AND parent_id = 0
+			<if test="keyword != null">
+				and g.title like concat("%",#{keyword},"%")
+			</if>
+			<if test="lang != null">
+				<if test="lang != '-1'">
+					and g.lang = #{lang}
+				</if>
+			</if>
+		</where>
+		  order by g.sort_num asc
+
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from goods_type
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="parentId != null">
+		        and parent_id = #{ parentId }
+	        </if>
+	        <if test="menuType != null">
+		        and menu_type = #{ menuType }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="sortNum != null">
+		        and sort_num = #{ sortNum }
+	        </if>
+	        <if test="menuUrl != null">
+		        and menu_url = #{ menuUrl }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="lang != null">
+		        and lang = #{ lang }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getAllLang" parameterType="pm" resultType="pm">
+		SELECT s.lang_name,s.chinese_name FROM sys_lang s WHERE s.is_deleted = 'N'
+	</select>
+	
+</mapper>
+

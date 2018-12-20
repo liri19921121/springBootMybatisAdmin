@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.dailyTotalDetail.DailyTotalDetailDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			coin_code ,
+			amount ,
+			real_amount ,
+			user_amount ,
+			status ,
+			type ,
+			date ,
+			unify_id ,
+			create_by ,
+			create_time,
+			statistics_time,
+			modify_by,
+			modify_time
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from coin_daily_total_detail 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update coin_daily_total_detail set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into coin_daily_total_detail (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ coinCode } ,
+	        	#{ amount } ,
+	        	#{ realAmount } ,
+	        	#{ userAmount } ,
+	        	#{ status } ,
+	        	#{ type } ,
+	        	#{ date } ,
+	        	#{ unifyId } ,
+	        	#{ createBy } ,
+	        	#{ createTime } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into coin_daily_total_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="coinCode != null">
+			        coin_code ,
+			      </if>
+	              <if test="amount != null">
+			        amount ,
+			      </if>
+	              <if test="realAmount != null">
+			        real_amount ,
+			      </if>
+	              <if test="userAmount != null">
+			        user_amount ,
+			      </if>
+	              <if test="status != null">
+			        status ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="date != null">
+			        date ,
+			      </if>
+	              <if test="unifyId != null">
+			        unify_id ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="coinCode != null">
+	        #{ coinCode } ,
+	      </if>
+	      <if test="amount != null">
+	        #{ amount } ,
+	      </if>
+	      <if test="realAmount != null">
+	        #{ realAmount } ,
+	      </if>
+	      <if test="userAmount != null">
+	        #{ userAmount } ,
+	      </if>
+	      <if test="status != null">
+	        #{ status } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="date != null">
+	        #{ date } ,
+	      </if>
+	      <if test="unifyId != null">
+	        #{ unifyId } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update coin_daily_total_detail
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="coinCode != null">
+	         coin_code = #{ coinCode } ,
+	      </if>
+	      <if test="amount != null">
+	         amount = #{ amount } ,
+	      </if>
+	      <if test="realAmount != null">
+	         real_amount = #{ realAmount } ,
+	      </if>
+	      <if test="userAmount != null">
+	         user_amount = #{ userAmount } ,
+	      </if>
+	      <if test="status != null">
+	         status = #{ status } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="date != null">
+	         date = #{ date } ,
+	      </if>
+	      <if test="unifyId != null">
+	         unify_id = #{ unifyId } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+		<if test="statisticsTime != null">
+			statistics_time = #{ statisticsTime } ,
+		</if>
+		<if test="modifyBy != null">
+			modify_by = #{ modifyBy } ,
+		</if>
+		<if test="modifyTime != null">
+			modify_time = #{ modifyTime } ,
+		</if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update coin_daily_total_detail
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        coin_code = #{ coinCode }  ,
+	        amount = #{ amount }  ,
+	        real_amount = #{ realAmount }  ,
+	        user_amount = #{ userAmount }  ,
+	        status = #{ status }  ,
+	        type = #{ type }  ,
+	        date = #{ date }  ,
+	        unify_id = #{ unifyId }  ,
+	        create_by = #{ createBy }  ,
+	        create_time = #{ createTime }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update coin_daily_total_detail set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from coin_daily_total_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="coinCode != null">
+		        and coin_code = #{ coinCode }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="realAmount != null">
+		        and real_amount = #{ realAmount }
+	        </if>
+	        <if test="userAmount != null">
+		        and user_amount = #{ userAmount }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="date != null">
+		        and date = #{ date }
+	        </if>
+	        <if test="unifyId != null">
+		        and unify_id = #{ unifyId }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select
+			  a.id ,
+			  a.user_id ,
+			  a.coin_code ,
+			  a.amount ,
+			  a.real_amount ,
+			  a.user_amount ,
+			  a.status ,
+			  a.type ,
+			  a.date ,
+			  a.unify_id ,
+			  a.create_by ,
+			  a.create_time,
+			  a.statistics_time,
+			  a.modify_by,
+			  a.modify_time,
+		  	  b.user_name,
+		  	  c.username
+		  from coin_daily_total_detail a
+		  left join
+		  		usr_user b
+		  on
+		  	a.user_id=b.id
+		  left join
+		  	admin_user c
+		  on
+		  	a.modify_by=c.user_id
+	   	  <where>  
+	        <if test="id != null">
+		        and a.id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and a.user_id = #{ userId }
+	        </if>
+	        <if test="coinCode != null">
+		        and a.coin_code = #{ coinCode }
+	        </if>
+	        <if test="amount != null">
+		        and a.amount = #{ amount }
+	        </if>
+	        <if test="realAmount != null">
+		        and a.real_amount = #{ realAmount }
+	        </if>
+	        <if test="userAmount != null">
+		        and a.user_amount = #{ userAmount }
+	        </if>
+	        <if test="status != null">
+		        and a.status = #{ status }
+	        </if>
+	        <if test="type != null">
+		        and a.type = #{ type }
+	        </if>
+	        <if test="date != null">
+		        and a.date = #{ date }
+	        </if>
+	        <if test="unifyId != null">
+		        and a.unify_id = #{ unifyId }
+	        </if>
+	        <if test="createBy != null">
+		        and a.create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and a.create_time = #{ createTime }
+	        </if>
+			  <if test="keyword != null and keyword != ''">
+				  and (
+				  b.user_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  or
+				  a.date LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  )
+			  </if>
+	    </where>
+		  order by a.status asc,a.create_time desc
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from coin_daily_total_detail
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="coinCode != null">
+		        and coin_code = #{ coinCode }
+	        </if>
+	        <if test="amount != null">
+		        and amount = #{ amount }
+	        </if>
+	        <if test="realAmount != null">
+		        and real_amount = #{ realAmount }
+	        </if>
+	        <if test="userAmount != null">
+		        and user_amount = #{ userAmount }
+	        </if>
+	        <if test="status != null">
+		        and status = #{ status }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="date != null">
+		        and date = #{ date }
+	        </if>
+	        <if test="unifyId != null">
+		        and unify_id = #{ unifyId }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

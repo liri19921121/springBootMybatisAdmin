@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.workOrder.WorkOrderDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			user_id ,
+			state ,
+			content ,
+			type ,
+			title ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by ,
+			is_deleted 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select
+	    <include refid="Base_Column_List" />
+	    from usr_work_order
+	    where id = #{ id }
+	  </select>
+
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_work_order set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm">
+	    insert into usr_work_order (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ userId } ,
+	        	#{ state } ,
+	        	#{ content } ,
+	        	#{ type } ,
+	        	#{ title } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ isDeleted } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm">
+    insert into usr_work_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="state != null">
+			        state ,
+			      </if>
+	              <if test="content != null">
+			        content ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="title != null">
+			        title ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="state != null">
+	        #{ state } ,
+	      </if>
+	      <if test="content != null">
+	        #{ content } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="title != null">
+	        #{ title } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_work_order
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="state != null">
+	         state = #{ state } ,
+	      </if>
+	      <if test="content != null">
+	         content = #{ content } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="title != null">
+	         title = #{ title } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_work_order
+    set  
+	        id = #{ id }  ,
+	        user_id = #{ userId }  ,
+	        state = #{ state }  ,
+	        content = #{ content }  ,
+	        type = #{ type }  ,
+	        title = #{ title }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        is_deleted = #{ isDeleted }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_work_order set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_work_order
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+		  SELECT w.id,u.user_name,u.mail as mail,u.mobile as mobile ,w.title,CASE WHEN w.type = 0 THEN '交易' WHEN w.type = 1 THEN '认证' WHEN w.type = 2 THEN '充币' WHEN w.type = 3 THEN '提币' ELSE '其他' END AS type,
+		  CASE WHEN w.state = 0 THEN '待回复' WHEN w.state = 1 THEN '已回复' ELSE '已关闭' END AS state,
+		  m.username,IFNULL(w.modify_time,"待回复") as modifyTime,
+		  w.create_time FROM usr_work_order w LEFT JOIN usr_user u ON w.user_id = u.id
+		  LEFT JOIN admin_user m ON w.modify_by = m.user_id
+		  <where>
+			  w.is_deleted = 'N'
+			  <if test="keyword != null">
+				  and( u.mobile like concat(concat("%",#{keyword}),"%")
+				  or u.mail like concat(concat("%",#{keyword}),"%")
+				  or u.user_name like concat(concat("%",#{keyword}),"%")
+				  )
+			  </if>
+			  /*买卖申诉跳转*/
+			  <if test="workOrderId != null">
+				  and w.id = #{workOrderId}
+			  </if>
+		  </where>
+
+		 ORDER BY w.create_time DESC
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_work_order
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="state != null">
+		        and state = #{ state }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="selectWorkOrderList" parameterType="pm" resultMap="selectWorkOrderListDTO">
+		SELECT d.user_id as userId,d.id,d.order_id as orderId,CASE WHEN state = 0 THEN '用户' ELSE au.username END AS state,
+		d.content,CONCAT(#{homeUrl},p1.pic_path ) AS picPath1,CONCAT(#{homeUrl},p2.pic_path )  AS picPath2,CONCAT(#{homeUrl},p3.pic_path )  AS picPath3,d.create_time AS createTime
+		 FROM usr_work_order_detail d
+ 		LEFT JOIN picture p1 ON d.img_1 = p1.pic_id
+		LEFT JOIN picture p2 ON d.img_2 = p2.pic_id
+		LEFT JOIN picture p3 ON d.img_3 = p3.pic_id
+		LEFT JOIN admin_user au ON au.user_id = d.modify_by
+		 WHERE d.order_id = #{ workOrderId } AND d.is_deleted = 'N' ORDER BY d.create_time asc
+	  </select>
+
+	<resultMap id="selectWorkOrderListDTO" type="com.admin.entity.dto.WorkOrderDTO">
+		<id column="id"   property="id"  jdbcType="BIGINT" />
+		<result column="orderId"   property="orderId"  jdbcType="BIGINT" />
+		<result column="state"   property="state" jdbcType="VARCHAR" />
+		<result column="content"   property="content" jdbcType="VARCHAR" />
+		<result column="picPath1"   property="picPath1" jdbcType="VARCHAR" />
+		<result column="picPath2"   property="picPath2" jdbcType="VARCHAR" />
+		<result column="picPath3"   property="picPath3" jdbcType="VARCHAR" />
+		<result column="createTime"   property="createTime" jdbcType="TIMESTAMP" />
+		<result column="userId"   property="userId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="getDetailById" resultType="pm" parameterType="pm" >
+		SELECT u.user_name,u.mobile,u.mail,w.title,
+		CASE WHEN w.type = 0 THEN '交易' WHEN w.type = 1 THEN '认证' WHEN w.type = 2 THEN '充币' WHEN w.type = 3 THEN '提币' ELSE '其他' END as type ,
+		w.content FROM usr_work_order w LEFT JOIN usr_user u ON w.user_id = u.id
+		where w.id = #{id}
+	</select>
+</mapper>
+

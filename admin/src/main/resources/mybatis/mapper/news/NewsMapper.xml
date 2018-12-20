@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.news.NewsDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			group_name ,
+			title ,
+			summary ,
+			author ,
+			cover ,
+			top_flag ,
+			top_cover ,
+			source ,
+			original ,
+			category_code ,
+			read_count ,
+			like_count ,
+			labels ,
+			lang ,
+			keywords ,
+			publish_time ,
+			status ,
+			is_deleted ,
+			create_by ,
+			create_time ,
+			modify_by ,
+			modify_time 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from news 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update news set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+
+	<insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+		insert into news (<include refid="Base_Column_List" />)
+		values (
+		#{ id } ,
+		#{ groupName } ,
+		#{ title } ,
+		#{ summary } ,
+		#{ author } ,
+		#{ cover } ,
+		#{ topFlag } ,
+		#{ topCover } ,
+		#{ source } ,
+		#{ original } ,
+		#{ categoryCode } ,
+		#{ readCount } ,
+		#{ likeCount } ,
+		#{ labels } ,
+		#{ lang } ,
+		#{ keywords } ,
+		#{ publishTime } ,
+		#{ status } ,
+		#{ isDeleted } ,
+		#{ createBy } ,
+		#{ createTime } ,
+		#{ modifyBy } ,
+		#{ modifyTime }
+		)
+	</insert>
+
+	<insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+		insert into news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id !=0 ">
+				id ,
+			</if>
+			<if test="groupName != null">
+				group_name ,
+			</if>
+			<if test="title != null">
+				title ,
+			</if>
+			<if test="summary != null">
+				summary ,
+			</if>
+			<if test="author != null">
+				author ,
+			</if>
+			<if test="cover != null">
+				cover ,
+			</if>
+			<if test="topFlag != null">
+				top_flag ,
+			</if>
+			<if test="topCover != null">
+				top_cover ,
+			</if>
+			<if test="source != null">
+				source ,
+			</if>
+			<if test="original != null">
+				original ,
+			</if>
+			<if test="categoryCode != null">
+				category_code ,
+			</if>
+			<if test="readCount != null">
+				read_count ,
+			</if>
+			<if test="likeCount != null">
+				like_count ,
+			</if>
+			<if test="labels != null">
+				labels ,
+			</if>
+			<if test="lang != null">
+				lang ,
+			</if>
+			<if test="keywords != null">
+				keywords ,
+			</if>
+			<if test="publishTime != null">
+				publish_time ,
+			</if>
+			<if test="status != null">
+				status ,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted ,
+			</if>
+			<if test="createBy != null">
+				create_by ,
+			</if>
+			<if test="createTime != null">
+				create_time ,
+			</if>
+			<if test="modifyBy != null">
+				modify_by ,
+			</if>
+			<if test="modifyTime != null">
+				modify_time ,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != 0">
+				#{ id } ,
+			</if>
+			<if test="groupName != null">
+				#{ groupName } ,
+			</if>
+			<if test="title != null">
+				#{ title } ,
+			</if>
+			<if test="summary != null">
+				#{ summary } ,
+			</if>
+			<if test="author != null">
+				#{ author } ,
+			</if>
+			<if test="cover != null">
+				#{ cover } ,
+			</if>
+			<if test="topFlag != null">
+				#{ topFlag } ,
+			</if>
+			<if test="topCover != null">
+				#{ topCover } ,
+			</if>
+			<if test="source != null">
+				#{ source } ,
+			</if>
+			<if test="original != null">
+				#{ original } ,
+			</if>
+			<if test="categoryCode != null">
+				#{ categoryCode } ,
+			</if>
+			<if test="readCount != null">
+				#{ readCount } ,
+			</if>
+			<if test="likeCount != null">
+				#{ likeCount } ,
+			</if>
+			<if test="labels != null">
+				#{ labels } ,
+			</if>
+			<if test="lang != null">
+				#{ lang } ,
+			</if>
+			<if test="keywords != null">
+				#{ keywords } ,
+			</if>
+			<if test="publishTime != null">
+				#{ publishTime } ,
+			</if>
+			<if test="status != null">
+				#{ status } ,
+			</if>
+			<if test="isDeleted != null">
+				#{ isDeleted } ,
+			</if>
+			<if test="createBy != null">
+				#{ createBy } ,
+			</if>
+			<if test="createTime != null">
+				#{ createTime } ,
+			</if>
+			<if test="modifyBy != null">
+				#{ modifyBy } ,
+			</if>
+			<if test="modifyTime != null">
+				#{ modifyTime } ,
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="pm">
+		update news
+		<set>
+			<if test="id != null">
+				id = #{ id } ,
+			</if>
+			<if test="groupName != null">
+				group_name = #{ groupName } ,
+			</if>
+			<if test="title != null">
+				title = #{ title } ,
+			</if>
+			<if test="summary != null">
+				summary = #{ summary } ,
+			</if>
+			<if test="author != null">
+				author = #{ author } ,
+			</if>
+			<if test="cover != null">
+				cover = #{ cover } ,
+			</if>
+			<if test="topFlag != null">
+				top_flag = #{ topFlag } ,
+			</if>
+			<if test="topCover != null">
+				top_cover = #{ topCover } ,
+			</if>
+			<if test="source != null">
+				source = #{ source } ,
+			</if>
+			<if test="original != null">
+				original = #{ original } ,
+			</if>
+			<if test="categoryCode != null">
+				category_code = #{ categoryCode } ,
+			</if>
+			<if test="readCount != null">
+				read_count = #{ readCount } ,
+			</if>
+			<if test="likeCount != null">
+				like_count = #{ likeCount } ,
+			</if>
+			<if test="labels != null">
+				labels = #{ labels } ,
+			</if>
+			<if test="lang != null">
+				lang = #{ lang } ,
+			</if>
+			<if test="keywords != null">
+				keywords = #{ keywords } ,
+			</if>
+			<if test="publishTime != null">
+				publish_time = #{ publishTime } ,
+			</if>
+			<if test="status != null">
+				status = #{ status } ,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{ isDeleted } ,
+			</if>
+			<if test="createBy != null">
+				create_by = #{ createBy } ,
+			</if>
+			<if test="createTime != null">
+				create_time = #{ createTime } ,
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{ modifyBy } ,
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{ modifyTime } ,
+			</if>
+		</set>
+		where id = #{ id }
+
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="pm">
+    update news
+    set
+	        id = #{ id }  ,
+	        group_name = #{ groupName }  ,
+	        title = #{ title }  ,
+	        summary = #{ summary }  ,
+	        author = #{ author }  ,
+	        cover = #{ cover }  ,
+	        top_flag = #{ topFlag }  ,
+	        top_cover = #{ topCover }  ,
+	        source = #{ source }  ,
+	        original = #{ original }  ,
+	        category_code = #{ categoryCode }  ,
+	        read_count = #{ readCount }  ,
+	        like_count = #{ likeCount }  ,
+	        labels = #{ labels }  ,
+	        lang = #{ lang }  ,
+	        keywords = #{ keywords }  ,
+	        publish_time = #{ publishTime }  ,
+	        status = #{ status }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_by = #{ createBy }  ,
+	        create_time = #{ createTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        modify_time = #{ modifyTime }
+    where id = #{ id }
+  </update>
+
+	<!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select 
+		    	a.id ,
+		  		a.group_name,
+				a.title ,
+				a.summary ,
+				a.author ,
+				a.cover ,
+				a.top_flag ,
+				a.top_cover ,
+				a.source ,
+				a.original ,
+				a.category_code ,
+				a.read_count ,
+				a.like_count ,
+				a.labels ,
+		  		a.lang,
+				a.keywords ,
+				a.publish_time ,
+				a.status ,
+				a.is_deleted ,
+				a.create_by ,
+				a.create_time ,
+				a.modify_by ,
+				a.modify_time,
+				b.content
+	   		from 
+	   			news a
+	   		left join
+	   			news_content b
+	   		on
+	   			a.id=b.news_id
+		  <where>
+			  <if test="id != null">
+				  and a.id = #{ id }
+			  </if>
+			  <if test="groupName != null">
+				  and a.group_name = #{ groupName }
+			  </if>
+			  <if test="title != null">
+				  and a.title = #{ title }
+			  </if>
+			  <if test="summary != null">
+				  and a.summary = #{ summary }
+			  </if>
+			  <if test="author != null">
+				  and a.author = #{ author }
+			  </if>
+			  <if test="cover != null">
+				  and a.cover = #{ cover }
+			  </if>
+			  <if test="topFlag != null">
+				  and a.top_flag = #{ topFlag }
+			  </if>
+			  <if test="topCover != null">
+				  and a.top_cover = #{ topCover }
+			  </if>
+			  <if test="source != null">
+				  and a.source = #{ source }
+			  </if>
+			  <if test="original != null">
+				  and a.original = #{ original }
+			  </if>
+			  <if test="categoryCode != null">
+				  and a.category_code = #{ categoryCode }
+			  </if>
+			  <if test="readCount != null">
+				  and a.read_count = #{ readCount }
+			  </if>
+			  <if test="likeCount != null">
+				  and a.like_count = #{ likeCount }
+			  </if>
+			  <if test="labels != null">
+				  and a.labels = #{ labels }
+			  </if>
+			  <if test="lang != null">
+				  and a.lang = #{ lang }
+			  </if>
+			  <if test="keywords != null">
+				  and a.keywords = #{ keywords }
+			  </if>
+			  <if test="publishTime != null">
+				  and a.publish_time = #{ publishTime }
+			  </if>
+			  <if test="status != null">
+				  and a.status = #{ status }
+			  </if>
+			  <if test="isDeleted != null">
+				  and a.is_deleted = #{ isDeleted }
+			  </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+		   select 
+		    	a.id ,
+		  		a.group_name,
+				a.title ,
+				a.summary ,
+				a.author ,
+				a.cover ,
+				a.top_flag ,
+				a.top_cover ,
+				a.source ,
+		  		a.lang,
+				a.original ,
+				a.category_code ,
+				a.read_count ,
+				a.like_count ,
+				a.labels ,
+				a.keywords ,
+				a.publish_time ,
+				a.status ,
+				a.is_deleted ,
+				a.create_by ,
+				a.create_time ,
+				a.modify_by ,
+				a.modify_time,
+				b.name
+	   		from news a
+	   		left join
+	   			news_category b
+	   		on
+	   			a.category_code=b.code
+		  <where>
+			  a.is_deleted = "N"
+			  <if test="keyword != null and keyword != ''">
+				  and (
+				  a.keywords LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  or
+				  a.summary LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  or
+				  a.title LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  or
+				  a.author LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+				  )
+			  </if>
+			  <if test="categoryLabels != null and categoryLabels != ''">
+				  and labels = #{categoryLabels}
+			  </if>
+	    </where>
+		  order by create_time desc
+	  </select>
+
+	<select id="getByConditionCount" parameterType="pm" resultType="long" >
+		select COUNT(1)
+		from news
+		<where>
+			<if test="id != null">
+				and id = #{ id }
+			</if>
+			<if test="groupName != null">
+				and group_name = #{ groupName }
+			</if>
+			<if test="title != null">
+				and title = #{ title }
+			</if>
+			<if test="summary != null">
+				and summary = #{ summary }
+			</if>
+			<if test="author != null">
+				and author = #{ author }
+			</if>
+			<if test="cover != null">
+				and cover = #{ cover }
+			</if>
+			<if test="topFlag != null">
+				and top_flag = #{ topFlag }
+			</if>
+			<if test="topCover != null">
+				and top_cover = #{ topCover }
+			</if>
+			<if test="source != null">
+				and source = #{ source }
+			</if>
+			<if test="original != null">
+				and original = #{ original }
+			</if>
+			<if test="categoryCode != null">
+				and category_code = #{ categoryCode }
+			</if>
+			<if test="readCount != null">
+				and read_count = #{ readCount }
+			</if>
+			<if test="likeCount != null">
+				and like_count = #{ likeCount }
+			</if>
+			<if test="labels != null">
+				and labels = #{ labels }
+			</if>
+			<if test="lang != null">
+				and lang = #{ lang }
+			</if>
+			<if test="keywords != null">
+				and keywords = #{ keywords }
+			</if>
+			<if test="publishTime != null">
+				and publish_time = #{ publishTime }
+			</if>
+			<if test="status != null">
+				and status = #{ status }
+			</if>
+			<if test="isDeleted != null">
+				and is_deleted = #{ isDeleted }
+			</if>
+			<if test="createBy != null">
+				and create_by = #{ createBy }
+			</if>
+			<if test="createTime != null">
+				and create_time = #{ createTime }
+			</if>
+			<if test="modifyBy != null">
+				and modify_by = #{ modifyBy }
+			</if>
+			<if test="modifyTime != null">
+				and modify_time = #{ modifyTime }
+			</if>
+		</where>
+	</select>
+</mapper>
+

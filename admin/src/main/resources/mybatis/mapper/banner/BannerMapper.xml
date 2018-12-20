@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.banner.BannerDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			number ,
+			picture_name ,
+			img_id ,
+			type ,
+			is_open ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select
+	    <include refid="Base_Column_List" />
+	    from sys_banner
+	    where id = #{ id }
+	  </select>
+
+	<select id="selectByPrimary" parameterType="pm" resultType="pm">
+	    SELECT s.id,s.number,s.picture_name,CONCAT(#{ homeUrl },p.pic_path) as pic_path,s.type,s.is_open
+	    FROM sys_banner s LEFT JOIN picture p ON s.img_id = p.pic_id
+	    where id = #{ id }
+	  </select>
+
+
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update sys_banner set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm">
+	    insert into sys_banner (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ number } ,
+	        	#{ pictureName } ,
+	        	#{ imgId } ,
+	        	#{ type } ,
+	        	#{ isOpen } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm">
+    insert into sys_banner
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="number != null">
+			        number ,
+			      </if>
+	              <if test="pictureName != null">
+			        picture_name ,
+			      </if>
+	              <if test="imgId != null">
+			        img_id ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="isOpen != null">
+			        is_open ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="number != null">
+	        #{ number } ,
+	      </if>
+	      <if test="pictureName != null">
+	        #{ pictureName } ,
+	      </if>
+	      <if test="imgId != null">
+	        #{ imgId } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="isOpen != null">
+	        #{ isOpen } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+
+	<insert id="insertPictureSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+		insert into picture
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="picId != null">
+				pic_id ,
+			</if>
+			<if test="picType != null">
+				pic_type ,
+			</if>
+			<if test="picName != null">
+				pic_name ,
+			</if>
+			<if test="picPath != null">
+				pic_path ,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted ,
+			</if>
+			<if test="createTime != null">
+				create_time ,
+			</if>
+			<if test="createBy != null">
+				create_by ,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="picId != null">
+				#{ picId, jdbcType=BIGINT } ,
+			</if>
+			<if test="picType != null">
+				#{ picType, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picName != null">
+				#{ picName, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picPath != null">
+				#{ picPath, jdbcType=VARCHAR } ,
+			</if>
+			<if test="isDeleted != null">
+				#{ isDeleted, jdbcType=VARCHAR } ,
+			</if>
+			<if test="createTime != null">
+				#{ createTime, jdbcType=TIMESTAMP } ,
+			</if>
+			<if test="createBy != null">
+				#{ createBy, jdbcType=BIGINT } ,
+			</if>
+		</trim>
+	</insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update sys_banner
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="number != null">
+	         number = #{ number } ,
+	      </if>
+	      <if test="pictureName != null">
+	         picture_name = #{ pictureName } ,
+	      </if>
+	      <if test="imgId != null">
+	         img_id = #{ imgId } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="isOpen != null">
+	         is_open = #{ isOpen } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update sys_banner
+    set  
+	        id = #{ id }  ,
+	        number = #{ number }  ,
+	        picture_name = #{ pictureName }  ,
+	        img_id = #{ imgId }  ,
+	        type = #{ type }  ,
+	        is_open = #{ isOpen }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update sys_banner set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from sys_banner
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="number != null">
+		        and number = #{ number }
+	        </if>
+	        <if test="pictureName != null">
+		        and picture_name = #{ pictureName }
+	        </if>
+	        <if test="imgId != null">
+		        and img_id = #{ imgId }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isOpen != null">
+		        and is_open = #{ isOpen }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    SELECT b.id,case when b.type = 'zh_CN' then '中文'
+		  WHEN b.type = 'zh_TW'   THEN '繁体'
+		  WHEN b.type = 'en_US'   THEN '英文'
+		  WHEN b.type = 'ko_KR'   THEN '韩文'
+		  WHEN b.type = 'ja_JP'   THEN '日文'
+		  else '其它' end as type,b.number,b.picture_name,b.is_open,CONCAT(#{homeUrl},p.pic_path) as pic_path FROM sys_banner b  LEFT JOIN picture p ON p.pic_id = b.img_id
+		  <where>
+			  b.is_deleted = 'N'
+			  <if test="keyword != null">
+				  and b.picture_name like concat(concat("%",#{keyword}),"%")
+			  </if>
+		  </where>
+	   order by  number asc
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from sys_banner
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="number != null">
+		        and number = #{ number }
+	        </if>
+	        <if test="pictureName != null">
+		        and picture_name = #{ pictureName }
+	        </if>
+	        <if test="imgId != null">
+		        and img_id = #{ imgId }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isOpen != null">
+		        and is_open = #{ isOpen }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

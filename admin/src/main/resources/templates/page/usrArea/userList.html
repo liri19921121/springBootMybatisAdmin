@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+	<link rel="stylesheet" th:href="@{/daterangepicker/daterangepicker.css}">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> 区域管理</a></li>
+		<li class="active">创建分区</li>
+	</ol>
+	<br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	<div class="box">
+		<h3 class="box-title">创建分区</h3>
+		<br><br>
+		<div style="height: 120px">
+			<div style="text-align: center">
+				分区名称：<input type="text"  th:value="${areaName}" id="areaName" placeholder="请输入分区名称" ><br><br>
+				创建者：<input th:value="${username}" type="text" readonly="readonly"/><br><br>
+				<button  class="btn btn-success btn-sm" id="cancel"> 取消</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button  class="btn btn-success btn-sm" id="addItem"> 确定</button>
+			</div>
+		</div>
+		<div class="box-header">
+			<div class="search">
+				<div class="input-group" style="float: right;width: 300px;">
+					<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入会员ID">
+					<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+				</div>
+			</div>
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body">
+			<div class="table-responsive">
+				<table id="menuList" class="table table-bordered table-striped">
+					<thead>
+					<tr>
+						<th>序号</th>
+						<th>会员ID</th>
+						<th>会员等级</th>
+						<th>邮箱</th>
+						<th>手机号码</th>
+						<th>姓名</th>
+						<th>证件号码</th>
+						<th>实名认证</th>
+						<th>用户状态</th>
+						<th>注册来源</th>
+						<th>注册时间</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:if="${QX.query == '1' }" th:each="item,stat :${ user }" >
+						<td th:text="${stat.count}">1</td>
+						<th th:text="${item.userName }">用户名</th>
+						<th th:if="${item.amount}<300 and ${item.status} ==0 " th:text="临时会员">会员等级</th>
+						<th th:if="${item.amount}<300 and ${item.status} !=0 " th:text="普通会员">会员等级</th>
+						<th th:if="${item.amount}>=300 and ${item.amount}<1000000 " th:text="普通会员">会员等级</th>
+						<th th:if="${item.amount}>=1000000 and ${item.amount}<3000000 " th:text="黑金会员">会员等级</th>
+						<th th:if="${item.amount}>=3000000" th:text="黑钻会员">会员等级</th>
+						<th th:text="${item.mail }">邮箱</th>
+						<th th:text="${item.mobile }">手机</th>
+						<th th:text="${item.realName }">姓名</th>
+						<th th:text="${item.idCard }">证件号码</th>
+						<th th:each="reviewStatus:${reviewStatusList}" th:if="${item.authVerified} == ${reviewStatus.key}" th:text="${reviewStatus.value}">审核状态：0-未验证,1-审核中，2-审核通过，3-审核不通过</th>
+						<th th:text="正常" th:if="${item.uStatus} == 1">用户状态</th>
+						<th th:text="禁用" th:unless="${item.uStatus} == 1">用户状态</th>
+						<th th:text="${item.source }">注册来源</th>
+						<th th:text="${item.createTime }">注册时间</th>
+						<td>
+							<label><input name="areaRadio" type="radio" th:value="${item.id }"  />选择</label>
+						</td>
+					</tr>
+					<tr th:unless="${QX.query == '1' }" >
+						<td colspan="7" rowspan="1" align="center">
+							<h2>您无权限查看该页面</h2>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+		<ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modelHead">创建分区</h4>
+			</div>
+			<input th:type="hidden" name="id" id="id" />
+			<div class="modal-body">
+				<form class="form-horizontal" role="form" >
+					您正在创建分区，确定选择该用户创建么？
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="submitBtn" >确定</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+    $(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+
+        $("#addItem").click(function(){
+            $("#itemModal").modal("show");
+        });
+
+        $("#cancel").click(function(){
+            window.location.href=_ctx+"/usrArea/list";
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var userId = $('input:radio:checked').val();
+            var areaName = $("#areaName").val();
+            if (userId == null){
+                alert("请选择用户");
+                $("#itemModal").modal("hide");
+                return false;
+			}
+            $.ajax({
+                type:"POST",
+                url:_ctx+"/usrArea/createArea",
+                cache:false,
+                data:{userId:userId,areaName:areaName},
+                dataType:"json",
+                success:function(data){
+                    if(data.status == "200"){
+                        alert("创建成功");
+                        window.location.href=_ctx+"/usrArea/list";
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+            $("#itemModal").modal("hide");
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+    })
+
+    function setData( id, authGoogle , password , dealPassword ,
+                      userName,name,mail,mobile,source,shimin,dengji,gmt_lastlogin,registrationTime,status ){
+
+        $("#userName").val(userName);
+        $("#name").val(name);
+        $("#mail").val(mail);
+        $("#mobile").val(mobile);
+        $("#source").val(source);
+        $("#shimin").val(shimin);
+        $("#dengji").val(dengji);
+        $("#gmt_lastlogin").val(gmt_lastlogin);
+        $("#registrationTime").val(registrationTime);
+        $("#status").val(status);
+
+        $("#id").val(id);
+
+        if(authGoogle == true){
+            $("#authGoogle").find('option:eq(0)').attr('selected','selected');
+        }else{
+            $("#authGoogle").find('option:eq(1)').attr('selected','selected');
+        };
+
+        if (password != null && password != ""){
+            $("#password").attr("placeholder","******");
+        }
+
+        if (dealPassword != null && dealPassword != ""){
+            $("#dealPassword").attr("placeholder","******");
+        }else{
+            $("#dealPassword").attr("placeholder","未设置交易密码");
+        }
+
+
+    }
+
+    function skipPage(page){
+        var keyword = $("#keyword").val();
+        var userId = $('input:radio:checked').val();
+        var areaName = $("#areaName").val();
+        var url="/usrArea/gotoUserList";
+        if(page != ""){
+            url =url+ "/"+page+"?t=1";
+        }else {
+            url = url + "?t=1";
+        }
+        if(keyword != ""){
+            url =url+"&keyword="+keyword;
+        }
+        if(userId != ""){
+            url =url+"&userId="+userId;
+        }
+        if(areaName != ""){
+            url =url+"&areaName="+areaName;
+        }
+        window.location.href=_ctx+url;
+    }
+
+    //删除
+    function del(id){
+        if(confirm("您确定要删除这条记录吗？"))
+            $.post(_ctx+"/appUser/del",{t:new Date().getTime(),id:id},function(data){
+                if(data.status == "200"){
+                    window.location.href=window.location.href;
+                }else{
+                    alert(data.message);
+                }
+            });
+    }
+
+</script>
+</body>
+</html>

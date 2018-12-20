@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 业务记录</a></li>
+    <li class="active">充值记录</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">充值列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"> &nbsp;&nbsp;后台充值</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>会员号</th>
+		                  <th>充值积分</th>
+		                  <th>充值类型</th>
+		                  <th>操作管理员</th>
+		                  <th>充值时间</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ rechargeDetail }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.user_name }">user_name</th>
+		                  <th th:text="${item.amount }">充值积分数量</th>
+		                  <th th:switch="${item.type }">
+							  <span th:case="free">自由子链</span>
+							  <span th:case="lock">锁定子链</span>
+							  <span th:case="zcb">众筹币</span>
+                              <span th:case="pptr">PPTR</span>
+						  </th>
+					      <th th:text="${item.nick_name }">管理员</th>
+						<th th:text="${#dates.format(item.create_time, 'yyyy-MM-dd hh:mm:ss')}">createTime</th>
+					<!--
+                <td>
+                    <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+
+
+                    <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                     <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+
+                    </td>
+                    -->
+                  </tr>
+                  <tr th:unless="${QX.query == '1' }" >
+                      <td colspan="6" rowspan="1" align="center">
+                          <h2>您无权限查看该页面</h2>
+                      </td>
+                  </tr>
+                  </tbody>
+                  </table>
+              </div>
+
+              </div>
+           <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+  </section>
+
+  <div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+          aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"
+                          aria-hidden="true">&times;</button>
+                      <h4 class="modal-title" id="modelHead">添加</h4>
+                  </div>
+                  <div class="modal-body">
+                      <form class="form-horizontal" role="form">
+                          <input type="hidden" name="id" id="id" value="0"/>
+                          <input type="hidden" name="actionurl" value="/"/>
+
+                            <div class="form-group">
+                              <label for="userName" class="col-sm-2 control-label">会员号</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" name="userName" value="" id="userName" placeholder="请输入用户会员号">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="amount" class="col-sm-2 control-label">充值积分</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" name="amount" value="" id="amount" placeholder="请输入充值积分数量">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="type" class="col-sm-2 control-label">充值类型</label>
+                              <div class="col-sm-10">
+                                  <select id="type" name="type" class="form-control" >
+                                      <option value="free" selected = "selected">自由子链</option>
+                                      <option value="lock" >锁定子链</option>
+                                      <option value="zcb" >众筹币</option>
+                                      <option value="pptr" >PPTR</option>
+                                  </select>
+                              </div>
+                            </div>
+                       </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                      <button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+  <script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+  <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+  <script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+  <script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+  <script th:src="@{/js/bootstrap-paginator.js}"></script>
+  <!-- AdminLTE App -->
+						<script th:src="@{/dist/js/adminlte.min.js}"></script>
+						<script th:src="@{/js/common.js}"></script>
+						<script th:inline="javascript">
+                            $(function(){
+                                var element = $('#mypage');
+                                options = {
+                                    bootstrapMajorVersion:3, //对应的bootstrap版本
+                                    currentPage: [[${page.pageNum }]], //当前页数
+                                    numberOfPages:[[${page.pageSize }]], //每页的数量
+                                    totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+                                    itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                                        switch (type) {
+                                            case "first":
+                                                return "首页";
+                                            case "prev":
+                                                return "上一页";
+                                            case "next":
+                                                return "下一页";
+                                            case "last":
+                                                return "末页";
+                                            case "page":
+                                                return page;
+                                        }
+                                    },
+                                    //点击事件
+                                    onPageClicked: function (event, originalEvent, type, page) {
+                                        skipPage(page);
+                                    }
+                                };
+                                element.bootstrapPaginator(options);
+
+
+                                $("#addItem").click(function(){
+                                    $("input[name='id']").val("");
+                                    $("input[name='actionurl']").val("/rechargeDetail/add");
+                                    $("#modelHead").text("添加");
+                                    $("#submitBtn").text("添加");
+                                    setData("","","","0");
+                                    $("#itemModal").modal("show");
+                                });
+
+                                //提交按钮
+                                $("#submitBtn").click(function(){
+                                    var id = $("input[name='id']").val();
+                                    var url = $("input[name='actionurl']").val();
+                                    var id = $("#id").val();
+                                    var userName = $("#userName").val();
+                                    var amount = $("#amount").val();
+                                    var type = $("#type").val();
+
+                                    if(checkData(userName ,amount ,type )){
+                                        $.ajax({
+                                            type:"POST",
+                                            url:_ctx+url,
+                                            cache:false,
+                                            data:{id:id,userName:userName,amount:amount,type:type, time:new Date().getTime()},
+                                            dataType:"json",
+                                            success:function(data){
+                                                if(data.status == "200"){
+                                                    window.location.href=window.location.href;
+                                                }else{
+                                                    alert(data.message);
+                                                }
+                                            }
+                                        });
+                                        $("#itemModal").modal("hide");
+                                    }
+
+                                });
+
+
+
+                                //搜索
+                                $(".searcher").click(function(){
+                                    skipPage("");
+                                });
+                            })
+
+
+                            function setData(  id , userName , amount , type ){
+                                $("#id").val(id);
+                                $("#userName").val(userName);
+                                $("#amount").val(amount);
+                                $("#type").val(type);
+                            }
+
+                            function skipPage(page){
+                                var keyword = $("#keyword").val();
+                                var url="/rechargeDetail/list";
+                                if(page != ""){
+                                    url =url+ "/"+page+"?t=1";
+                                }else {
+                                    url = url + "?t=1";
+                                }
+                                if(keyword != ""){
+                                    url =url+"&keyword="+keyword;
+                                }
+                                window.location.href=_ctx+url;
+                            }
+                            //编辑商户
+                            function edit(id){
+                                $("#modelHead").text("编辑");
+                                $("#submitBtn").text("编辑");
+                                $("input[name='id']").val(id);
+                                $("input[name='actionurl']").val("/rechargeDetail/edit");
+                                $.get(_ctx+"/rechargeDetail/detail",{t:new Date().getTime(),id:id},function(data){
+                                    console.log("data:",data);
+                                    if(data.status == "200"){
+                                        var item = data.data;
+                                        console.log("item:",item);
+                                        setData( item.id , item.user_name , item.amount , item.type  )
+                                    }else{
+                                        alert(data.message);
+                                    }
+                                })
+                                $("#itemModal").modal("show");
+                            }
+                            //删除
+                            function del(id){
+                                if(confirm("您确定要删除这条记录吗？"))
+                                    $.post(_ctx+"/rechargeDetail/del",{t:new Date().getTime(),id:id},function(data){
+                                        if(data.status == "200"){
+                                            window.location.href=window.location.href;
+                                        }else{
+                                            alert(data.message);
+                                        }
+                                    });
+                            }
+
+                            //校验
+                            function checkData(  userName , amount , type ){
+                                if(userName == ""){
+                                    alert("用户会员号不能为空");
+                                    $("input[name='userName']").focus();
+                                    return false;
+                                }
+                                if(amount == ""){
+                                    alert("充值积分数量不能为空");
+                                    $("input[name='amount']").focus();
+                                    return false;
+                                }
+                                if(type == ""){
+                                    alert("充值类型不能为空");
+                                    $("input[name='type']").focus();
+                                    return false;
+                                }
+                                return true;
+                            }
+						</script>
+</body>
+</html>

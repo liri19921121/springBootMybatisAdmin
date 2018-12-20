@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+  <head>
+  <meta charset="utf-8">
+  <meta name="_ctx" th:content="@{/}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>商户列表</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+  <link rel="stylesheet" th:href="@{/daterangepicker/daterangepicker.css}">
+  <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style type="text/css">
+	label{
+		text-align: right;
+	}
+	#publishNew{
+		margin: 10px auto;
+		width:300px;
+		border-radius: 5px;
+		background-color: #00C0EF;
+		color: #fff;
+		text-align: center;
+		padding: 5px;
+		font-size: 1.5em;
+		cursor: pointer;
+	}
+</style>
+ </head>
+<body>
+<section >
+<div class="box-body">
+<div class="box-body table-responsive">
+	<input type="hidden" name="id" id="id" th:value="${id}" value="0"/>
+	<input type="hidden" name="actionurl" id="actionurl" th:value="${actionurl}" value="/"/>
+<table class="table table-hover">
+  <tbody>
+   <tr>
+     	<td>
+      	 <div class="form-group">
+		    <label for="name" class="col-sm-2 control-label">封面图片</label>
+		    <div class="col-sm-10">
+		    	<form id="fileUploadForm" style="display: none;" name="fileUploadForm" target="fileUploadFrame" method="post" enctype="multipart/form-data">
+			    	<input type="file"  class="form-control" name="file" value="" id="imgfile" >
+				</form>
+			      <img  th:if="${#lists.isEmpty(news) || #lists.isEmpty(news.cover)}" th:src="@{/images/jiahao.png}" data-toggle="tooltip" title="当前头像或更新后的头像" id="showImg" style="width: 200px;">
+			      <img th:unless="${#lists.isEmpty(news) || #lists.isEmpty(news.cover)}" th:src="${news.cover}" data-toggle="tooltip" id="showImg" title="当前头像或更新后的头像"  style="width: 300px;">
+		    </div>
+		  </div>
+		 </td>
+		 <td></td>
+   </tr>
+   <tr>
+	   <td>
+		   <div class="form-group">
+			   <label for="group_name" class="col-sm-2 control-label">组名</label>
+			   <div class="col-sm-10">
+				   <input type="text" class="form-control" name="group_name" th:if="${#lists.isEmpty(news)}" value="" id="group_name" placeholder="请输入组名">
+				   <input type="text" class="form-control" name="group_name" th:unless="${#lists.isEmpty(news)}" th:value="${news.group_name}" id="group_name" placeholder="请输入组名">
+			   </div>
+		   </div>
+	   </td>
+
+	   <td><div class="form-group">
+		    <label for="title" class="col-sm-2 control-label">标题</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name="title" th:if="${#lists.isEmpty(news)}" id="title" placeholder="请输入资讯标题">
+		      <input type="text" class="form-control" name="title" th:unless="${#lists.isEmpty(news)}" th:value="${news.title}" id="title" placeholder="请输入资讯标题">
+		    </div>
+		  </div>
+		 </td>
+
+    </tr>
+
+    <tr>
+      <td><div class="form-group">
+		    <label for="source" class="col-sm-2 control-label">来源</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name="source" th:if="${#lists.isEmpty(news)}" value="" id="source" placeholder="请输入来源">
+		      <input type="text" class="form-control" name="source" th:unless="${#lists.isEmpty(news)}" th:value="${news.source}" id="source" placeholder="请输入来源">
+		    </div>
+		  </div>
+		 </td>
+
+		<td>
+			<div class="form-group">
+				<label for="author" class="col-sm-2 control-label">作者</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="author" th:if="${#lists.isEmpty(news)}" value="" id="author" placeholder="请输入作者名称">
+					<input type="text" class="form-control" name="author" th:unless="${#lists.isEmpty(news)}" th:value="${news.author}" id="author" placeholder="请输入作者名称">
+				</div>
+			</div>
+		</td>
+    </tr>
+
+    <tr>
+      <td>
+      	<div class="form-group">
+		    <label for="like_count" class="col-sm-2 control-label">点赞数</label>
+		    <div class="col-sm-10">
+		      <input type="number" class="form-control" name="like_count" th:if="${#lists.isEmpty(news)}" value="1" id="like_count" placeholder="请输入点赞数">
+		      <input type="number" class="form-control" name="like_count" th:unless="${#lists.isEmpty(news)}"  th:value="${news.like_count}" id="like_count" placeholder="请输入点赞数">
+		    </div>
+		  </div>
+		</td>
+      <td>
+      	<div class="form-group">
+		    <label for="read_count" class="col-sm-2 control-label">浏览数</label>
+		    <div class="col-sm-10">
+		      <input type="number" class="form-control" name="read_count" th:if="${#lists.isEmpty(news)}" value="1" id="read_count" placeholder="请输入阅读数">
+		      <input type="number" class="form-control" name="read_count" th:unless="${#lists.isEmpty(news)}" th:value="${news.read_count}" id="read_count" placeholder="请输入阅读数">
+		    </div>
+		  </div>
+		</td>
+    </tr>
+
+    <tr>
+      <td><div class="form-group">
+		    <label for="original" class="col-sm-2 control-label">原创</label>
+		    <div class="col-sm-10">
+	 			<select name="original" id="original" class="form-control">
+			      <option value="Y" th:if="${#lists.isEmpty(news)}">原创</option>
+			      <option value="N" th:if="${#lists.isEmpty(news)}" selected="selected" >非原创</option>
+			      <option value="Y" th:unless="${#lists.isEmpty(news)}" th:selected="${news.original == 'Y'}">原创</option>
+			      <option value="N" th:unless="${#lists.isEmpty(news)}" th:selected="${news.original == 'N'}" >非原创</option>
+			    </select>
+		    </div>
+		  </div>
+		 </td>
+
+		<td>
+			<div class="form-group">
+				<label for="lang" class="col-sm-2 control-label">语言</label>
+				<div class="col-sm-10">
+					<select name="lang" id="lang" class="form-control">
+						<option th:each="language:${languageList}" th:value="${language.key}" th:text="${language.value}" th:if="${#lists.isEmpty(news)}" ></option>
+						<option th:each="language:${languageList}" th:value="${language.key}" th:text="${language.value}" th:unless="${#lists.isEmpty(news)}" th:selected="${news.lang == language.key}"></option>
+					</select>
+				</div>
+			</div>
+		</td>
+    </tr>
+    <tr>
+      <td><div class="form-group">
+		    <label for="labels" class="col-sm-2 control-label">标签</label>
+		    <div class="col-sm-10">
+		      <select id="labels" class="form-control">
+					<option th:each="category:${categorys}" th:value="${category.code}" th:text="${category.name}" th:if="${#lists.isEmpty(news)}" ></option>
+					<option th:each="category:${categorys}" th:value="${category.code}" th:text="${category.name}" th:unless="${#lists.isEmpty(news)}" th:selected="${news.labels == category.code}"></option>
+				</select>
+		    </div>
+		  </div>
+		 </td>
+      <td><div class="form-group">
+		    <label for="publish_time" class="col-sm-2 control-label">发布时间</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name="publish_time" th:unless="${#lists.isEmpty(news)}" th:value="${news.publish_time}" id="publish_time" placeholder="请选择发布时间">
+		      <input type="text" class="form-control" name="publish_time" th:if="${#lists.isEmpty(news)}" value="" id="publish_time" placeholder="请选择发布时间">
+		    </div>
+		  </div>
+		 </td>
+    </tr>
+
+    <tr>
+      <td><div class="form-group">
+		    <label for="status" class="col-sm-2 control-label">资讯状态</label>
+		    <div class="col-sm-10">
+		   		<select name="status" id="status" class="form-control">
+			      <option value="10" th:if="${#lists.isEmpty(news)}" selected="selected" >新建</option>
+			      <option value="20" th:if="${#lists.isEmpty(news)}">发布</option>
+			      <option value="30" th:if="${#lists.isEmpty(news)}">下架</option>
+			      <option value="10" th:unless="${#lists.isEmpty(news)}" th:selected="${news.status == '10'}">新建</option>
+			      <option value="20" th:unless="${#lists.isEmpty(news)}" th:selected="${news.status == '20'}" >发布</option>
+			      <option value="30" th:unless="${#lists.isEmpty(news)}" th:selected="${news.status == '30'}" >下架</option>
+			    </select>
+		    
+		    </div>
+		  </div>
+		 </td>
+		  <td>
+		  <div class="form-group">
+		    <label for="keywords" class="col-sm-2 control-label">关键字</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" name="keywords" th:if="${#lists.isEmpty(news)}" value="" id="keywords" placeholder="请输入关键字">
+		      <input type="text" class="form-control" name="keywords" th:unless="${#lists.isEmpty(news)}" th:value="${news.keywords}" id="keywords" placeholder="请输入关键字">
+		    </div>
+		  </div>
+		 </td>
+    </tr>
+
+   <tr>
+	   <td><div class="form-group">
+		   <label for="top_flag" class="col-sm-2 control-label">置顶</label>
+		   <div class="col-sm-10">
+			   <select name="top_flag" id="top_flag" class="form-control">
+				   <option value="Y" th:if="${#lists.isEmpty(news)}">置顶</option>
+				   <option value="N" th:if="${#lists.isEmpty(news)}" selected="selected" >非置顶</option>
+				   <option value="Y" th:unless="${#lists.isEmpty(news)}" th:selected="${news.top_flag == 'Y'}">置顶</option>
+				   <option value="N" th:unless="${#lists.isEmpty(news)}" th:selected="${news.top_flag == 'N'}" >非置顶</option>
+			   </select>
+		   </div>
+	   </div>
+	   </td>
+	   <td><div class="form-group">
+		   <label for="category_code" class="col-sm-2 control-label">类型</label>
+		   <div class="col-sm-10">
+			   <select name="category_code" id="category_code" class="form-control">
+				   <option value="0" th:if="${#lists.isEmpty(news)}">咨讯</option>
+				   <option value="1" th:if="${#lists.isEmpty(news)}" selected="selected" >公告</option>
+				   <option value="0" th:unless="${#lists.isEmpty(news)}" th:selected="${news.category_code == '0'}">咨讯</option>
+				   <option value="1" th:unless="${#lists.isEmpty(news)}" th:selected="${news.category_code == '1'}" >公告</option>
+			   </select>
+		   </div>
+	   </div>
+	   </td>
+
+   </tr>
+   
+  </tbody>
+</table>
+</div> 
+<textarea id="myTextarea" th:if="${#lists.isEmpty(news)}" ></textarea>
+<textarea id="myTextarea" th:unless="${#lists.isEmpty(news)}" th:text="${news.content}"></textarea>
+</div>
+
+<div id="publishNew" >保存</div>
+               
+</section>
+
+    
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/daterangepicker/moment.min.js}"></script>
+<script th:src="@{/daterangepicker/daterangepicker.js}"></script>
+<script type="text/javascript"  th:inline="javascript">
+
+var baseURL=[[${homeUrl}]];
+
+var options = {};
+options.singleDatePicker=true;
+options.timePicker=true;
+options.timePickerSeconds=true;
+options.timePicker24Hour=true;
+options.showDropdowns=true;
+options.autoApply=true;//只有在不显示时间的时候起作用
+options.showDropdowns=true;
+options.locale= {
+		format: 'YYYY-MM-DD HH:mm:ss',
+		applyLabel: "应用",
+		cancelLabel: "取消",
+		resetLabel: "重置",
+		daysOfWeek: ['日', '一', '二', '三', '四', '五','六'],
+		monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+	}
+	tinymce.init({
+				selector : '#myTextarea',
+				theme : 'modern',
+				language : 'zh_CN',
+				plugins : [
+						'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+						'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+						'save table contextmenu directionality emoticons  paste textcolor ' ],
+				toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor fullscreen fontsizeselect ',
+				images_upload_handler: function (blobInfo, success, failure) {
+					uploadFile(blobInfo,success,failure);
+					  },
+				convert_urls: false,
+				fontsize_formats: "8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt"
+			});
+	
+	
+	//tinymce 图片上传
+	function uploadFile(blobInfo,success,failure){
+		var xhr, formData;
+	    xhr = new XMLHttpRequest();
+	    xhr.withCredentials = false;
+	    xhr.open('POST', _ctx+'/upload/uploadImg');
+	    xhr.onload = function() {
+	      var json;
+	      if (xhr.status != 200) {
+	        failure('HTTP Error: ' + xhr.status);
+	        return;
+	      }
+	      json = JSON.parse(xhr.responseText);
+	      if(json.status != "200"){
+	    	  failure('图片上传错误: 返回值:'+json);
+	      }
+	      success(baseURL+json.data);
+	    };
+	    formData = new FormData();
+	    formData.append('file', blobInfo.blob(),blobInfo.filename());
+	    xhr.send(formData);
+	}
+
+	//校验参数
+	function checkParameter(group_name,title,author,like_count,read_count,original,lang,labels,publish_time,status,keywords,category_code){
+		//TODO 校验
+		return true;
+	}
+	//提交请求
+	function submitNew(id,actionurl,content,cover,groupName,title,source,author,likeCount,readCount,original,lang,labels,topFlag,categoryCode,publishTime,status,keywords){
+		$.ajax({
+			type:"POST",
+			url:_ctx+actionurl,
+			dataType:"json",
+            data:{id:id,content:content,cover:cover,groupName:groupName,title:title,source:source,author:author,likeCount:likeCount,readCount:readCount,original:original,lang:lang,labels:labels,topFlag:topFlag,categoryCode:categoryCode,publishTime:publishTime,status:status,keywords:keywords},
+			cache:false,
+			success: function(data){
+				console.log("data:",data);
+				if(data.status == "200"){
+					window.location.href=_ctx+"/news/list";
+				}
+			}
+		});
+	}
+
+$(function(){
+	//日期
+	$('#publish_time').daterangepicker(options);
+	
+	//发布
+	$("#publishNew").click(function(){
+		var id=$("#id").val();
+		var actionurl=$("#actionurl").val();
+		// 文本编辑器的内容
+		var content = tinyMCE.activeEditor.getContent();
+		var cover = $("#showImg").attr("src");
+		var groupName = $("#group_name").val();
+		var title = $("#title").val();
+		var source = $("#source").val();
+		var author = $("#author").val();
+		var likeCount = $("#like_count").val();
+		var readCount = $("#read_count").val();
+		var original = $("#original").val();
+        var lang = $("#lang").val();
+        var labels = $("#labels").val();
+		var topFlag = $("#top_flag").val();
+		var categoryCode = $("#category_code").val();
+		var publishTime = $("#publish_time").val();
+		var status = $("#status").val();
+		var keywords = $("#keywords").val();
+		if(checkParameter(groupName,title,author,likeCount,readCount,original,lang,labels,publishTime,status,keywords,categoryCode)){
+			submitNew(id,actionurl,content,cover,groupName,title,source,author,likeCount,readCount,original,lang,labels,topFlag,categoryCode,publishTime,status,keywords);
+		}
+	});
+	
+	
+	//图片上传
+	$("#showImg").click(function(){
+		 $("#imgfile").click(); 
+	     $("#imgfile").on("change",function(){
+	    	 var form = new FormData(document.getElementById("fileUploadForm"));
+	    	 $.ajax({
+		    	  url:_ctx+"/upload/uploadImg",
+		    	  type:"post",
+		    	  data:form,
+		    	  processData:false,
+		    	  contentType:false,
+		    	  success:function(data){
+		    		  console.log("data:",data);
+		    	      $("#showImg").attr("src",data.data);
+		    	  },
+		    	  error:function(e){
+		    	      alert("图片上传错误！！！");
+		    	  }
+	    	 });   
+	     });
+	});
+	
+})
+</script>
+</body>
+</html>

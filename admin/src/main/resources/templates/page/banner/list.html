@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统配置</a></li>
+    <li class="active">banner管理</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">banner列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入标题名称">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>排序号</th>
+		                  <th>图片名称</th>
+						  <th>图片类型</th>
+		                  <th>是否开启</th>
+						  <th>图片</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ banner }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.number }">排序号</th>
+		                  <th th:text="${item.picture_name }">图片名称</th>
+							<th th:text="${item.type }">版本</th>
+						  <th th:if="${item.is_open} eq 0">关闭</th>
+						  <th th:if="${item.is_open} eq 1">开启</th>
+					      <th><img  th:width="30px" th:high="30px" th:src="${item.pic_path }" /></th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+  <div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" enctype="multipart/form-data"  method="post" action="/banner/add" id="bannerForm">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+
+						<input type="hidden" name="pics" id="pics" value=""/>
+						<input type="hidden" id="isImgChange" name="isImgChange" value=""/>
+
+						
+						  <div class="form-group">
+						    <label for="number" class="col-sm-2 control-label">排序号</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="number" value="" id="number" placeholder="请输入排序号">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="pictureName" class="col-sm-2 control-label">图片名称</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="pictureName" value="" id="pictureName" placeholder="请输入图片名称">
+						    </div>
+						  </div>
+							<div class="form-group">
+								<label for="pictureType" class="col-sm-2 control-label">版本</label>
+								<div class="col-sm-10">
+									<select id="pictureType" name="pictureType"  class="form-control">
+										<option value ="zh_CN" >中文版</option>
+										<option value ="zh_TW">繁体版</option>
+										<option value ="en_US">英文版</option>
+										<option value ="ko_KR">韩文版</option>
+										<option value ="ja_JP">日文版</option>
+									</select>
+								</div>
+							</div>
+
+						<div class="form-group" data-toggle="tooltip" title="如果不修改则不需要选择文件">
+							<label for="imgfile" class="col-sm-2 control-label">上传图片</label>
+							<div class="col-sm-10">
+								<a href="javascript:void(0)"><input type="file" class="form-control file" name="imgfile" value="" id="imgfile" placeholder="请选择文件"></a>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="imgfile" class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<div><img src="" data-toggle="tooltip" title="当前头像或更新后的头像" id="showImg" style="width: 50px;"></div>
+							</div>
+						</div>
+
+
+
+						  <div class="form-group">
+						    <label for="isOpen" class="col-sm-2 control-label">是否开启</label>
+						    <div class="col-sm-10">
+								<select class="form-control" name="isOpen"  id="isOpen" placeholder="请输入是否开启" >
+									<option value ="1">开启</option>
+									<option value ="0">关闭</option>
+								</select>
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/banner/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","zh_CN","1");
+            $("#itemModal").modal("show");
+        });
+
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var number = $("#number").val();
+            var  pictureName =$("#pictureName").val();
+            var isOpen =  $("#isOpen").val();
+            var pictureType = $("#pictureType").val();
+            var pics = $("#pics").val();
+            var isImgChange = $("#isImgChange").val();
+
+            if (number == null ||pictureName == null ||isOpen == null || pictureType == null || number == "" || pictureName == "" || isOpen == "" || pictureType == "" ) {
+                alert( "参数不齐，请检查参数");
+                return;
+            }
+            $.ajax({
+                type:"POST",
+                url:_ctx+url,
+                cache:false,
+                data:{id:id,isImgChange:isImgChange,number:number,pictureName:pictureName,isOpen:isOpen,type:pictureType,pics:pics},
+                dataType:"json",
+                success:function(data){
+                    if(data.status == "200"){
+                        alert("操作成功！")
+                        window.location.href=window.location.href;
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+            $("#itemModal").modal("hide");
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , number , pictureName , pic_path , type , isOpen){
+   	 $("#id").val(id);
+   	 $("#number").val(number);
+   	 $("#pictureName").val(pictureName);
+   	 $("#isOpen").val(isOpen);
+	 $("#pictureType").val(type.trim());
+     $("#showImg").attr("src",pic_path);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/banner/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/banner/edit");
+    $.get(_ctx+"/banner/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        var item = data;
+		setData( item.id , item.number , item.picture_name , item.pic_path , item.type , item.is_open)
+
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/banner/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , number , pictureName , imgId , type ){
+
+    if(number == ""){
+        alert("排序号不能为空");
+        $("input[name='number']").focus();
+        return false;
+    }
+    if(pictureName == ""){
+        alert("图片名称不能为空");
+        $("input[name='pictureName']").focus();
+        return false;
+    }
+    if(isOpen == ""){
+        alert("是否开启：0-关闭；1-开启不能为空");
+        $("input[name='isOpen']").focus();
+        return false;
+    }
+
+    return true;
+}
+
+
+
+    var input = document.getElementById("imgfile");
+    if (typeof (FileReader) === 'undefined') {
+        result.innerHTML = "抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！";
+        input.setAttribute('disabled', 'disabled');
+    } else {
+        input.addEventListener('change', readFile, false);
+    }
+    function readFile() {
+        var file = this.files[0];
+        //判断是否是图片类型
+        if (!/image\/\w+/.test(file.type)) {
+            alert("只能选择图片");
+            return false;
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            base64Code=this.result;
+            $("input[name='pics']").val(this.result);
+            $("#showImg").attr("src",this.result);
+            $("#isImgChange").val("isImgChange");
+        }
+    }
+
+</script>
+</body>
+</html>

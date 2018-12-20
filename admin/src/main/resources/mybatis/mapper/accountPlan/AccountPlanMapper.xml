@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.accountPlan.AccountPlanDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			object_id ,
+			user_id ,
+			tran_user_id ,
+			operate_state ,
+			operate_amount ,
+			operate_code ,
+			operate_source ,
+			description ,
+			into_account ,
+			response_time ,
+			is_admin ,
+			create_by ,
+			create_time ,
+			modify_by ,
+			modify_time 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_account_plan 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_account_plan set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_account_plan (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ objectId } ,
+	        	#{ userId } ,
+	        	#{ tranUserId } ,
+	        	#{ operateState } ,
+	        	#{ operateAmount } ,
+	        	#{ operateCode } ,
+	        	#{ operateSource } ,
+	        	#{ description } ,
+	        	#{ intoAccount } ,
+	        	#{ responseTime } ,
+	        	#{ isAdmin } ,
+	        	#{ createBy } ,
+	        	#{ createTime } ,
+	        	#{ modifyBy } ,
+	        	#{ modifyTime } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_account_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="objectId != null">
+			        object_id ,
+			      </if>
+	              <if test="userId != null">
+			        user_id ,
+			      </if>
+	              <if test="tranUserId != null">
+			        tran_user_id ,
+			      </if>
+	              <if test="operateState != null">
+			        operate_state ,
+			      </if>
+	              <if test="operateAmount != null">
+			        operate_amount ,
+			      </if>
+	              <if test="operateCode != null">
+			        operate_code ,
+			      </if>
+	              <if test="operateSource != null">
+			        operate_source ,
+			      </if>
+	              <if test="description != null">
+			        description ,
+			      </if>
+	              <if test="intoAccount != null">
+			        into_account ,
+			      </if>
+	              <if test="responseTime != null">
+			        response_time ,
+			      </if>
+	              <if test="isAdmin != null">
+			        is_admin ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="objectId != null">
+	        #{ objectId } ,
+	      </if>
+	      <if test="userId != null">
+	        #{ userId } ,
+	      </if>
+	      <if test="tranUserId != null">
+	        #{ tranUserId } ,
+	      </if>
+	      <if test="operateState != null">
+	        #{ operateState } ,
+	      </if>
+	      <if test="operateAmount != null">
+	        #{ operateAmount } ,
+	      </if>
+	      <if test="operateCode != null">
+	        #{ operateCode } ,
+	      </if>
+	      <if test="operateSource != null">
+	        #{ operateSource } ,
+	      </if>
+	      <if test="description != null">
+	        #{ description } ,
+	      </if>
+	      <if test="intoAccount != null">
+	        #{ intoAccount } ,
+	      </if>
+	      <if test="responseTime != null">
+	        #{ responseTime } ,
+	      </if>
+	      <if test="isAdmin != null">
+	        #{ isAdmin } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_account_plan
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="objectId != null">
+	         object_id = #{ objectId } ,
+	      </if>
+	      <if test="userId != null">
+	         user_id = #{ userId } ,
+	      </if>
+	      <if test="tranUserId != null">
+	         tran_user_id = #{ tranUserId } ,
+	      </if>
+	      <if test="operateState != null">
+	         operate_state = #{ operateState } ,
+	      </if>
+	      <if test="operateAmount != null">
+	         operate_amount = #{ operateAmount } ,
+	      </if>
+	      <if test="operateCode != null">
+	         operate_code = #{ operateCode } ,
+	      </if>
+	      <if test="operateSource != null">
+	         operate_source = #{ operateSource } ,
+	      </if>
+	      <if test="description != null">
+	         description = #{ description } ,
+	      </if>
+	      <if test="intoAccount != null">
+	         into_account = #{ intoAccount } ,
+	      </if>
+	      <if test="responseTime != null">
+	         response_time = #{ responseTime } ,
+	      </if>
+	      <if test="isAdmin != null">
+	         is_admin = #{ isAdmin } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_account_plan
+    set  
+	        id = #{ id }  ,
+	        object_id = #{ objectId }  ,
+	        user_id = #{ userId }  ,
+	        tran_user_id = #{ tranUserId }  ,
+	        operate_state = #{ operateState }  ,
+	        operate_amount = #{ operateAmount }  ,
+	        operate_code = #{ operateCode }  ,
+	        operate_source = #{ operateSource }  ,
+	        description = #{ description }  ,
+	        into_account = #{ intoAccount }  ,
+	        response_time = #{ responseTime }  ,
+	        is_admin = #{ isAdmin }  ,
+	        create_by = #{ createBy }  ,
+	        create_time = #{ createTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        modify_time = #{ modifyTime }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_account_plan set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_account_plan
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="objectId != null">
+		        and object_id = #{ objectId }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="tranUserId != null">
+		        and tran_user_id = #{ tranUserId }
+	        </if>
+	        <if test="operateState != null">
+		        and operate_state = #{ operateState }
+	        </if>
+	        <if test="operateAmount != null">
+		        and operate_amount = #{ operateAmount }
+	        </if>
+	        <if test="operateCode != null">
+		        and operate_code = #{ operateCode }
+	        </if>
+	        <if test="operateSource != null">
+		        and operate_source = #{ operateSource }
+	        </if>
+	        <if test="description != null">
+		        and description = #{ description }
+	        </if>
+	        <if test="intoAccount != null">
+		        and into_account = #{ intoAccount }
+	        </if>
+	        <if test="responseTime != null">
+		        and response_time = #{ responseTime }
+	        </if>
+	        <if test="isAdmin != null">
+		        and is_admin = #{ isAdmin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_account_plan
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="objectId != null">
+		        and object_id = #{ objectId }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="tranUserId != null">
+		        and tran_user_id = #{ tranUserId }
+	        </if>
+	        <if test="operateState != null">
+		        and operate_state = #{ operateState }
+	        </if>
+	        <if test="operateAmount != null">
+		        and operate_amount = #{ operateAmount }
+	        </if>
+	        <if test="operateCode != null">
+		        and operate_code = #{ operateCode }
+	        </if>
+	        <if test="operateSource != null">
+		        and operate_source = #{ operateSource }
+	        </if>
+	        <if test="description != null">
+		        and description = #{ description }
+	        </if>
+	        <if test="intoAccount != null">
+		        and into_account = #{ intoAccount }
+	        </if>
+	        <if test="responseTime != null">
+		        and response_time = #{ responseTime }
+	        </if>
+	        <if test="isAdmin != null">
+		        and is_admin = #{ isAdmin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getList" resultType="pm" parameterType="pm" >
+		SELECT a.id,a.description,u.user_name AS user_name,tu.user_name AS tuser_name,
+		CASE WHEN a.operate_state = 1 THEN '收入' WHEN a.operate_state = 0 THEN '支出' ELSE '异常' END AS operate_state,
+		a.operate_amount,i.chinese_name AS operate_code,
+		CASE WHEN a.operate_source = 101 THEN '转账' WHEN a.operate_source = 102 THEN '复投 '
+		WHEN a.operate_source = 103 THEN '采集' WHEN a.operate_source = 104 THEN '系统释放' WHEN a.operate_source = 105
+		THEN '充值' WHEN a.operate_source = 106 THEN '众筹' WHEN a.operate_source = 107 THEN '广告'  WHEN
+		a.operate_source = 108 THEN '广告交易' WHEN a.operate_source = 109 THEN '统计' ELSE '其他' END AS operate_source,
+		CASE WHEN a.into_account = 0 THEN '待转账' WHEN a.into_account = 1 THEN '已入账' ELSE '异常' END AS into_account,a.response_time,
+		CASE WHEN a.is_admin = 0 THEN '否' WHEN a.is_admin = 1 THEN '是' ELSE '异常' END AS is_admin,a.create_time,a.modify_time
+		 FROM usr_account_plan a LEFT JOIN usr_user u ON a.user_id = u.id LEFT JOIN usr_user tu ON a.tran_user_id = tu.id
+		LEFT JOIN coin_info i ON i.code = a.operate_code
+		<where>
+			<if test="keyword != null and keyword != ''">
+				 (u.user_name LIKE CONCAT('%', #{keyword}, '%') or tu.user_name LIKE CONCAT('%', #{keyword}, '%'))
+			</if>
+		</where>
+
+		ORDER BY a.create_time DESC
+	</select>
+
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_account_plan
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="objectId != null">
+		        and object_id = #{ objectId }
+	        </if>
+	        <if test="userId != null">
+		        and user_id = #{ userId }
+	        </if>
+	        <if test="tranUserId != null">
+		        and tran_user_id = #{ tranUserId }
+	        </if>
+	        <if test="operateState != null">
+		        and operate_state = #{ operateState }
+	        </if>
+	        <if test="operateAmount != null">
+		        and operate_amount = #{ operateAmount }
+	        </if>
+	        <if test="operateCode != null">
+		        and operate_code = #{ operateCode }
+	        </if>
+	        <if test="operateSource != null">
+		        and operate_source = #{ operateSource }
+	        </if>
+	        <if test="description != null">
+		        and description = #{ description }
+	        </if>
+	        <if test="intoAccount != null">
+		        and into_account = #{ intoAccount }
+	        </if>
+	        <if test="responseTime != null">
+		        and response_time = #{ responseTime }
+	        </if>
+	        <if test="isAdmin != null">
+		        and is_admin = #{ isAdmin }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

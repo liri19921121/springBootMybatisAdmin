@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.usrArea.UsrAreaDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			top_level ,
+			top_user ,
+			area_name ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by ,
+			is_deleted 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from usr_area 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update usr_area set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into usr_area (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ topLevel } ,
+	        	#{ topUser } ,
+	        	#{ areaName } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } ,
+	        	#{ isDeleted } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into usr_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="topLevel != null">
+			        top_level ,
+			      </if>
+	              <if test="topUser != null">
+			        top_user ,
+			      </if>
+	              <if test="areaName != null">
+			        area_name ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="topLevel != null">
+	        #{ topLevel } ,
+	      </if>
+	      <if test="topUser != null">
+	        #{ topUser } ,
+	      </if>
+	      <if test="areaName != null">
+	        #{ areaName } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update usr_area
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="topLevel != null">
+	         top_level = #{ topLevel } ,
+	      </if>
+	      <if test="topUser != null">
+	         top_user = #{ topUser } ,
+	      </if>
+	      <if test="areaName != null">
+	         area_name = #{ areaName } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update usr_area
+    set  
+	        id = #{ id }  ,
+	        top_level = #{ topLevel }  ,
+	        top_user = #{ topUser }  ,
+	        area_name = #{ areaName }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  ,
+	        is_deleted = #{ isDeleted }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update usr_area set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+       #{ids}
+	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_area
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="topLevel != null">
+		        and top_level = #{ topLevel }
+	        </if>
+	        <if test="topUser != null">
+		        and top_user = #{ topUser }
+	        </if>
+	        <if test="areaName != null">
+		        and area_name = #{ areaName }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from usr_area
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="topLevel != null">
+		        and top_level = #{ topLevel }
+	        </if>
+	        <if test="topUser != null">
+		        and top_user = #{ topUser }
+	        </if>
+	        <if test="areaName != null">
+		        and area_name = #{ areaName }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getPageList" resultType="pm" parameterType="pm" >
+		SELECT a.id,u.user_name,a.top_user,a.area_name,
+
+		(select count(1) from usr_relation_umbrella um where um.area_id = a.id and um.is_deleted = 'N'
+		AND not exists(select f.user_id from usr_area_father f where um.user_id=f.user_id AND f.is_deleted = 'N' ) )AS usableNum,
+
+		(select count(1) from usr_relation_umbrella um where um.area_id = a.id and um.is_deleted = 'N'
+		AND  exists(select f.user_id from usr_area_father f where um.user_id=f.user_id AND f.is_deleted = 'N' ) )AS notUsableNum,
+
+		(SELECT COUNT(1) FROM usr_relation_umbrella ru WHERE ru.area_id = a.id AND ru.is_deleted = 'N' ) AS num,a.create_time,ad.username FROM usr_area a
+		LEFT JOIN usr_user u ON a.top_user = u.id LEFT JOIN admin_user ad ON a.create_by = ad.user_id
+		<where>
+			a.is_deleted = 'N'
+			<if test="userName != null">
+				and u.user_name like concat("%",#{userName},"%")
+			</if>
+			<if test="areaName != null">
+				and a.area_name like concat("%",#{areaName},"%")
+			</if>
+		</where>
+	</select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from usr_area
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="topLevel != null">
+		        and top_level = #{ topLevel }
+	        </if>
+	        <if test="topUser != null">
+		        and top_user = #{ topUser }
+	        </if>
+	        <if test="areaName != null">
+		        and area_name = #{ areaName }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

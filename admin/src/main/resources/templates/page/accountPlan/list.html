@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 业务记录</a></li>
+    <li class="active">计划目录</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">计划目录</h3>
+              <br><br>
+             <!-- <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>-->
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入用户ID">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                 <!-- <th>对应业务数据主键ID</th>-->
+		                  <th>用户ID</th>
+		                  <th>交易用户ID</th>
+		                  <th>操作类型</th>
+		                  <th>操作金额</th>
+		                  <th>账户类型</th>
+		                  <th>数据来源</th>
+		                  <th>是否入账</th>
+						  <th>是否是平台收益</th>
+						  <th>备注</th>
+		                  <th>创建时间</th>
+						  <th>处理时间</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ accountPlan }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <!--<th th:text="${item.object_id }">对应业务数据主键ID</th>-->
+		                  <th th:text="${item.user_name }">用户ID</th>
+		                  <th th:text="${item.tuser_name }">和哪个用户交易的</th>
+		                  <th th:text="${item.operate_state }">操作类型：1 -- 收入，0 -- 支出</th>
+		                  <th th:text="${item.operate_amount }">操作的金额</th>
+		                  <th th:text="${item.operate_code }">账户类型：free -- 自由子链，lock--锁定子链</th>
+		                  <th th:text="${item.operate_source }">数据来源</th>
+		                  <th th:text="${item.into_account }">是否入账：0 -- 待入账，1 -- 已入账</th>
+					     <th th:text="${item.is_admin }">是否是平台收益，1/是  0/否</th>
+					     <th th:text="${item.description }"></th>
+		                 <th th:text="${item.create_time }"></th>
+					     <th th:text="${item.response_time }"></th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <!--<span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>-->
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="objectId" class="col-sm-2 control-label">对应业务数据主键ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="objectId" value="" id="objectId" placeholder="请输入对应业务数据主键ID">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="userId" class="col-sm-2 control-label">用户ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userId" value="" id="userId" placeholder="请输入用户ID">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="tranUserId" class="col-sm-2 control-label">和哪个用户交易的</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="tranUserId" value="" id="tranUserId" placeholder="请输入和哪个用户交易的">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="operateState" class="col-sm-2 control-label">操作类型：1 -- 收入，0 -- 支出</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="operateState" value="" id="operateState" placeholder="请输入操作类型：1 -- 收入，0 -- 支出">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="operateAmount" class="col-sm-2 control-label">操作的金额</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="operateAmount" value="" id="operateAmount" placeholder="请输入操作的金额">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="operateCode" class="col-sm-2 control-label">账户类型：free -- 自由子链，lock--锁定子链</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="operateCode" value="" id="operateCode" placeholder="请输入账户类型：free -- 自由子链，lock--锁定子链">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="operateSource" class="col-sm-2 control-label">数据来源：1 -- 转账，2 -- 复投，3 -- 采集，4 -- 系统释放，5 -- 充值,6--众筹,7--买卖广告记录,8--买卖交易记录，9 -- 统计入账</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="operateSource" value="" id="operateSource" placeholder="请输入数据来源：1 -- 转账，2 -- 复投，3 -- 采集，4 -- 系统释放，5 -- 充值,6--众筹,7--买卖广告记录,8--买卖交易记录，9 -- 统计入账">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="description" class="col-sm-2 control-label">备注信息</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="description" value="" id="description" placeholder="请输入备注信息">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="intoAccount" class="col-sm-2 control-label">是否入账：0 -- 待入账，1 -- 已入账</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="intoAccount" value="" id="intoAccount" placeholder="请输入是否入账：0 -- 待入账，1 -- 已入账">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="responseTime" class="col-sm-2 control-label">什么时候处理这条数据，当当前时间大于这个时间时执行</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="responseTime" value="" id="responseTime" placeholder="请输入什么时候处理这条数据，当当前时间大于这个时间时执行">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="isAdmin" class="col-sm-2 control-label">是否是平台收益，1/是  0/否</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="isAdmin" value="" id="isAdmin" placeholder="请输入是否是平台收益，1/是  0/否">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/accountPlan/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var objectId = $("#objectId").val();
+            var userId = $("#userId").val();
+            var tranUserId = $("#tranUserId").val();
+            var operateState = $("#operateState").val();
+            var operateAmount = $("#operateAmount").val();
+            var operateCode = $("#operateCode").val();
+            var operateSource = $("#operateSource").val();
+            var description = $("#description").val();
+            var intoAccount = $("#intoAccount").val();
+            var responseTime = $("#responseTime").val();
+            var isAdmin = $("#isAdmin").val();
+            var createBy = $("#createBy").val();
+            var createTime = $("#createTime").val();
+            var modifyBy = $("#modifyBy").val();
+            var modifyTime = $("#modifyTime").val();
+            
+
+            if(checkData(id ,objectId ,userId ,tranUserId ,operateState ,operateAmount ,operateCode ,operateSource ,description ,intoAccount ,responseTime ,isAdmin ,createBy ,createTime ,modifyBy ,modifyTime )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,objectId:objectId,userId:userId,tranUserId:tranUserId,operateState:operateState,operateAmount:operateAmount,operateCode:operateCode,operateSource:operateSource,description:description,intoAccount:intoAccount,responseTime:responseTime,isAdmin:isAdmin,createBy:createBy,createTime:createTime,modifyBy:modifyBy,modifyTime:modifyTime, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , objectId , userId , tranUserId , operateState , operateAmount , operateCode , operateSource , description , intoAccount , responseTime , isAdmin , createBy , createTime , modifyBy , modifyTime ){
+   	 $("#id").val(id);
+   	 $("#objectId").val(objectId);
+   	 $("#userId").val(userId);
+   	 $("#tranUserId").val(tranUserId);
+   	 $("#operateState").val(operateState);
+   	 $("#operateAmount").val(operateAmount);
+   	 $("#operateCode").val(operateCode);
+   	 $("#operateSource").val(operateSource);
+   	 $("#description").val(description);
+   	 $("#intoAccount").val(intoAccount);
+   	 $("#responseTime").val(responseTime);
+   	 $("#isAdmin").val(isAdmin);
+   	 $("#createBy").val(createBy);
+   	 $("#createTime").val(createTime);
+   	 $("#modifyBy").val(modifyBy);
+   	 $("#modifyTime").val(modifyTime);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/accountPlan/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/accountPlan/edit");
+    $.get(_ctx+"/accountPlan/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.object_id , item.user_id , item.tran_user_id , item.operate_state , item.operate_amount , item.operate_code , item.operate_source , item.description , item.into_account , item.response_time , item.is_admin , item.create_by , item.create_time , item.modify_by , item.modify_time )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/accountPlan/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , objectId , userId , tranUserId , operateState , operateAmount , operateCode , operateSource , description , intoAccount , responseTime , isAdmin , createBy , createTime , modifyBy , modifyTime ){
+    if(id == ""){
+        alert("主键ID不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(objectId == ""){
+        alert("对应业务数据主键ID不能为空");
+        $("input[name='objectId']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("用户ID不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(tranUserId == ""){
+        alert("和哪个用户交易的不能为空");
+        $("input[name='tranUserId']").focus();
+        return false;
+    }
+    if(operateState == ""){
+        alert("操作类型：1 -- 收入，0 -- 支出不能为空");
+        $("input[name='operateState']").focus();
+        return false;
+    }
+    if(operateAmount == ""){
+        alert("操作的金额不能为空");
+        $("input[name='operateAmount']").focus();
+        return false;
+    }
+    if(operateCode == ""){
+        alert("账户类型：free -- 自由子链，lock--锁定子链不能为空");
+        $("input[name='operateCode']").focus();
+        return false;
+    }
+    if(operateSource == ""){
+        alert("数据来源：1 -- 转账，2 -- 复投，3 -- 采集，4 -- 系统释放，5 -- 充值,6--众筹,7--买卖广告记录,8--买卖交易记录，9 -- 统计入账不能为空");
+        $("input[name='operateSource']").focus();
+        return false;
+    }
+    if(description == ""){
+        alert("备注信息不能为空");
+        $("input[name='description']").focus();
+        return false;
+    }
+    if(intoAccount == ""){
+        alert("是否入账：0 -- 待入账，1 -- 已入账不能为空");
+        $("input[name='intoAccount']").focus();
+        return false;
+    }
+    if(responseTime == ""){
+        alert("什么时候处理这条数据，当当前时间大于这个时间时执行不能为空");
+        $("input[name='responseTime']").focus();
+        return false;
+    }
+    if(isAdmin == ""){
+        alert("是否是平台收益，1/是  0/否不能为空");
+        $("input[name='isAdmin']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("创建人不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("创建时间不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

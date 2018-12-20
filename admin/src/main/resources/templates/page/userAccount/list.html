@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="utf-8">
+	<meta name="_ctx" th:content="@{/}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<style>
+		.search{
+			float: right;
+		}
+		.search>.selectbox{
+			width: 300px;float: right;
+			margin-right: 20px;
+		}
+		.search>.selectbox>label{
+			float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+		}
+		.search>.selectbox>select{
+			width:200px;float: right;
+		}
+		.searcher{
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统配置</a></li>
+    <li class="active">规则配置</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">配置列表</h3>
+              <br><br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入用户ID">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+					<div class="selectbox">
+						<select id="selectCoin" class="form-control">
+							<option value="all" th:text="所有币种" th:selected="${'all' == coin}"></option>
+							<option th:each="allCoinName:${allCoinName}" th:value="${allCoinName.code}" th:text="${allCoinName.chinese_name}"  th:selected="${allCoinName.code == coin}" ></option>
+						</select>
+					</div>
+			</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>用户ID</th>
+						  <th>币种</th>
+						  <th>币种中文名</th>
+		                  <!--<th>用户手机</th>
+		                  <th>用户邮箱</th>-->
+		                  <th>余额</th>
+		                  <th>冻结金额</th>
+		                  <th>总额</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ userAccount }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.user_name }">用户ID</th>
+					      <th th:text="${item.code }">币种</th>
+					      <th th:text="${item.chinese_name }">币种中文名</th>
+		                  <!--<th th:text="${item.mobile }">用户手机</th>
+		                  <th th:text="${item.mail }">用户邮箱</th>-->
+		                  <th th:text="${item.amount }">余额</th>
+		                  <th th:text="${item.lock_amount }">冻结金额</th>
+		                  <th th:text="${item.num }">总额</th>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="userId" class="col-sm-2 control-label">用户ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userId" value="" id="userId" placeholder="请输入用户ID">
+						    </div>
+						  </div>`
+						  <div class="form-group">
+						    <label for="code" class="col-sm-2 control-label">币种</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="code" value="" id="code" placeholder="请输入币种">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="token" class="col-sm-2 control-label">token ,以后可能用到</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="token" value="" id="token" placeholder="请输入token ,以后可能用到">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="address" class="col-sm-2 control-label">地址，以后可能用到</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="address" value="" id="address" placeholder="请输入地址，以后可能用到">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="amount" class="col-sm-2 control-label">可用余额</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="amount" value="" id="amount" placeholder="请输入可用余额">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="lockAmount" class="col-sm-2 control-label">冻结余额</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="lockAmount" value="" id="lockAmount" placeholder="请输入冻结余额">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+
+
+        };
+        element.bootstrapPaginator(options);
+
+        //改变事件
+        $("#selectCoin").change(function(){
+            skipPage("");
+        });
+
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/userAccount/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var userId = $("#userId").val();
+            var code = $("#code").val();
+            var token = $("#token").val();
+            var address = $("#address").val();
+            var amount = $("#amount").val();
+            var lockAmount = $("#lockAmount").val();
+            var isDeleted = $("#isDeleted").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            
+
+            if(checkData(id ,userId ,code ,token ,address ,amount ,lockAmount ,isDeleted ,createTime ,createBy ,modifyTime ,modifyBy )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,userId:userId,code:code,token:token,address:address,amount:amount,lockAmount:lockAmount,isDeleted:isDeleted,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , userId , code , token , address , amount , lockAmount , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+   	 $("#id").val(id);
+   	 $("#userId").val(userId);
+   	 $("#code").val(code);
+   	 $("#token").val(token);
+   	 $("#address").val(address);
+   	 $("#amount").val(amount);
+   	 $("#lockAmount").val(lockAmount);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var coin = $("#selectCoin").val();
+    var url="/userAccount/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url+"&coin="+coin;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/userAccount/edit");
+    $.get(_ctx+"/userAccount/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.user_id , item.code , item.token , item.address , item.amount , item.lock_amount , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/userAccount/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , userId , code , token , address , amount , lockAmount , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("用户ID不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(code == ""){
+        alert("币种不能为空");
+        $("input[name='code']").focus();
+        return false;
+    }
+    if(token == ""){
+        alert("token ,以后可能用到不能为空");
+        $("input[name='token']").focus();
+        return false;
+    }
+    if(address == ""){
+        alert("地址，以后可能用到不能为空");
+        $("input[name='address']").focus();
+        return false;
+    }
+    if(amount == ""){
+        alert("可用余额不能为空");
+        $("input[name='amount']").focus();
+        return false;
+    }
+    if(lockAmount == ""){
+        alert("冻结余额不能为空");
+        $("input[name='lockAmount']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

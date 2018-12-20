@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.picture.PictureMapper">
+
+	<resultMap id="BaseResultMap" type="com.admin.entity.picture.Picture">
+		<id column="pic_id"   property="picId"  jdbcType="BIGINT" />
+		<result column="pic_type"   property="picType" jdbcType="VARCHAR" />
+		<result column="pic_name"   property="picName" jdbcType="VARCHAR" />
+		<result column="pic_path"   property="picPath" jdbcType="VARCHAR" />
+		<result column="is_deleted"   property="isDeleted" jdbcType="VARCHAR" />
+		<result column="create_time"   property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by"   property="createBy" jdbcType="BIGINT" />
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			pic_id ,
+			pic_type ,
+			pic_name ,
+			pic_path ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			object_id 
+	    ]]>
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from picture
+		where pic_id = #{ picId, jdbcType=BIGINT }
+	</select>
+	<!--
+       pic_id
+       PicId
+       picId
+    -->
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update picture set is_deleted = 'Y'
+	    where pic_id = #{ picId, jdbcType=BIGINT }
+	  </update>
+
+	<insert id="insert" parameterType="com.admin.entity.picture.Picture" useGeneratedKeys="true" keyProperty="id">
+		insert into picture (<include refid="Base_Column_List" />)
+		values (
+		#{ picId } ,
+		#{ picType } ,
+		#{ picName } ,
+		#{ picPath } ,
+		#{ isDeleted } ,
+		#{ createTime } ,
+		#{ createBy } ,
+		#{ objectId }
+		)
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.admin.entity.picture.Picture" useGeneratedKeys="true" keyProperty="picId">
+		insert into picture
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="picId != null">
+				pic_id ,
+			</if>
+			<if test="picType != null">
+				pic_type ,
+			</if>
+			<if test="picName != null">
+				pic_name ,
+			</if>
+			<if test="picPath != null">
+				pic_path ,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted ,
+			</if>
+			<if test="createTime != null">
+				create_time ,
+			</if>
+			<if test="createBy != null">
+				create_by ,
+			</if>
+			<if test="objectId != null">
+				object_id ,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="picId != null">
+				#{ picId, jdbcType=BIGINT } ,
+			</if>
+			<if test="picType != null">
+				#{ picType, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picName != null">
+				#{ picName, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picPath != null">
+				#{ picPath, jdbcType=VARCHAR } ,
+			</if>
+			<if test="isDeleted != null">
+				#{ isDeleted, jdbcType=VARCHAR } ,
+			</if>
+			<if test="createTime != null">
+				#{ createTime, jdbcType=TIMESTAMP } ,
+			</if>
+			<if test="createBy != null">
+				#{ createBy, jdbcType=BIGINT } ,
+			</if>
+			<if test="objectId != null">
+				#{ objectId } ,
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.admin.entity.picture.Picture">
+		update picture
+		<set>
+			<if test="picId != null">
+				pic_id = #{ picId, jdbcType=BIGINT } ,
+			</if>
+			<if test="picType != null">
+				pic_type = #{ picType, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picName != null">
+				pic_name = #{ picName, jdbcType=VARCHAR } ,
+			</if>
+			<if test="picPath != null">
+				pic_path = #{ picPath, jdbcType=VARCHAR } ,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{ isDeleted, jdbcType=VARCHAR } ,
+			</if>
+			<if test="createTime != null">
+				create_time = #{ createTime, jdbcType=TIMESTAMP } ,
+			</if>
+			<if test="createBy != null">
+				create_by = #{ createBy, jdbcType=BIGINT } ,
+			</if>
+			<if test="objectId != null">
+				object_id = #{ objectId } ,
+			</if>
+		</set>
+		where pic_id = #{ picId, jdbcType=BIGINT }
+
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.admin.entity.picture.Picture">
+    update picture
+    set  
+	        pic_id = #{ picId, jdbcType=BIGINT }  ,
+	        pic_type = #{ picType, jdbcType=VARCHAR }  ,
+	        pic_name = #{ picName, jdbcType=VARCHAR }  ,
+	        pic_path = #{ picPath, jdbcType=VARCHAR }  ,
+	        is_deleted = #{ isDeleted, jdbcType=VARCHAR }  ,
+	        create_time = #{ createTime, jdbcType=TIMESTAMP }  ,
+	        create_by = #{ createBy, jdbcType=BIGINT }  ,
+   object_id = #{ objectId }  
+    where pic_id = #{ picId, jdbcType=BIGINT }
+  </update>
+
+	<update id="deleteByIds" parameterType="java.lang.String">
+		update picture set is_deleted = 'Y'
+		where pic_id in
+		<foreach item="ids" collection="array" open="(" separator="," close=")">
+			#{ids}	</foreach>
+	</update>
+
+	<!--  query begin -->
+	<select id="getByCondition" resultMap="BaseResultMap" parameterType="Map" >
+		select <include refid="Base_Column_List" />
+		from picture
+		<where>
+			<if test="picId != null">
+				and pic_id = #{ picId, jdbcType=BIGINT }
+			</if>
+			<if test="picType != null">
+				and pic_type = #{ picType, jdbcType=VARCHAR }
+			</if>
+			<if test="picName != null">
+				and pic_name = #{ picName, jdbcType=VARCHAR }
+			</if>
+			<if test="picPath != null">
+				and pic_path = #{ picPath, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted != null">
+				and is_deleted = #{ isDeleted, jdbcType=VARCHAR }
+			</if>
+			<if test="createTime != null">
+				and create_time = #{ createTime, jdbcType=TIMESTAMP }
+			</if>
+			<if test="createBy != null">
+				and create_by = #{ createBy, jdbcType=BIGINT }
+			</if>
+			<if test="objectId != null">
+				and object_id = #{ objectId }
+			</if>
+		</where>
+	</select>
+	<select id="getByCondition4List" resultMap="BaseResultMap" parameterType="Map" >
+		select <include refid="Base_Column_List" />
+		from picture
+		<where>
+			<if test="picId != null">
+				and pic_id = #{ picId, jdbcType=BIGINT }
+			</if>
+			<if test="picType != null">
+				and pic_type = #{ picType, jdbcType=VARCHAR }
+			</if>
+			<if test="picName != null">
+				and pic_name = #{ picName, jdbcType=VARCHAR }
+			</if>
+			<if test="picPath != null">
+				and pic_path = #{ picPath, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted != null">
+				and is_deleted = #{ isDeleted, jdbcType=VARCHAR }
+			</if>
+			<if test="createTime != null">
+				and create_time = #{ createTime, jdbcType=TIMESTAMP }
+			</if>
+			<if test="createBy != null">
+				and create_by = #{ createBy, jdbcType=BIGINT }
+			</if>
+			<if test="objectId != null">
+				and object_id = #{ objectId }
+			</if>
+		</where>
+	</select>
+
+	<select id="getByCondition4Count" parameterType="Map" resultType="long" >
+		select COUNT(1)
+		from picture
+		<where>
+			<if test="picId != null">
+				and pic_id = #{ picId, jdbcType=BIGINT }
+			</if>
+			<if test="picType != null">
+				and pic_type = #{ picType, jdbcType=VARCHAR }
+			</if>
+			<if test="picName != null">
+				and pic_name = #{ picName, jdbcType=VARCHAR }
+			</if>
+			<if test="picPath != null">
+				and pic_path = #{ picPath, jdbcType=VARCHAR }
+			</if>
+			<if test="isDeleted != null">
+				and is_deleted = #{ isDeleted, jdbcType=VARCHAR }
+			</if>
+			<if test="createTime != null">
+				and create_time = #{ createTime, jdbcType=TIMESTAMP }
+			</if>
+			<if test="createBy != null">
+				and create_by = #{ createBy, jdbcType=BIGINT }
+			</if>
+			<if test="objectId != null">
+				and object_id = #{ objectId }
+			</if>
+		</where>
+	</select>
+
+	<!--  query end -->
+
+	<!-- end -->
+
+</mapper>
+
+		<!-- this macro to be use for create jdbcType attribute when u use the mybatis. wzz  -->
+		<!--生成参数列带jdbcType类型，  parameterName对应列参数名字 小写开头 ， javaType该列对应的属性类型 -->

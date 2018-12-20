@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.version.VersionDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			version ,
+			type ,
+			is_new ,
+			url ,
+			content ,
+			create_time ,
+			create_by ,
+			is_deleted 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from sys_version 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update sys_version set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into sys_version (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ version } ,
+	        	#{ type } ,
+	        	#{ isNew } ,
+	        	#{ url } ,
+	        	#{ content } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ isDeleted } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into sys_version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="version != null">
+			        version ,
+			      </if>
+	              <if test="type != null">
+			        type ,
+			      </if>
+	              <if test="isNew != null">
+			        is_new ,
+			      </if>
+	              <if test="url != null">
+			        url ,
+			      </if>
+	              <if test="content != null">
+			        content ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="version != null">
+	        #{ version } ,
+	      </if>
+	      <if test="type != null">
+	        #{ type } ,
+	      </if>
+	      <if test="isNew != null">
+	        #{ isNew } ,
+	      </if>
+	      <if test="url != null">
+	        #{ url } ,
+	      </if>
+	      <if test="content != null">
+	        #{ content } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update sys_version
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="version != null">
+	         version = #{ version } ,
+	      </if>
+	      <if test="type != null">
+	         type = #{ type } ,
+	      </if>
+	      <if test="isNew != null">
+	         is_new = #{ isNew } ,
+	      </if>
+	      <if test="url != null">
+	         url = #{ url } ,
+	      </if>
+	      <if test="content != null">
+	         content = #{ content } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update sys_version
+    set  
+	        id = #{ id }  ,
+	        version = #{ version }  ,
+	        type = #{ type }  ,
+	        is_new = #{ isNew }  ,
+	        url = #{ url }  ,
+	        content = #{ content }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        is_deleted = #{ isDeleted }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update sys_version set is_deleted = 'Y' , is_new = '0'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from sys_version
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="version != null">
+		        and version = #{ version }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isNew != null">
+		        and is_new = #{ isNew }
+	        </if>
+	        <if test="url != null">
+		        and url = #{ url }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	       SELECT s.id,s.version,s.url,s.type,CASE WHEN s.is_new = 1 THEN 'YES' ELSE 'NO' END AS is_new,s.create_time,s.content FROM sys_version s
+
+	       where is_deleted = 'N'
+		  <if test="keyword != null">
+			  and s.type = #{ keyword }
+		  </if>
+	       ORDER BY s.is_new DESC
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from sys_version
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="version != null">
+		        and version = #{ version }
+	        </if>
+	        <if test="type != null">
+		        and type = #{ type }
+	        </if>
+	        <if test="isNew != null">
+		        and is_new = #{ isNew }
+	        </if>
+	        <if test="url != null">
+		        and url = #{ url }
+	        </if>
+	        <if test="content != null">
+		        and content = #{ content }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	    </where> 
+	  </select>
+
+
+	<update id="updateIsNew" parameterType="pm">
+		update sys_version s set  s.is_new = '0'
+		where s.id != #{id} and s.type = #{type}
+	</update>
+
+
+</mapper>
+

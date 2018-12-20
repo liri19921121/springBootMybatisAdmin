@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 系统配置</a></li>
+    <li class="active">规则配置</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">配置列表</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜索</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                    <th>组名</th>
+		                    <th>浏览量</th>
+							<th>中文版是否添加</th>
+							<th>繁体版是否添加</th>
+							<th>英文版是否添加</th>
+							<th>添加时间</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ notice }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.group_name }">组名</th>
+		                  <th th:text="${item.view_num }">浏览量</th>
+					      <th th:text="${item.zhcn }">中文版是否添加</th>
+					      <th th:text="${item.zhtw }">繁体版是否添加</th>
+					      <th th:text="${item.enus }">英文版是否添加</th>
+					      <th th:text="${item.create_time }">添加时间</th>
+
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="isShow" class="col-sm-2 control-label">是否显示 1 显示 0不显示</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="isShow" value="" id="isShow" placeholder="请输入是否显示 1 显示 0不显示">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="groupName" class="col-sm-2 control-label">组名</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="groupName" value="" id="groupName" placeholder="请输入组名">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="orderNum" class="col-sm-2 control-label">显示顺序</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="orderNum" value="" id="orderNum" placeholder="请输入显示顺序">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="viewNum" class="col-sm-2 control-label">浏览量</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="viewNum" value="" id="viewNum" placeholder="请输入浏览量">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="adminUserId" class="col-sm-2 control-label">后台添加人员</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="adminUserId" value="" id="adminUserId" placeholder="请输入后台添加人员">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="type" class="col-sm-2 control-label">类型</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="type" value="" id="type" placeholder="请输入类型">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+/*            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/notice/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","");
+            $("#itemModal").modal("show");*/
+            window.location.href=_ctx+"/notice/toAdd";
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var isShow = $("#isShow").val();
+            var groupName = $("#groupName").val();
+            var orderNum = $("#orderNum").val();
+            var viewNum = $("#viewNum").val();
+            var adminUserId = $("#adminUserId").val();
+            var type = $("#type").val();
+            var isDeleted = $("#isDeleted").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            
+
+            if(checkData(id ,isShow ,groupName ,orderNum ,viewNum ,adminUserId ,type ,isDeleted ,createTime ,createBy ,modifyTime ,modifyBy )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,isShow:isShow,groupName:groupName,orderNum:orderNum,viewNum:viewNum,adminUserId:adminUserId,type:type,isDeleted:isDeleted,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , isShow , groupName , orderNum , viewNum , adminUserId , type , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+   	 $("#id").val(id);
+   	 $("#isShow").val(isShow);
+   	 $("#groupName").val(groupName);
+   	 $("#orderNum").val(orderNum);
+   	 $("#viewNum").val(viewNum);
+   	 $("#adminUserId").val(adminUserId);
+   	 $("#type").val(type);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/notice/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/notice/edit");
+    $.get(_ctx+"/notice/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.is_show , item.group_name , item.order_num , item.view_num , item.admin_user_id , item.type , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/notice/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , isShow , groupName , orderNum , viewNum , adminUserId , type , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(isShow == ""){
+        alert("是否显示 1 显示 0不显示不能为空");
+        $("input[name='isShow']").focus();
+        return false;
+    }
+    if(groupName == ""){
+        alert("组名不能为空");
+        $("input[name='groupName']").focus();
+        return false;
+    }
+    if(orderNum == ""){
+        alert("显示顺序不能为空");
+        $("input[name='orderNum']").focus();
+        return false;
+    }
+    if(viewNum == ""){
+        alert("浏览量不能为空");
+        $("input[name='viewNum']").focus();
+        return false;
+    }
+    if(adminUserId == ""){
+        alert("后台添加人员不能为空");
+        $("input[name='adminUserId']").focus();
+        return false;
+    }
+    if(type == ""){
+        alert("类型不能为空");
+        $("input[name='type']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("创建时间不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/css-head :: css-head">
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 数据挖据</a></li>
+    <li class="active">挖据数据</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">数据列表</h3>
+              <br><br>
+				<!--
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加</button>
+              -->
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入关键字">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>会员账号</th>
+		                  <th>待领积分</th>
+		                  <th>产出类型</th>
+		                  <th>是否领取</th>
+		                  <th>领取时间</th>
+		                  <th>生成时间</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ moneyMine }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.user_name }">userId</th>
+		                  <th th:text="${item.money }">待领积分</th>
+		                  <th th:switch="${item.type }">
+							  <span th:case="1">每日释放</span>
+							  <span th:case="2">复投奖励自由子链</span>
+							  <span th:case="3">复投奖励锁定子链</span>
+						  </th>
+		                  <th th:if="${item.isOverdue} == 0" th:switch="${item.state }">
+							  <span class="label label-default" th:case="0">未领取</span>
+							  <span class="label label-success" th:case="1">已领取</span>
+						  </th>
+						<th th:unless="${item.isOverdue} == 0">
+							<span class="label label-warning">已过期</span>
+						</th>
+		                  <th th:text="${item.receive_time }">领取时间</th>
+		                  <th th:text="${item.create_time }">领取时间</th>
+					<!--
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+                  	 <span data-toggle="tooltip" data-placement="left" title="修改" th:if="${QX.edit == '1' }" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i></span>
+                  	 <span data-toggle="tooltip" data-placement="right" title="删除" th:if="${QX.del == '1' }" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i></span>
+                  </td>
+                  -->
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="userId" class="col-sm-2 control-label">userId</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="userId" value="" id="userId" placeholder="请输入userId">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="money" class="col-sm-2 control-label">待领积分</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="money" value="" id="money" placeholder="请输入待领积分">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="rewardMoney" class="col-sm-2 control-label">获得的奖励积分</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="rewardMoney" value="" id="rewardMoney" placeholder="请输入获得的奖励积分">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="type" class="col-sm-2 control-label">采集类型：1 --- 每日释放，2 -- 动态奖励自由子链，3 --- 动态奖励锁定子链</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="type" value="" id="type" placeholder="请输入采集类型：1 --- 每日释放，2 -- 动态奖励自由子链，3 --- 动态奖励锁定子链">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="detailId" class="col-sm-2 control-label">产生这笔收益的ID</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="detailId" value="" id="detailId" placeholder="请输入产生这笔收益的ID">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="state" class="col-sm-2 control-label">是否领取，0未领取，1领取</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="state" value="" id="state" placeholder="请输入是否领取，0未领取，1领取">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="receiveTime" class="col-sm-2 control-label">领取时间</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="receiveTime" value="" id="receiveTime" placeholder="请输入领取时间">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="isWeek" class="col-sm-2 control-label">是否是周结的</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="isWeek" value="" id="isWeek" placeholder="请输入是否是周结的">
+						    </div>
+						  </div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/moneyMine/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("input[name='id']").val();
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var userId = $("#userId").val();
+            var money = $("#money").val();
+            var rewardMoney = $("#rewardMoney").val();
+            var type = $("#type").val();
+            var detailId = $("#detailId").val();
+            var state = $("#state").val();
+            var receiveTime = $("#receiveTime").val();
+            var isWeek = $("#isWeek").val();
+            var isDeleted = $("#isDeleted").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            
+
+            if(checkData(id ,userId ,money ,rewardMoney ,type ,detailId ,state ,receiveTime ,isWeek ,isDeleted ,createTime ,createBy ,modifyTime ,modifyBy )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,userId:userId,money:money,rewardMoney:rewardMoney,type:type,detailId:detailId,state:state,receiveTime:receiveTime,isWeek:isWeek,isDeleted:isDeleted,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , userId , money , rewardMoney , type , detailId , state , receiveTime , isWeek , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+   	 $("#id").val(id);
+   	 $("#userId").val(userId);
+   	 $("#money").val(money);
+   	 $("#rewardMoney").val(rewardMoney);
+   	 $("#type").val(type);
+   	 $("#detailId").val(detailId);
+   	 $("#state").val(state);
+   	 $("#receiveTime").val(receiveTime);
+   	 $("#isWeek").val(isWeek);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/moneyMine/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/moneyMine/edit");
+    $.get(_ctx+"/moneyMine/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.user_id , item.money , item.rewardmoney , item.type , item.detail_id , item.state , item.receive_time , item.is_week , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/moneyMine/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , userId , money , rewardMoney , type , detailId , state , receiveTime , isWeek , isDeleted , createTime , createBy , modifyTime , modifyBy ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(userId == ""){
+        alert("userId不能为空");
+        $("input[name='userId']").focus();
+        return false;
+    }
+    if(money == ""){
+        alert("待领积分不能为空");
+        $("input[name='money']").focus();
+        return false;
+    }
+    if(rewardMoney == ""){
+        alert("获得的奖励积分不能为空");
+        $("input[name='rewardMoney']").focus();
+        return false;
+    }
+    if(type == ""){
+        alert("采集类型：1 --- 每日释放，2 -- 动态奖励自由子链，3 --- 动态奖励锁定子链不能为空");
+        $("input[name='type']").focus();
+        return false;
+    }
+    if(detailId == ""){
+        alert("产生这笔收益的ID不能为空");
+        $("input[name='detailId']").focus();
+        return false;
+    }
+    if(state == ""){
+        alert("是否领取，0未领取，1领取不能为空");
+        $("input[name='state']").focus();
+        return false;
+    }
+    if(receiveTime == ""){
+        alert("领取时间不能为空");
+        $("input[name='receiveTime']").focus();
+        return false;
+    }
+    if(isWeek == ""){
+        alert("是否是周结的不能为空");
+        $("input[name='isWeek']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

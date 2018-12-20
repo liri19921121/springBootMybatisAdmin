@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.dao.coinPublish.CoinPublishDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			id ,
+			title ,
+			depict ,
+			head_path,
+			show_number ,
+			number ,
+			user_number ,
+			buy_number ,
+			consume_coin ,
+			consume_price ,
+			get_coin ,
+			get_price ,
+			preheat_time ,
+			publish_begin_time ,
+			publish_end_time ,
+			is_deleted ,
+			create_time ,
+			create_by ,
+			modify_time ,
+			modify_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from raise_coin_publish 
+	    where id = #{ id }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update raise_coin_publish set is_deleted = 'Y'
+	    where id = #{ id }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+	    insert into raise_coin_publish (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ id } ,
+	        	#{ title } ,
+	        	#{ depict } ,
+	        	#{ headPath } ,
+	        	#{ showNumber } ,
+	        	#{ number } ,
+	        	#{ userNumber } ,
+	        	#{ buyNumber } ,
+	        	#{ consumeCoin } ,
+	        	#{ consumePrice } ,
+	        	#{ getCoin } ,
+	        	#{ getPrice } ,
+	        	#{ preheatTime } ,
+	        	#{ publishBeginTime } ,
+	        	#{ publishEndTime } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } ,
+	        	#{ modifyTime } ,
+	        	#{ modifyBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm" useGeneratedKeys="true" keyProperty="id">
+    insert into raise_coin_publish
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="id != null">
+			        id ,
+			      </if>
+	              <if test="title != null">
+			        title ,
+			      </if>
+	              <if test="depict != null">
+			        depict ,
+			      </if>
+	              <if test="headPath != null">
+			        head_path ,
+			      </if>
+	              <if test="showNumber != null">
+			        show_number ,
+			      </if>
+	              <if test="number != null">
+			        number ,
+			      </if>
+	              <if test="userNumber != null">
+			        user_number ,
+			      </if>
+	              <if test="buyNumber != null">
+			        buy_number ,
+			      </if>
+	              <if test="consumeCoin != null">
+			        consume_coin ,
+			      </if>
+	              <if test="consumePrice != null">
+			        consume_price ,
+			      </if>
+	              <if test="getCoin != null">
+			        get_coin ,
+			      </if>
+	              <if test="getPrice != null">
+			        get_price ,
+			      </if>
+	              <if test="preheatTime != null">
+			        preheat_time ,
+			      </if>
+	              <if test="publishBeginTime != null">
+			        publish_begin_time ,
+			      </if>
+	              <if test="publishEndTime != null">
+			        publish_end_time ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+	              <if test="modifyTime != null">
+			        modify_time ,
+			      </if>
+	              <if test="modifyBy != null">
+			        modify_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">
+	        #{ id } ,
+	      </if>
+	      <if test="title != null">
+	        #{ title } ,
+	      </if>
+	      <if test="depict != null">
+	        #{ depict } ,
+	      </if>
+	      <if test="headPath != null">
+	        #{ headPath } ,
+	      </if>
+	      <if test="showNumber != null">
+	        #{ showNumber } ,
+	      </if>
+	      <if test="number != null">
+	        #{ number } ,
+	      </if>
+	      <if test="userNumber != null">
+	        #{ userNumber } ,
+	      </if>
+	      <if test="buyNumber != null">
+	        #{ buyNumber } ,
+	      </if>
+	      <if test="consumeCoin != null">
+	        #{ consumeCoin } ,
+	      </if>
+	      <if test="consumePrice != null">
+	        #{ consumePrice } ,
+	      </if>
+	      <if test="getCoin != null">
+	        #{ getCoin } ,
+	      </if>
+	      <if test="getPrice != null">
+	        #{ getPrice } ,
+	      </if>
+	      <if test="preheatTime != null">
+	        #{ preheatTime } ,
+	      </if>
+	      <if test="publishBeginTime != null">
+	        #{ publishBeginTime } ,
+	      </if>
+	      <if test="publishEndTime != null">
+	        #{ publishEndTime } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	        #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	        #{ modifyBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update raise_coin_publish
+    <set>
+	      <if test="id != null">
+	         id = #{ id } ,
+	      </if>
+	      <if test="title != null">
+	         title = #{ title } ,
+	      </if>
+	      <if test="depict != null">
+	         depict = #{ depict } ,
+	      </if>
+	      <if test="headPath != null">
+	         head_path = #{ headPath } ,
+	      </if>
+	      <if test="showNumber != null">
+	         show_number = #{ showNumber } ,
+	      </if>
+	      <if test="number != null">
+	         number = #{ number } ,
+	      </if>
+	      <if test="userNumber != null">
+	         user_number = #{ userNumber } ,
+	      </if>
+	      <if test="buyNumber != null">
+	         buy_number = #{ buyNumber } ,
+	      </if>
+	      <if test="consumeCoin != null">
+	         consume_coin = #{ consumeCoin } ,
+	      </if>
+	      <if test="consumePrice != null">
+	         consume_price = #{ consumePrice } ,
+	      </if>
+	      <if test="getCoin != null">
+	         get_coin = #{ getCoin } ,
+	      </if>
+	      <if test="getPrice != null">
+	         get_price = #{ getPrice } ,
+	      </if>
+	      <if test="preheatTime != null">
+	         preheat_time = #{ preheatTime } ,
+	      </if>
+	      <if test="publishBeginTime != null">
+	         publish_begin_time = #{ publishBeginTime } ,
+	      </if>
+	      <if test="publishEndTime != null">
+	         publish_end_time = #{ publishEndTime } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+	      <if test="modifyTime != null">
+	         modify_time = #{ modifyTime } ,
+	      </if>
+	      <if test="modifyBy != null">
+	         modify_by = #{ modifyBy } ,
+	      </if>
+    </set>
+    where id = #{ id }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update raise_coin_publish
+    set  
+	        id = #{ id }  ,
+	        title = #{ title }  ,
+	        depict = #{ depict }  ,
+	        head_path = #{ headPath }  ,
+	        show_number = #{ showNumber }  ,
+	        number = #{ number }  ,
+	        user_number = #{ userNumber }  ,
+	        buy_number = #{ buyNumber }  ,
+	        consume_coin = #{ consumeCoin }  ,
+	        consume_price = #{ consumePrice }  ,
+	        get_coin = #{ getCoin }  ,
+	        get_price = #{ getPrice }  ,
+	        preheat_time = #{ preheatTime }  ,
+	        publish_begin_time = #{ publishBeginTime }  ,
+	        publish_end_time = #{ publishEndTime }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  ,
+	        modify_time = #{ modifyTime }  ,
+	        modify_by = #{ modifyBy }  
+    where id = #{ id }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update raise_coin_publish set is_deleted = 'Y'
+    where id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from raise_coin_publish
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="depict != null">
+		        and depict = #{ depict }
+	        </if>
+	        <if test="headPath != null">
+		        and head_path = #{ headPath }
+	        </if>
+	        <if test="showNumber != null">
+		        and show_number = #{ showNumber }
+	        </if>
+	        <if test="number != null">
+		        and number = #{ number }
+	        </if>
+	        <if test="userNumber != null">
+		        and user_number = #{ userNumber }
+	        </if>
+	        <if test="buyNumber != null">
+		        and buy_number = #{ buyNumber }
+	        </if>
+	        <if test="consumeCoin != null">
+		        and consume_coin = #{ consumeCoin }
+	        </if>
+	        <if test="consumePrice != null">
+		        and consume_price = #{ consumePrice }
+	        </if>
+	        <if test="getCoin != null">
+		        and get_coin = #{ getCoin }
+	        </if>
+	        <if test="getPrice != null">
+		        and get_price = #{ getPrice }
+	        </if>
+	        <if test="preheatTime != null">
+		        and preheat_time = #{ preheatTime }
+	        </if>
+	        <if test="publishBeginTime != null">
+		        and publish_begin_time = #{ publishBeginTime }
+	        </if>
+	        <if test="publishEndTime != null">
+		        and publish_end_time = #{ publishEndTime }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select
+		  r.id as id,r.title ,r.depict ,concat(#{homeUrl},r.head_path) as head_path,r.show_number ,r.number ,r.user_number ,
+		  r.buy_number ,r.consume_coin , r.consume_price ,r.get_coin ,r.get_price ,r.preheat_time ,r.publish_begin_time,
+		  r.publish_end_time ,cc.chinese_name AS conChineseName,cg.chinese_name AS getChineseName,
+		  CASE WHEN (#{nowTime} <![CDATA[ > ]]> r.preheat_time AND #{nowTime}  <![CDATA[ < ]]> r.publish_begin_time) THEN '预热中'
+		  WHEN (#{nowTime}  <![CDATA[ > ]]> r.publish_begin_time AND  #{nowTime}  <![CDATA[ < ]]> r.publish_end_time) THEN '进行中'
+		  WHEN #{nowTime}  <![CDATA[ > ]]> r.publish_end_time THEN '已结束'
+		  ELSE '未开始' END as state
+		  from raise_coin_publish r LEFT JOIN coin_info cc ON r.consume_coin = cc.`code` LEFT JOIN coin_info cg ON r.get_coin = cg.`code`
+	   	  <where>  
+	        <if test="keyword != null">
+		        and r.title like concat(concat("%",#{keyword}),"%")
+	        </if>
+			  <if test="publishState == 0">
+			      and #{nowTime} <![CDATA[ < ]]> r.preheat_time
+		      </if>
+			  <if test="publishState == 1">
+				  and #{nowTime} <![CDATA[ > ]]> r.preheat_time AND #{nowTime}  <![CDATA[ < ]]> r.publish_begin_time
+			  </if>
+			  <if test="publishState == 2">
+				  and #{nowTime}  <![CDATA[ > ]]> r.publish_begin_time AND  #{nowTime}  <![CDATA[ < ]]> r.publish_end_time
+			  </if>
+			  <if test="publishState == 3">
+				  and #{nowTime}  <![CDATA[ > ]]> r.publish_end_time
+			  </if>
+			  and r.is_deleted = 'N'
+	      </where>
+		  order by r.preheat_time desc
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from raise_coin_publish
+	   	  <where>  
+	        <if test="id != null">
+		        and id = #{ id }
+	        </if>
+	        <if test="title != null">
+		        and title = #{ title }
+	        </if>
+	        <if test="depict != null">
+		        and depict = #{ depict }
+	        </if>
+	        <if test="headPath != null">
+		        and head_path = #{ headPath }
+	        </if>
+	        <if test="showNumber != null">
+		        and show_number = #{ showNumber }
+	        </if>
+	        <if test="number != null">
+		        and number = #{ number }
+	        </if>
+	        <if test="userNumber != null">
+		        and user_number = #{ userNumber }
+	        </if>
+	        <if test="buyNumber != null">
+		        and buy_number = #{ buyNumber }
+	        </if>
+	        <if test="consumeCoin != null">
+		        and consume_coin = #{ consumeCoin }
+	        </if>
+	        <if test="consumePrice != null">
+		        and consume_price = #{ consumePrice }
+	        </if>
+	        <if test="getCoin != null">
+		        and get_coin = #{ getCoin }
+	        </if>
+	        <if test="getPrice != null">
+		        and get_price = #{ getPrice }
+	        </if>
+	        <if test="preheatTime != null">
+		        and preheat_time = #{ preheatTime }
+	        </if>
+	        <if test="publishBeginTime != null">
+		        and publish_begin_time = #{ publishBeginTime }
+	        </if>
+	        <if test="publishEndTime != null">
+		        and publish_end_time = #{ publishEndTime }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	        <if test="modifyTime != null">
+		        and modify_time = #{ modifyTime }
+	        </if>
+	        <if test="modifyBy != null">
+		        and modify_by = #{ modifyBy }
+	        </if>
+	    </where> 
+	  </select>
+
+	<select id="getHaveLang" parameterType="pm" resultType="pm">
+            SELECT s.chinese_name FROM raise_coin_lang r  LEFT JOIN sys_lang s ON r.lang = s.lang_name WHERE r.raise_id = #{raiseId}
+	</select>
+
+	<select id="getAllVersionLang" parameterType="pm" resultType="pm">
+			SELECT s.chinese_name,l.title,l.depict,l.create_time FROM raise_coin_lang l LEFT JOIN sys_lang s ON l.lang = s.lang_name WHERE raise_id = #{raiseId}
+	</select>
+
+</mapper>
+

@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="utf-8">
+	<meta name="_ctx" th:content="@{/}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<style>
+		.search{
+			float: right;
+		}
+		.search>.selectbox{
+			width: 300px;float: right;
+			margin-right: 20px;
+		}
+		.search>.selectbox>label{
+			float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+		}
+		.search>.selectbox>select{
+			width:200px;float: right;
+		}
+		.searcher{
+			cursor: pointer;
+		}
+
+		@media (min-width: 768px){
+			.modal-dialog {
+				width: 800px;
+				margin: 30px auto;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 商城管理</a></li>
+    <li class="active">目录管理</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">目录管理</h3>
+              <br><br>
+              <button th:if="${QX.add == '1' && QX.query == '1' }" class="btn btn-success btn-sm" id="addItem"><i class="fa fa-plus"></i> &nbsp;&nbsp;添加一级菜单</button>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入标题">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+					<div class="selectbox" style="width: 203px">
+						<select class="form-control" name="lang"  id="lang" placeholder="语言版本" >
+							<option value="-1" >请选择语言版本</option>
+							<option th:each="allLang:${allLang}" th:value="${allLang.lang_name}" th:text="${allLang.chinese_name}"  th:selected="${allLang.lang_name == lang}"></option>
+						</select>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>标题</th>
+		                  <th>排序</th>
+		                  <th>语言版本</th>
+	                      <th>菜单操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ goodsType }" >
+                  <td th:text="${stat.count}">1</td>
+		                  <th th:text="${item.title }">标题</th>
+		                  <th th:text="${item.sort_num }">排序</th>
+		                  <th th:text="${item.chinese_name }">语言版本</th>
+                  <td width="20%">
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+					  <span data-toggle="tooltip" data-placement="left" title="添加子菜单" th:if="${QX.add == '1'}" class="btn btn-xs btn-success" th:onclick="'addMenu(\''+${item.id}+'\');'"><i class="fa fa-plus"></i> 添加</span>
+					  <span data-toggle="tooltip" data-placement="left" title="修改菜单" th:if="${QX.edit == '1'}" class="btn btn-xs btn-info" th:onclick="'edit(\''+${item.id}+'\');'"><i class="fa fa-edit"></i> 修改</span>
+					  <span data-toggle="tooltip" data-placement="left" title="展开菜单" class="btn btn-xs btn-primary spreadSubm"  th:onclick="'unfold(\''+${item.id}+'\');'" th:attr="data-id=${item.id}"><i class="fa fa-list-ul"></i> <font>展开</font></span>
+					  <span data-toggle="tooltip" data-placement="right" title="删除菜单" th:if="${QX.del == '1'}" class="btn btn-xs btn-danger" th:onclick="'del(\''+${item.id}+'\');'"><i class="fa fa-trash-o"></i> 删除</span>
+                  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">添加</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value="0"/>
+						<input type="hidden" name="actionurl" value="/"/>
+						
+						  <div class="form-group">
+						    <label for="title" class="col-sm-2 control-label">标题</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="title" value="" id="title" placeholder="请输入标题">
+						    </div>
+						  </div>
+						  <div class="form-group">
+						    <label for="sortNum" class="col-sm-2 control-label">排序号</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" name="sortNum" value="" id="sortNum" placeholder="请输入排序">
+						    </div>
+						  </div>
+						<div class="form-group">
+							<label  class="col-sm-2 control-label">请选择语言</label>
+							<div class="col-sm-10">
+								<select class="form-control" name="addLang"  id="addLang" placeholder="请选择语言" >
+									<option th:each="allLang:${allLang}" th:value="${allLang.lang_name}" th:text="${allLang.chinese_name}"  ></option>
+								</select>
+							</div>
+						</div>
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >添加</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/goodsType/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var url = $("input[name='actionurl']").val();
+            var id = $("#id").val();
+            var parentId = $("#parentId").val();
+            var menuType = $("#menuType").val();
+            var title = $("#title").val();
+            var sortNum = $("#sortNum").val();
+            var menuUrl = $("#menuUrl").val();
+            var isDeleted = $("#isDeleted").val();
+            var createTime = $("#createTime").val();
+            var createBy = $("#createBy").val();
+            var modifyTime = $("#modifyTime").val();
+            var modifyBy = $("#modifyBy").val();
+            var addLang = $("#addLang").val();
+
+            if (parentId == null){
+                parentId = 0;
+			}
+            if (menuType == null){
+                menuType = 1;
+            }
+
+            if(checkData(id ,parentId ,menuType ,title ,sortNum ,menuUrl ,isDeleted ,createTime ,createBy ,modifyTime ,modifyBy ,addLang )){
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+url,
+                    cache:false,
+                    data:{id:id,parentId:parentId,menuType:menuType,title:title,sortNum:sortNum,menuUrl:menuUrl,isDeleted:isDeleted,createTime:createTime,createBy:createBy,modifyTime:modifyTime,modifyBy:modifyBy,lang:addLang, time:new Date().getTime()},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+            }
+
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+	
+	
+function setData(  id , parentId , menuType , title , sortNum , menuUrl , isDeleted , createTime , createBy , modifyTime , modifyBy , lang ){
+   	 $("#id").val(id);
+   	 $("#parentId").val(parentId);
+   	 $("#menuType").val(menuType);
+   	 $("#title").val(title);
+   	 $("#sortNum").val(sortNum);
+   	 $("#menuUrl").val(menuUrl);
+   	 $("#isDeleted").val(isDeleted);
+   	 $("#createTime").val(createTime);
+   	 $("#createBy").val(createBy);
+   	 $("#modifyTime").val(modifyTime);
+   	 $("#modifyBy").val(modifyBy);
+   	 $("#addLang").val(lang);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/goodsType/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    var lang = $("#lang").val();
+    url = _ctx+url+"&lang="+lang;
+    window.location.href=url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("修改");
+    $("#submitBtn").text("修改");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/goodsType/edit");
+    $.get(_ctx+"/goodsType/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            setData( item.id , item.parent_id , item.menu_type , item.title , item.sort_num , item.menu_url , item.is_deleted , item.create_time , item.create_by , item.modify_time , item.modify_by , item.lang )
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/goodsType/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+function  unfold(id){
+	alert("暂未开发");
+}
+function  addMenu(id){
+	alert("暂未开发");
+}
+//校验
+function checkData( id , parentId , menuType , title , sortNum , menuUrl , isDeleted , createTime , createBy , modifyTime , modifyBy , lang ){
+
+    if(title == ""){
+        alert("标题不能为空");
+        $("input[name='title']").focus();
+        return false;
+    }
+    if(sortNum == ""){
+        alert("排序不能为空");
+        $("input[name='sortNum']").focus();
+        return false;
+    }
+    if(lang == ""){
+        alert("语言版本不能为空");
+        $("input[name='lang']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>

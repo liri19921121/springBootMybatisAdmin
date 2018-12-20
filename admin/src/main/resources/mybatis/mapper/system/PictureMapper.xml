@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.otcbi.admin.dao.system.PictureDao">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="Base_Column_List">
+	    <![CDATA[
+			pic_id ,
+			pic_type ,
+			pic_name ,
+			pic_path ,
+			is_deleted ,
+			create_time ,
+			create_by 
+	    ]]>
+	</sql>
+
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="pm">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from picture 
+	    where pic_id = #{ picId }
+	  </select>
+	  
+       <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	    update picture set is_deleted = 'Y'
+	    where pic_id = #{ picId }
+	  </update>
+	  
+	  <insert id="insert" parameterType="pm">
+	    insert into picture (<include refid="Base_Column_List" />)
+	    values (
+	        	#{ picId } ,
+	        	#{ picType } ,
+	        	#{ picName } ,
+	        	#{ picPath } ,
+	        	#{ isDeleted } ,
+	        	#{ createTime } ,
+	        	#{ createBy } 
+	    )
+  	  </insert>  
+  
+  <insert id="insertSelective" parameterType="pm">
+    insert into picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	              <if test="picId != null">
+			        pic_id ,
+			      </if>
+	              <if test="picType != null">
+			        pic_type ,
+			      </if>
+	              <if test="picName != null">
+			        pic_name ,
+			      </if>
+	              <if test="picPath != null">
+			        pic_path ,
+			      </if>
+	              <if test="isDeleted != null">
+			        is_deleted ,
+			      </if>
+	              <if test="createTime != null">
+			        create_time ,
+			      </if>
+	              <if test="createBy != null">
+			        create_by ,
+			      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="picId != null">
+	        #{ picId } ,
+	      </if>
+	      <if test="picType != null">
+	        #{ picType } ,
+	      </if>
+	      <if test="picName != null">
+	        #{ picName } ,
+	      </if>
+	      <if test="picPath != null">
+	        #{ picPath } ,
+	      </if>
+	      <if test="isDeleted != null">
+	        #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	        #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	        #{ createBy } ,
+	      </if>
+    </trim>
+  </insert>
+    
+  
+  <update id="updateByPrimaryKeySelective" parameterType="pm">
+    update picture
+    <set>
+	      <if test="picId != null">
+	         pic_id = #{ picId } ,
+	      </if>
+	      <if test="picType != null">
+	         pic_type = #{ picType } ,
+	      </if>
+	      <if test="picName != null">
+	         pic_name = #{ picName } ,
+	      </if>
+	      <if test="picPath != null">
+	         pic_path = #{ picPath } ,
+	      </if>
+	      <if test="isDeleted != null">
+	         is_deleted = #{ isDeleted } ,
+	      </if>
+	      <if test="createTime != null">
+	         create_time = #{ createTime } ,
+	      </if>
+	      <if test="createBy != null">
+	         create_by = #{ createBy } ,
+	      </if>
+    </set>
+    where pic_id = #{ picId }
+   
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="pm">
+    update picture
+    set  
+	        pic_id = #{ picId }  ,
+	        pic_type = #{ picType }  ,
+	        pic_name = #{ picName }  ,
+	        pic_path = #{ picPath }  ,
+	        is_deleted = #{ isDeleted }  ,
+	        create_time = #{ createTime }  ,
+	        create_by = #{ createBy }  
+    where pic_id = #{ picId }
+  </update> 
+	
+  <update id="deleteByIds" parameterType="java.lang.String">
+	update picture set is_deleted = 'Y'
+    where pic_id in
+   	<foreach item="ids" collection="array" open="(" separator="," close=")">
+#{ids}	</foreach>
+  </update>
+   
+   <!--  query begin -->
+	  <select id="getByCondition" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from picture
+	   	  <where>  
+	        <if test="picId != null">
+		        and pic_id = #{ picId }
+	        </if>
+	        <if test="picType != null">
+		        and pic_type = #{ picType }
+	        </if>
+	        <if test="picName != null">
+		        and pic_name = #{ picName }
+	        </if>
+	        <if test="picPath != null">
+		        and pic_path = #{ picPath }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	    </where> 
+	  </select>
+	  <select id="getByConditionList" resultType="pm" parameterType="pm" >
+	    select <include refid="Base_Column_List" />
+	   		from picture
+	   	  <where>  
+	        <if test="picId != null">
+		        and pic_id = #{ picId }
+	        </if>
+	        <if test="picType != null">
+		        and pic_type = #{ picType }
+	        </if>
+	        <if test="picName != null">
+		        and pic_name = #{ picName }
+	        </if>
+	        <if test="picPath != null">
+		        and pic_path = #{ picPath }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	    </where> 
+	  </select>
+	  
+	  <select id="getByConditionCount" parameterType="pm" resultType="long" >
+	    select COUNT(1)
+	   		from picture
+	   	  <where>  
+	        <if test="picId != null">
+		        and pic_id = #{ picId }
+	        </if>
+	        <if test="picType != null">
+		        and pic_type = #{ picType }
+	        </if>
+	        <if test="picName != null">
+		        and pic_name = #{ picName }
+	        </if>
+	        <if test="picPath != null">
+		        and pic_path = #{ picPath }
+	        </if>
+	        <if test="isDeleted != null">
+		        and is_deleted = #{ isDeleted }
+	        </if>
+	        <if test="createTime != null">
+		        and create_time = #{ createTime }
+	        </if>
+	        <if test="createBy != null">
+		        and create_by = #{ createBy }
+	        </if>
+	    </where> 
+	  </select>
+	
+</mapper>
+

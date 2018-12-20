@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<meta charset="utf-8">
+	<meta name="_ctx" th:content="@{/}" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- Google Font -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<style>
+		.search{
+			float: right;
+		}
+		.search>.selectbox{
+			width: 300px;float: right;
+			margin-right: 20px;
+		}
+		.search>.selectbox>label{
+			float: left;display: block;width: 100px;text-align: right;height: 35px;line-height: 30px;padding-right: 10px;
+		}
+		.search>.selectbox>select{
+			width:200px;float: right;
+		}
+		.searcher{
+			cursor: pointer;
+		}
+
+		@media (min-width: 768px){
+			.modal-dialog {
+				width: 800px;
+				margin: 30px auto;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> 买卖大厅</a></li>
+    <li class="active">订单申诉</li>
+  </ol>
+  <br/>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	 <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">订单申诉</h3>
+              <br><br>
+				<div class="search">
+					<div class="input-group" style="float: right;width: 300px;">
+						<input type="text" class="form-control" id="keyword" th:value="${keyword}" placeholder="请输入订单编号">
+						<span class="input-group-addon searcher"><i class="fa fa-search"></i> 搜素</span>
+					</div>
+				</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="menuList" class="table table-bordered table-striped">
+                <thead>
+	                <tr>
+	                  <th>序号</th>
+		                  <th>订单编号</th>
+						  <th>标题</th>
+						  <th>申诉时间</th>
+						  <th>申诉结果</th>
+						  <th>查看工单详情</th>
+	                  <th>操作</th>
+	                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${QX.query == '1' }" th:each="item,stat :${ dealAppeal }" >
+                  <td th:text="${stat.count}">1</td>
+						<th th:text="${item.order_id }">订单编号</th>
+					    <th th:text="${item.title }">标题</th>
+						<th th:text="${item.create_time }">申诉时间</th>
+					    <th th:text="${item.is_win }">申诉结果</th>
+					    <th><a th:onclick="'gotoWorkOrder(\''+${item.workOrderId}+'\');'"  style="cursor:pointer" >查看工单详情</a></th>
+                  <td>
+                  	 <span th:unless="${QX.add == '1' || QX.del == '1' || QX.edit == '1' || QX.query == '1' }" ><i class="fa fa-lock"></i> 无权限</span>
+					  <span data-toggle="tooltip" data-placement="left"   class="btn btn-xs btn-info" th:onclick="'dispose(\''+${item.id}+'\');'" ><i class="fa fa-edit" ></i> 申诉处理</span>
+				  </td>
+                </tr>
+                <tr th:unless="${QX.query == '1' }" >
+                	<td colspan="7" rowspan="1" align="center">
+						<h2>您无权限查看该页面</h2>
+                	</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+
+			</div>
+		 <ul style="float: right;" id='mypage' th:if="${page.pages > 1}" class="pagination"></ul>
+</section>
+
+<div class="modal fade" id="itemModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelHead">申诉处理</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<input type="hidden" name="id" id="id" value=""/>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">订单编号</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="dealId" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">标题</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="title" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">申诉用户ID</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="auserName" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">被申诉ID</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="buserName" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">申诉用户手机</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="amobile" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">被申诉手机</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="bmobile" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">申诉用户邮箱</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="amail" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">被申诉邮箱</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="bmail" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">交易数量</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="amount" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">交易单价</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="price" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">交易总额</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="money" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">下单时间</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="buy_time" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">付款时间</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="play_time" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-5 control-label">申诉时间</label>
+									<div class="col-sm-7">
+										<input type="text" class="form-control"  value="" id="create_time" readonly="readonly" >
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group">
+								<label  class="col-sm-2 control-label">描述</label>
+								<div class="col-sm-10">
+									<textarea  class="form-control" name="appealUserId" value="" id="content" style="height:100px;" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+								<div class="form-group">
+									<label  class="col-sm-2 control-label">支付图片</label>
+									<div class="col-sm-10">
+										<img src="" id="payImg" >
+									</div>
+								</div>
+						</div>
+
+						<div class="row">
+								<div class="form-group">
+									<label  class="col-sm-2 control-label">申诉图片</label>
+									<div class="col-sm-10">
+										<img src="" id="p1" >
+										<img src="" id="p2" >
+										<img src="" id="p3" >
+									</div>
+								</div>
+						</div>
+
+
+
+						<!--<div class="form-group">
+							<label  class="col-sm-2 control-label">申诉图片</label>
+							<div class="col-sm-10">
+								<img src="" id="p1" >
+								<img src="" id="p2" >
+								<img src="" id="p3" >
+							</div>
+						</div>-->
+
+
+						<div class="form-group">
+							<label  class="col-sm-2 control-label">申诉处理</label>
+							<div class="col-sm-10">
+								<select id="userIsWin" class="form-control" name="userIsWin"  >
+									<option  value="-1">请选择</option>
+									<option  value=1>卖家胜诉</option>
+									<option  value="0">买家胜诉</option>
+								</select>
+							</div>
+						</div>
+
+					 </form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-success" id="submitBtn" >确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>	
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-paginator.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	$(function(){
+        var element = $('#mypage');
+        options = {
+            bootstrapMajorVersion:3, //对应的bootstrap版本
+            currentPage: [[${page.pageNum }]], //当前页数
+            numberOfPages:[[${page.pageSize }]], //每页的数量
+            totalPages:[[${page.pages }]], //总页数，这里是用的EL表达式，获取从后台传过来的值
+            itemTexts: function (type, page, current) {//设置显示的样式，默认是箭头
+                switch (type) {
+                    case "first":
+                        return "首页";
+                    case "prev":
+                        return "上一页";
+                    case "next":
+                        return "下一页";
+                    case "last":
+                        return "末页";
+                    case "page":
+                        return page;
+                }
+            },
+            //点击事件
+            onPageClicked: function (event, originalEvent, type, page) {
+                skipPage(page);
+            }
+        };
+        element.bootstrapPaginator(options);
+
+        
+        $("#addItem").click(function(){
+            $("input[name='id']").val("");
+            $("input[name='actionurl']").val("/dealAppeal/add");
+            $("#modelHead").text("添加");
+            $("#submitBtn").text("添加");
+            setData("","","","","","","","","","","","","","");
+            $("#itemModal").modal("show");
+        });
+
+        //提交按钮
+        $("#submitBtn").click(function(){
+            var id = $("#id").val();
+            var userIsWin = $("#userIsWin").val();
+            if (userIsWin == null || userIsWin == "" || userIsWin == -1){
+                alert("请选择胜诉方");
+                return false;
+			}
+                $.ajax({
+                    type:"POST",
+                    url:_ctx+"/dealAppeal/dispose",
+                    cache:false,
+                    data:{id:id,userIsWin:userIsWin},
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status == "200"){
+                            window.location.href=window.location.href;
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+                $("#itemModal").modal("hide");
+        });
+
+
+
+        //搜索
+        $(".searcher").click(function(){
+            skipPage("");
+        });
+	})
+
+function gotoWorkOrder(workOrderId){
+    window.location.replace(_ctx+"/workOrder/list?workOrderId="+workOrderId);
+}
+	
+function setData(id,appealUserId , byAppealUserId , dealId){
+   	 $("#id").val(id);
+   	 $("#appealUserId").val(appealUserId);
+   	 $("#byAppealUserId").val(byAppealUserId);
+   	 $("#dealId").val(dealId);
+}
+
+function skipPage(page){
+    var keyword = $("#keyword").val();
+    var url="/dealAppeal/list";
+    if(page != ""){
+        url =url+ "/"+page+"?t=1";
+    }else {
+        url = url + "?t=1";
+    }
+    if(keyword != ""){
+        url =url+"&keyword="+keyword;
+    }
+    window.location.href=_ctx+url;
+}
+//编辑商户
+function edit(id){
+    $("#modelHead").text("编辑");
+    $("#submitBtn").text("编辑");
+    $("input[name='id']").val(id);
+    $("input[name='actionurl']").val("/dealAppeal/edit");
+    $.get(_ctx+"/dealAppeal/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+
+        }else{
+            alert(data.message);
+        }
+    })
+	alert(data.data.p1)
+    $("#itemModal").modal("show");
+}
+
+function dispose(id){
+    $("input[name='id']").val(id);
+    $.get(_ctx+"/dealAppeal/detail",{t:new Date().getTime(),id:id},function(data){
+        console.log("data:",data);
+        if(data.status == "200"){
+            var item = data.data;
+            console.log("item:",item);
+            $("#id").val(item.id);
+            $("#dealId").val(item.order_id);
+            $("#content").val(item.content);
+            $("#payImg").attr("src", item.p4);
+            $("#p1").attr("src", item.p1);
+            $("#p2").attr("src", item.p2);
+            $("#p3").attr("src", item.p3);
+            $("#amail").val(item.amail);
+            $("#amobile").val(item.amobile);
+
+            $("#amount").val(item.amount);
+            $("#auserName").val(item.auserName);
+            $("#bmail").val(item.bmail);
+            $("#bmobile").val(item.bmobile);
+            $("#buserName").val(item.buserName);
+            $("#buy_time").val(item.buy_time);
+            $("#create_time").val(item.create_time);
+            $("#money").val(item.money);
+            $("#play_time").val(item.play_time);
+            $("#price").val(item.price);
+            $("#title").val(item.title);
+
+
+        }else{
+            alert(data.message);
+        }
+    })
+    $("#itemModal").modal("show");
+}
+
+//删除
+function del(id){
+    if(confirm("您确定要删除这条记录吗？"))
+        $.post(_ctx+"/dealAppeal/del",{t:new Date().getTime(),id:id},function(data){
+            if(data.status == "200"){
+                window.location.href=window.location.href;
+            }else{
+                alert(data.message);
+            }
+        });
+}
+
+//校验
+function checkData( id , appealUserId , byAppealUserId , dealId , role , type , isWin , disposeTime , disposeId , createTime , createBy , modifyTime , modifyBy , isDeleted ){
+    if(id == ""){
+        alert("id不能为空");
+        $("input[name='id']").focus();
+        return false;
+    }
+    if(appealUserId == ""){
+        alert("申诉用户不能为空");
+        $("input[name='appealUserId']").focus();
+        return false;
+    }
+    if(byAppealUserId == ""){
+        alert("被申诉人id不能为空");
+        $("input[name='byAppealUserId']").focus();
+        return false;
+    }
+    if(dealId == ""){
+        alert("订单id不能为空");
+        $("input[name='dealId']").focus();
+        return false;
+    }
+    if(role == ""){
+        alert("用户是卖家还是，1卖家还是0买家不能为空");
+        $("input[name='role']").focus();
+        return false;
+    }
+    if(type == ""){
+        alert("订单类型，0出售，1购买不能为空");
+        $("input[name='type']").focus();
+        return false;
+    }
+    if(isWin == ""){
+        alert("是否获胜，1是0不是不能为空");
+        $("input[name='isWin']").focus();
+        return false;
+    }
+    if(disposeTime == ""){
+        alert("处理时间不能为空");
+        $("input[name='disposeTime']").focus();
+        return false;
+    }
+    if(disposeId == ""){
+        alert("处理人不能为空");
+        $("input[name='disposeId']").focus();
+        return false;
+    }
+    if(createTime == ""){
+        alert("createTime不能为空");
+        $("input[name='createTime']").focus();
+        return false;
+    }
+    if(createBy == ""){
+        alert("createBy不能为空");
+        $("input[name='createBy']").focus();
+        return false;
+    }
+    if(modifyTime == ""){
+        alert("modifyTime不能为空");
+        $("input[name='modifyTime']").focus();
+        return false;
+    }
+    if(modifyBy == ""){
+        alert("modifyBy不能为空");
+        $("input[name='modifyBy']").focus();
+        return false;
+    }
+    if(isDeleted == ""){
+        alert("isDeleted不能为空");
+        $("input[name='isDeleted']").focus();
+        return false;
+    }
+   
+    return true;
+}
+</script>
+</body>
+</html>
